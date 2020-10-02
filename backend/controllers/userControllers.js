@@ -84,10 +84,32 @@ exports.login = (req, res, next) => {
 };
 
 // Get all users
-exports.getAllUsers = (req, res, next) => {};
+exports.getAllUsers = (req, res, next) => {
+  models.User.findAll({ attributes: ["email", "username", "isAdmin", "bio"] })
+    .then((users) => res.status(200).json(users))
+    .catch((error) => res.status(400).json({ error }));
+};
+
+// Get one user
+exports.getOneUser = (req, res) => {
+  models.User.findOne({
+    attributes: ["email", "username", "isAdmin", "bio"],
+    where: { id: req.params.id },
+  })
+    .then((user) => res.status(200).json(user))
+    .catch((error) => res.status(500).json(error));
+};
 
 // Get One user
-exports.getOneUser = (req, res) => {};
+exports.getMyProfil = (req, res, next) => {
+  const id = jwt.getUserId(req.headers.authorization);
+  models.User.findOne({
+    attributes: ["email", "username", "isAdmin", "bio"],
+    where: { id: id },
+  })
+    .then((user) => res.status(200).json(user))
+    .catch((error) => res.status(500).json(error));
+};
 
 // Get one user by its username
 exports.getUserByUsername = (req, res, next) => {};

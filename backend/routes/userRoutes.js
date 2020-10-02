@@ -19,6 +19,9 @@ router.get("/", bouncer.block, userCtrl.getAllUsers);
 // Get One user
 router.get("/:id", bouncer.block, userCtrl.getOneUser);
 
+// Get me own profil
+router.get("/myself", bouncer.block, userCtrl.getMyProfil);
+
 // Get one user by its username
 router.get("/username/:username", bouncer.block, userCtrl.getUserByUsername);
 
