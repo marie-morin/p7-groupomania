@@ -1,17 +1,54 @@
 // Import
 const models = require("../models");
-const utils = require("../utils/jwtUtils");
-const verifInput = require("../utils/verifInput");
+const jwt = require("../utils/jwtValidator");
 
 // Security imports
 const dotenv = require("dotenv").config();
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const mailValidator = require("email-validator");
-const passwordValidator = require("password-validator");
+
+// Constantes
+const passwordRegex = /((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20})/;
+const usernameRegex = /^[a-zA-Z ,.'-]+$/;
 
 // Signup
-exports.signup = (req, res, next) => {};
+exports.signup = (req, res, next) => {
+  if (
+    !mailValidator.validate(req.body.email) ||
+    !passwordRegex.test(req.body.password) ||
+    !usernameRegex.test(req.body.username)
+  ) {
+    console.log("Les champs contiennent des valeurs interdites !");
+  }
+  models.User.findOne({
+    attributes: ["email"],
+    where: { email: req.body.email },
+  })
+    .then((user) => {
+      if (user) {
+        res.status(409).json({
+          error: "L'email utilisé correspond déjà à un compte existant !",
+        });
+      }
+      bcrypt.hash(req.body.password, 10, function (err, bcryptPassword) {
+        const username = req.body.firstname + " " + req.body.lastname;
+        const newUser = models.User.create({
+          email: req.body.email,
+          password: bcryptPassword,
+          username: username,
+          bio: req.body.bio,
+          isAdmin: 0,
+        })
+          .then(res.status(201).json({ message: "Utilisateur créé !" }))
+          .catch((err) => {
+            res.status(500).json({ err });
+          });
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({ err });
+    });
+};
 
 // Login
 exports.login = (req, res, next) => {};

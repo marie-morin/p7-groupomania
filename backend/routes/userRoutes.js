@@ -2,15 +2,16 @@
 const express = require("express");
 const router = express.Router();
 const userCtrl = require("../controllers/userControllers");
-const auth = require("../middleware/auth");
+// const auth = require("../middleware/auth");
 const bouncer = require("express-bouncer")(30000, 60000, 3); // Limitation du nombre de tentatives de connexion
-const bruteforce = require("../middleware/bruteforce");
+// const bruteforce = require("../middleware/bruteforce");
 
 // Sign up
 router.post("/signup", userCtrl.signup);
 
 // Login
-router.post("/login", bruteforce, bouncer.block, userCtrl.login);
+router.post("/login", bouncer.block, userCtrl.login);
+// router.post("/login", bruteforce, bouncer.block, userCtrl.login);
 
 // Get all users
 router.get("/", bouncer.block, userCtrl.getAllUsers);
