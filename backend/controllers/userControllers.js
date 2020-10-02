@@ -51,7 +51,37 @@ exports.signup = (req, res, next) => {
 };
 
 // Login
-exports.login = (req, res, next) => {};
+exports.login = (req, res, next) => {
+  models.User.findOne({
+    where: { email: req.body.email },
+  })
+    .then((user) => {
+      if (!user) {
+        res.status(404).json({
+          erreur: "Aucun compte ne correspond à l'adresse email renseignée !",
+        });
+      }
+
+      bcrypt.compare(
+        req.body.password,
+        user.password,
+        (errComparePassword, resComparePassword) => {
+          if (resComparePassword) {
+            res.status(200).json({
+              userId: user.id,
+              token: jwt.generateToken(user),
+              isAdmin: user.isAdmin,
+            });
+          } else {
+            res.status(403).json({ error: "Le mot de passe est invalide !" });
+          }
+        }
+      );
+    })
+    .catch((err) => {
+      res.status(500).json({ err });
+    });
+};
 
 // Get all users
 exports.getAllUsers = (req, res, next) => {};
