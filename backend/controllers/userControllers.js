@@ -118,4 +118,25 @@ exports.getUserByUsername = (req, res, next) => {};
 exports.modifyUser = (req, res, next) => {};
 
 // // Delete an acount
-exports.deleteUser = (req, res, next) => {};
+exports.deleteUser = (req, res, next) => {
+  const userId = jwt.getUserId(req.headers.authorization);
+
+  models.User.findOne({
+    where: { id: userId },
+  }).then((user) => {
+    if (!user) {
+      res.status(401).json({ error: "Cet user n'existe pas" });
+    }
+    models.Post.destroy({
+      where: { userId: user.id },
+    })
+      .then(() => {
+        models.User.destroy({
+          where: { id: user.id },
+        })
+          .then(() => res.end())
+          .catch((err) => console.log(err));
+      })
+      .catch((err) => res.status(500).json(err));
+  });
+};
