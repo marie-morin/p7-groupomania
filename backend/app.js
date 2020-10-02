@@ -8,7 +8,7 @@ const rateLimit = require("express-rate-limit");
 const hpp = require("hpp");
 // Routes Imports
 const userRoutes = require("./routes/userRoutes");
-// const postRoutes = require("./routes/postRoutes");
+const postRoutes = require("./routes/postRoutes");
 // const commentRoutes = require("./routes/commentRoutes");
 
 // Express app launching
@@ -47,7 +47,7 @@ app.use(hpp()); // HPP middleware to protect against HTTP parameter pollution at
 
 // Setting routes
 app.use("/api/users", userRoutes);
-// app.use("/api/posts", postRoutes);
+app.use("/api/posts", postRoutes);
 // app.use("/api/comments", commentRoutes);
 
 // Exporting module
