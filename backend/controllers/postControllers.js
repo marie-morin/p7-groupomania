@@ -45,7 +45,6 @@ exports.getAllPosts = (req, res) => {
 
 // Get one post
 exports.getOnePost = (req, res, next) => {
-  console.log(req.params.id);
   models.Post.findOne({
     where: { id: req.params.id },
     include: [
