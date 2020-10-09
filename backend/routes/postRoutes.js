@@ -7,20 +7,35 @@ const multer = require("../middleware/multer-config");
 
 // Routes
 
+// // Create a post
+// router.post("/", postCtrl.addPost);
+// // Get all posts
+// router.get("/", postCtrl.getAllPosts);
+// // Get one post
+// router.get("/:id", postCtrl.getOnePost);
+// // Get all posts from one user
+// router.get("/from/:user", postCtrl.getPostsFrom);
+// // Update a post
+// router.put("/:id", postCtrl.modifyPost);
+// // Delete a post
+// router.delete("/:id", postCtrl.deletePost);
+// // Like or dislike a post
+// router.post("/:id/like", postCtrl.giveOpinion);
+
 // Create a post
-router.post("/", postCtrl.addPost);
+router.post("/", auth, postCtrl.addPost);
 // Get all posts
-router.get("/", postCtrl.getAllPosts);
+router.get("/", auth, postCtrl.getAllPosts);
 // Get one post
-router.get("/:id", postCtrl.getOnePost);
+router.get("/:id", auth, postCtrl.getOnePost);
 // Get all posts from one user
-router.get("/from/:user", postCtrl.getPostsFrom);
+router.get("/from/:user", auth, postCtrl.getPostsFrom);
 // Update a post
-router.put("/:id", postCtrl.modifyPost);
+router.put("/:id", auth, postCtrl.modifyPost);
 // Delete a post
-router.delete("/:id", postCtrl.deletePost);
+router.delete("/:id", auth, postCtrl.deletePost);
 // Like or dislike a post
-router.post("/:id/like", postCtrl.giveOpinion);
+router.post("/:id/like", auth, postCtrl.giveOpinion);
 
 // // Create a post
 // router.post("/", auth, multer, postCtrl.addPost);

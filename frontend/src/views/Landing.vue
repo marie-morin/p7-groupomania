@@ -2,13 +2,11 @@
   <div class="landing">
     <div class="content">
       <div class="bienvenue">
-        <h1>
-          Bienvenue sur votre réseau interne Groupomania
-        </h1>
+        <h1>Bienvenue sur votre réseau interne Groupomania</h1>
       </div>
-      <div class="redirectio">
-        <Button url="/signup" text="S'inscrire" />
-        <Button url="/login" text="Se connecter" />
+      <div class="redirection">
+        <Button url="/signup" text="S'inscrire" class="btn" />
+        <Button url="/login" text="Se connecter" class="btn" />
       </div>
       <!-- <img src="../../public/images/icon-white.png" alt="Logo Groupamania" /> -->
     </div>
@@ -36,5 +34,17 @@ export default {
 
 .content {
   @include flexbox(center, column, center);
+}
+
+.redirection {
+  @media screen and (max-width: 400px) {
+    @include flexbox(center, column, center);
+  }
+}
+
+.btn {
+  @media screen and (max-width: $x-small) {
+    margin-top: 20px;
+  }
 }
 </style>

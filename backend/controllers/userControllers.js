@@ -9,20 +9,22 @@ const mailValidator = require("email-validator");
 
 // Constantes
 const passwordRegex = /((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20})/;
-const usernameRegex = /^[a-zA-Z ,.'-]+$/;
+const nameRegex = /^[a-zA-Z ,.'-]+$/;
 
 // Signup
 exports.signup = (req, res, next) => {
-  if (
-    !mailValidator.validate(req.body.email) ||
-    !passwordRegex.test(req.body.password) ||
-    !usernameRegex.test(req.body.username)
-  ) {
-    console.log("Les champs contiennent des valeurs interdites !");
-  }
+  const registeringUser = JSON.parse(req.body.body);
+  // if (
+  //   !mailValidator.validate(req.body.email) ||
+  //   !passwordRegex.test(req.body.password) ||
+  //   !nameRegex.test(req.body.firstname) ||
+  //   !nameRegex.test(req.body.lastname)
+  // ) {
+  //   console.log("Les champs contiennent des valeurs interdites !");
+  // }
   models.User.findOne({
     attributes: ["email"],
-    where: { email: req.body.email },
+    where: { email: registeringUser.email },
   })
     .then((user) => {
       if (user) {
@@ -30,13 +32,14 @@ exports.signup = (req, res, next) => {
           error: "L'email utilisé correspond déjà à un compte existant !",
         });
       }
-      bcrypt.hash(req.body.password, 10, function (err, bcryptPassword) {
-        const username = req.body.firstname + " " + req.body.lastname;
+      bcrypt.hash(registeringUser.password, 10, function (err, bcryptPassword) {
+        const username =
+          registeringUser.firstname + " " + registeringUser.lastname;
         const newUser = models.User.create({
-          email: req.body.email,
+          email: registeringUser.email,
           password: bcryptPassword,
           username: username,
-          bio: req.body.bio,
+          bio: registeringUser.bio,
           isAdmin: 0,
         })
           .then(res.status(201).json({ message: "Utilisateur enregistré !" }))
@@ -52,8 +55,10 @@ exports.signup = (req, res, next) => {
 
 // Login
 exports.login = (req, res, next) => {
+  const loginUser = JSON.parse(req.body.body);
+
   models.User.findOne({
-    where: { email: req.body.email },
+    where: { email: loginUser.email },
   })
     .then((user) => {
       if (!user) {
@@ -63,7 +68,7 @@ exports.login = (req, res, next) => {
       }
 
       bcrypt.compare(
-        req.body.password,
+        loginUser.password,
         user.password,
         (errComparePassword, resComparePassword) => {
           if (resComparePassword) {

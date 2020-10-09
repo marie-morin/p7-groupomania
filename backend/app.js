@@ -40,7 +40,7 @@ app.use((req, res, next) => {
 
 // Parsing req
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // Security
 app.use(hpp()); // HPP middleware to protect against HTTP parameter pollution attacks
