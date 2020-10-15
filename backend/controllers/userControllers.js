@@ -32,6 +32,22 @@ exports.signup = (req, res, next) => {
           error: "L'email utilisé correspond déjà à un compte existant !",
         });
       }
+
+      // bcrypt.hash(registeringUser.password, 10, function (err, bcryptPassword) {
+      //   const username =
+      //     registeringUser.firstname + " " + registeringUser.lastname;
+      //   const newUser = models.User.create({
+      //     email: registeringUser.email,
+      //     password: bcryptPassword,
+      //     username: username,
+      //     bio: registeringUser.bio,
+      //     isAdmin: 0,
+      //   })
+      //     .then(res.status(201).json({ message: "Utilisateur enregistré !" }))
+      //     .catch((err) => {
+      //       res.status(501).json({ err });
+      //     });
+      // });
       bcrypt.hash(registeringUser.password, 10, function (err, bcryptPassword) {
         const username =
           registeringUser.firstname + " " + registeringUser.lastname;
@@ -42,14 +58,20 @@ exports.signup = (req, res, next) => {
           bio: registeringUser.bio,
           isAdmin: 0,
         })
-          .then(res.status(201).json({ message: "Utilisateur enregistré !" }))
+          .then((user) => {
+            res.status(200).json({
+              userId: user.dataValues.id,
+              token: jwt.generateToken(user.dataValues),
+              isAdmin: user.dataValues.isAdmin,
+            });
+          })
           .catch((err) => {
-            res.status(500).json({ err });
+            res.status(501).json({ err });
           });
       });
     })
     .catch((err) => {
-      res.status(500).json({ err });
+      res.status(503).json({ err });
     });
 };
 
@@ -98,7 +120,7 @@ exports.getAllUsers = (req, res, next) => {
 // Get one user
 exports.getOneUser = (req, res) => {
   models.User.findOne({
-    attributes: ["email", "username", "isAdmin", "bio"],
+    attributes: ["email", "username", "isAdmin", "bio", "id"],
     where: { id: req.params.id },
   })
     .then((user) => res.status(200).json(user))
@@ -126,16 +148,20 @@ exports.getUserByUsername = (req, res, next) => {};
 
 // Update user acount
 exports.modifyUser = (req, res, next) => {
+  const registeringUser = JSON.parse(req.body.body);
   const userId = jwt.getUserId(req.headers.authorization);
-  console.log(userId);
-
-  if (req.body.newPassword && !passwordRegex.test(newPassword)) {
-    res
-      .status(406)
-      .json({ error: "Le mot de passe contient des caractères interdits !" });
+  let newPassword;
+  if (registeringUser.password) {
+    newPassword = registeringUser.password;
   }
 
-  if (userId !== req.params.id) {
+  // if (req.body.newPassword && !passwordRegex.test(newPassword)) {
+  //   res
+  //     .status(406)
+  //     .json({ error: "Le mot de passe contient des caractères interdits !" });
+  // }
+
+  if (userId != req.params.id) {
     res.status(401).json({ err: "Vous d'avez pas d'authorisation !" });
   }
 
@@ -143,7 +169,9 @@ exports.modifyUser = (req, res, next) => {
     where: { id: userId },
   })
     .then((user) => {
-      if (req.body.newPassword) {
+      const newUsername =
+        registeringUser.firstname + " " + registeringUser.lastname;
+      if (newPassword) {
         bcrypt.compare(
           newPassword,
           user.password,
@@ -158,8 +186,9 @@ exports.modifyUser = (req, res, next) => {
                 models.User.update(
                   {
                     password: bcryptNewPassword,
-                    email: req.body.email,
-                    bio: req.body.bio,
+                    email: registeringUser.email,
+                    bio: registeringUser.bio,
+                    username: newUsername,
                   },
                   { where: { id: user.id } }
                 )
@@ -168,7 +197,7 @@ exports.modifyUser = (req, res, next) => {
                       confirmation: "Les modifications ont été enregistrées !",
                     })
                   )
-                  .catch((err) => res.status(500).json(err));
+                  .catch((err) => res.status(501).json(err));
               });
             }
           }
@@ -176,8 +205,9 @@ exports.modifyUser = (req, res, next) => {
       } else {
         models.User.update(
           {
-            email: req.body.email,
-            bio: req.body.bio,
+            email: registeringUser.email,
+            bio: registeringUser.bio,
+            username: newUsername,
           },
           { where: { id: user.id } }
         )
@@ -186,10 +216,10 @@ exports.modifyUser = (req, res, next) => {
               .status(201)
               .json({ message: "Les modifications ont été enregistrées !" })
           )
-          .catch((err) => res.status(500).json(err));
+          .catch((err) => res.status(502).json(err));
       }
     })
-    .catch((err) => res.status(500).json(err));
+    .catch((err) => res.status(503).json(err));
 };
 
 // // Delete an acount

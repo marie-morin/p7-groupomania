@@ -12,7 +12,7 @@
         placeholder="Que voulez-vous partager ?"
       />
       <div class="btn">
-        <input type="submit" class="submit" :value="title" />
+        <input type="submit" class="submit" />
       </div>
     </form>
   </div>

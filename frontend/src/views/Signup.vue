@@ -4,13 +4,7 @@
       <Header />
 
       <div class="content">
-        <Form
-          title="Inscrivez-vous"
-          question="Déjà un compte"
-          option="Connectez-vous"
-          :schema="schema"
-          :urlPost="urlPost"
-        />
+        <Form :settings="settings" :schema="schema" />
       </div>
     </div>
 
@@ -29,6 +23,14 @@ export default {
   components: { Header, Footer, Form },
   data() {
     return {
+      settings: {
+        goal: "post",
+        title: "Inscrivez-vous",
+        question: "Déjà un compte",
+        option: "Connectez-vous",
+        destination: "login",
+        urlPost: "http://localhost:3000/api/users/signup",
+      },
       schema: {
         email: { elt: "input", type: "text", label: "Email" },
         firstname: { elt: "input", type: "text", label: "Prénom" },
@@ -36,7 +38,6 @@ export default {
         password: { elt: "input", type: "password", label: "Mot de passe" },
         bio: { elt: "textarea", label: "Biographie" },
       },
-      urlPost: "http://localhost:3000/api/users/signup",
     };
   },
 };

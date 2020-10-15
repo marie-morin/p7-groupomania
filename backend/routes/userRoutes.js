@@ -18,6 +18,7 @@ router.get("/", userCtrl.getAllUsers);
 
 // Get One user
 router.get("/:id", userCtrl.getOneUser);
+// router.get("/:id", userCtrl.getOneUser);
 
 // Get me own profil
 // router.get("/myself", userCtrl.getMyProfil);

@@ -1,26 +1,69 @@
 <template>
   <div class="page-content">
-    <h1>Bienvenue {{ name }} !</h1>
     <div class="infos-container">
-      <h3>Email :</h3>
-      <p>mariemorin@gmail.com</p>
+      <!-- <h1>Bienvenue {{ user.username.split(" ")[0] }} !</h1> -->
+      <!-- <h1>Bienvenue {{ user.username.split(" ")[0] }} !</h1> -->
       <h3>Nom d'utilisateur :</h3>
-      <p>Marie Morin</p>
+      <p>{{ user.username }}</p>
+      <h3>Email :</h3>
+      <p>{{ user.email }}</p>
       <h3>Biographie :</h3>
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit fuga
-        accusamus reprehenderit alias perspiciatis repellat molestiae, rem
-        suscipit eaque quisquam et numquam ratione tempora quibusdam magni
-        temporibus excepturi, repudiandae beatae!
-      </p>
+      <p>{{ user.bio }}</p>
+      <button v-on:click="$emit('display-form')">
+        Modifier mon profil
+      </button>
+      <!-- <button @click.prevent="modifyProfil" v-on:click="$emit('show-form')">
+        Modifier mon profil
+      </button> -->
+      <button @click.prevent="deleteProfil">Supprimer mon profil</button>
     </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+let TOKEN = localStorage.getItem("jwt");
+const headers = {
+  Authorization: "Bearer " + TOKEN.replace(/['"']+/g, ""),
+};
+
 export default {
-  name: "Form",
-  props: ["name", "label", "placeholder", "question", "option"],
+  name: "UserInfos",
+
+  props: {
+    user: {
+      type: Object,
+      required: true,
+    },
+    userId: {
+      type: String,
+      required: true,
+    },
+  },
+
+  data: function() {
+    return {
+      showForm: false,
+    };
+  },
+
+  methods: {
+    deleteProfil: function() {
+      if (window.confirm("Voulez-vous vraiment supprimer votre compte ?")) {
+        axios.delete("http://localhost:3000/api/users/" + this.userId, {
+          headers: headers,
+        });
+
+        localStorage.clear();
+        this.$router.push("Home");
+      }
+    },
+    modifyProfil: function() {
+      console.log(this.userId);
+      this.showForm = true;
+      return this.showForm;
+    },
+  },
 };
 </script>
 

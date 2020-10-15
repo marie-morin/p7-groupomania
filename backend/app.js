@@ -2,6 +2,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
+const cors = require("cors");
 // Security Imports
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
@@ -16,6 +17,7 @@ const app = express();
 
 // Helmet middlware for safe headers
 app.use(helmet());
+app.use(cors());
 
 // express-rate-limit middleware to limit the amount of request done
 const limiter = rateLimit({

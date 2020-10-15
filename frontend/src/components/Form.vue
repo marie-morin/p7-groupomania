@@ -2,13 +2,15 @@
   <div class="form-section">
     <div class="form-container">
       <form @submit.prevent="checkForm" class="form">
-        <h1>{{ title }} !</h1>
+        <h1 v-if="settings.goal === 'post'">{{ settings.title }} !</h1>
+
         <div class="form-row" v-for="(item, name) in schema" :key="name">
           <label :for="name">{{ item.label }}</label>
           <input
             :type="item.type"
             :name="name"
             :id="name"
+            :value="item.value"
             v-model="test[name]"
             v-if="item.elt === 'input'"
           />
@@ -17,17 +19,30 @@
             :id="name"
             cols="10"
             rows="10"
-            v-model="test[name]"
             v-if="item.elt === 'textarea'"
           ></textarea>
         </div>
+
         <div class="form-btn">
-          <input type="submit" class="form-submit" :value="title" />
+          <input type="submit" class="form-submit" :value="settings.title" />
+        </div>
+
+        <div class="form-btn" v-if="settings.goal === 'put'">
+          <input
+            type="submit"
+            class="form-submit"
+            value="Annuler"
+            @click.prevent.stop="$emit('display-form')"
+          />
         </div>
       </form>
     </div>
-    <p>
-      {{ question }} ? <a class="option" href="@">{{ option }}</a> !
+    <p v-if="settings.goal === 'post'">
+      {{ settings.question }} ?
+      <router-link :to="'/' + settings.destination" class="option">{{
+        settings.option
+      }}</router-link>
+      !
     </p>
   </div>
 </template>
@@ -38,66 +53,65 @@ import axios from "axios";
 export default {
   name: "Form",
 
-  data: function () {
-    const obj = {};
-    for (const [key, value] of Object.entries(this.schema)) {
-      obj[key] = "";
-      console.log(value);
-    }
-    return { test: { ...obj } };
-  },
-
   props: {
-    title: {
-      type: String,
-      required: true,
-    },
-    question: {
-      type: String,
-      required: true,
-    },
-    option: {
-      type: String,
+    settings: {
+      type: Object,
       required: true,
     },
     schema: {
       type: Object,
       required: true,
     },
-    urlPost: {
-      type: String,
-      required: true,
-    },
+  },
+
+  data: function() {
+    const obj = {};
+    for (const [key] of Object.entries(this.schema)) {
+      obj[key] = "";
+    }
+    return { test: { ...obj } };
   },
 
   methods: {
-    checkForm: function () {
+    checkForm: function() {
       const user = {};
       for (const [key, value] of Object.entries(this.test)) {
         user[key] = value;
       }
-      console.log(user);
-      const test = JSON.stringify(user);
-      console.log(JSON.parse(test));
-      console.log(this.urlPost);
-      axios
-        .post(this.urlPost, {
-          method: "POST",
-          body: JSON.stringify(user),
-          headers: {
-            "Content-type": "application/json; charset=UTF-8",
-          },
-        })
-        .then((json) => {
-          console.log("response: " + JSON.stringify(json));
-          this.$router.push("Home");
-        });
+
+      if (this.settings.goal === "put") {
+        let TOKEN = localStorage.getItem("jwt");
+        const headers = {
+          Authorization: "Bearer " + TOKEN.replace(/['"']+/g, ""),
+        };
+        axios.put(
+          this.settings.urlPost + this.settings.userId,
+          { body: JSON.stringify(user) },
+          { headers: headers }
+        );
+        // this.$emit("display-form");
+        // this.$emit("display-user");
+        this.$router.go();
+      } else {
+        axios
+          .post(this.settings.urlPost, {
+            method: "POST",
+            body: JSON.stringify(user),
+            headers: {
+              Authorization: "Bearer token test",
+              "Content-type": "application/json; charset=UTF-8",
+            },
+          })
+          .then((res) => {
+            localStorage.setItem("jwt", JSON.stringify(res.data.token));
+            localStorage.setItem("user", JSON.stringify(res.data.userId));
+            this.$router.push("Home");
+          });
+      }
     },
   },
 };
 </script>
-
-
 
 <style scoped lang="scss">
 .form {
@@ -149,6 +163,7 @@ export default {
     width: 100%;
     height: 40px;
     margin: 5px 0;
+    padding: 0 5px;
     border: none;
     border-radius: $radius;
   }

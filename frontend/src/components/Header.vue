@@ -5,7 +5,7 @@
       <div id="nav">
         <router-link to="/home">Accueil</router-link>
         <router-link to="/profil">Profil</router-link>
-        <a href="#">Déconnexion</a>
+        <a v-if="connected" href="#" @click.prevent="logout">Déconnexion</a>
       </div>
     </div>
   </div>
@@ -14,6 +14,28 @@
 <script>
 export default {
   name: "Header",
+
+  data() {
+    return {
+      connected: false,
+    };
+  },
+
+  created: function() {
+    if (localStorage.getItem("jwt") !== null) {
+      this.connected = true;
+    }
+
+    return this.connected;
+  },
+
+  methods: {
+    logout: function() {
+      console.log("deconexion");
+      localStorage.clear();
+      this.$router.push("/");
+    },
+  },
 };
 </script>
 

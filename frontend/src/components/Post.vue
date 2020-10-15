@@ -7,10 +7,7 @@
     </div>
 
     <div class="post-content">
-      <p class="meta">
-        Par {{ post.User.username }}, il y a
-        <!-- {{ moment(post.createdAt).fromNow() }} -->
-      </p>
+      <p class="meta">Par {{ post.User.username }}, il y a</p>
       <p class="title">{{ post.title }}</p>
       <p class="text">{{ post.content }}</p>
 
@@ -23,9 +20,6 @@
 </template>
 
 <script>
-// import moment from "moment";
-// Vue.prototype.moment = moment;
-
 export default {
   name: "Post",
   props: {

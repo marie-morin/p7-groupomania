@@ -25,7 +25,7 @@ export default {
 
   data: function() {
     return {
-      apiUrl: "http://localhost:3000/api/posts",
+      // apiUrl: "http://localhost:3000/api/posts",
       listOfPosts: [],
     };
   },
