@@ -6,12 +6,12 @@
 
         <div class="form-row" v-for="(item, name) in schema" :key="name">
           <label :for="name">{{ item.label }}</label>
+          <pre style="color: #000;">{{ item }}</pre>
           <input
             :type="item.type"
             :name="name"
             :id="name"
-            :value="item.value"
-            v-model="test[name]"
+            v-model="user"
             v-if="item.elt === 'input'"
           />
           <textarea
@@ -19,6 +19,7 @@
             :id="name"
             cols="10"
             rows="10"
+            v-model="user"
             v-if="item.elt === 'textarea'"
           ></textarea>
         </div>
@@ -62,22 +63,26 @@ export default {
       type: Object,
       required: true,
     },
+    user: {
+      type: Object,
+    },
   },
 
-  data: function() {
-    const obj = {};
-    for (const [key] of Object.entries(this.schema)) {
-      obj[key] = "";
-    }
-    return { test: { ...obj } };
-  },
+  // data: function() {
+  //   // const obj = {};
+  //   // for (const [key] of Object.entries(this.schema)) {
+  //   //   obj[key] = "";
+  //   // }
+  //   // return { test: { ...obj } };
+  // },
 
   methods: {
     checkForm: function() {
-      const user = {};
-      for (const [key, value] of Object.entries(this.test)) {
-        user[key] = value;
-      }
+      // const user = {};
+      console.log(this.user);
+      // for (const [key, value] of Object.entries(this.test)) {
+      //   this.user[key] = value;
+      // }
 
       if (this.settings.goal === "put") {
         let TOKEN = localStorage.getItem("jwt");
@@ -86,7 +91,7 @@ export default {
         };
         axios.put(
           this.settings.urlPost + this.settings.userId,
-          { body: JSON.stringify(user) },
+          { body: JSON.stringify(this.user) },
           { headers: headers }
         );
         // this.$emit("display-form");
@@ -96,7 +101,7 @@ export default {
         axios
           .post(this.settings.urlPost, {
             method: "POST",
-            body: JSON.stringify(user),
+            body: JSON.stringify(this.user),
             headers: {
               Authorization: "Bearer token test",
               "Content-type": "application/json; charset=UTF-8",

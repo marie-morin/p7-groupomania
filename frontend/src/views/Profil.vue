@@ -12,6 +12,7 @@
           v-show="showForm === true"
           :settings="settings"
           :schema="schema"
+          :user="user"
           :userId="userId"
           v-on:display-form="displayFrom()"
         />
@@ -76,6 +77,7 @@ export default {
         .get("http://localhost:3000/api/users/" + id)
         .then((response) => {
           this.user = response.data;
+          // console.log(this.user);
         })
         .catch((error) => console.log(error));
     },
@@ -96,6 +98,10 @@ export default {
   //     })
   //     .catch((error) => console.log(error));
   // },
+  beforeMount: function() {
+    console.log(this.user);
+    console.log(this.schema);
+  },
 };
 </script>
 
