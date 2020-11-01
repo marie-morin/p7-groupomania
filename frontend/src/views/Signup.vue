@@ -4,7 +4,7 @@
       <Header />
 
       <div class="content">
-        <SignForm :settings="settings" :schema="schema" />
+        <SignForm :settings="settings" :schema="schema" :user="user" />
       </div>
     </div>
 
@@ -23,6 +23,13 @@ export default {
   components: { Header, Footer, SignForm },
   data() {
     return {
+      user: {
+        email: "",
+        firstname: "",
+        lastname: "",
+        password: "",
+        bio: "",
+      },
       settings: {
         title: "Inscrivez-vous",
         question: "Déjà un compte",

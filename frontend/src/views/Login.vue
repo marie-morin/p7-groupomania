@@ -3,7 +3,7 @@
     <div class="top-content">
       <Header />
       <div class="content">
-        <SignForm :settings="settings" :schema="schema" />
+        <SignForm :settings="settings" :schema="schema" :user="user" />
       </div>
     </div>
 
@@ -22,6 +22,10 @@ export default {
   components: { Header, Footer, SignForm },
   data() {
     return {
+      user: {
+        email: "",
+        password: "",
+      },
       settings: {
         title: "Connectez-vous",
         question: "Pas encore de compte",

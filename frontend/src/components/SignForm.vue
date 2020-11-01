@@ -10,6 +10,7 @@
             :type="item.type"
             :name="name"
             :id="name"
+            v-model="user[name]"
             v-if="item.elt === 'input'"
           />
           <textarea
@@ -17,6 +18,7 @@
             :id="name"
             cols="10"
             rows="10"
+            v-model="user[name]"
             v-if="item.elt === 'textarea'"
           ></textarea>
         </div>
@@ -58,7 +60,6 @@ export default {
 
   methods: {
     checkForm: function() {
-      console.log(this.user);
       axios
         .post(this.settings.urlPost, {
           method: "POST",
