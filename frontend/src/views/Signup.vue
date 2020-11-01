@@ -4,7 +4,7 @@
       <Header />
 
       <div class="content">
-        <Form :settings="settings" :schema="schema" />
+        <SignForm :settings="settings" :schema="schema" />
       </div>
     </div>
 
@@ -16,15 +16,14 @@
 // @ is an alias to /src
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
-import Form from "@/components/Form.vue";
+import SignForm from "@/components/SignForm.vue";
 
 export default {
   name: "Signup",
-  components: { Header, Footer, Form },
+  components: { Header, Footer, SignForm },
   data() {
     return {
       settings: {
-        goal: "post",
         title: "Inscrivez-vous",
         question: "Déjà un compte",
         option: "Connectez-vous",

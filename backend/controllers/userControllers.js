@@ -77,6 +77,8 @@ exports.signup = (req, res, next) => {
 
 // Login
 exports.login = (req, res, next) => {
+  console.log("------------------");
+  console.log(req.body);
   const loginUser = JSON.parse(req.body.body);
 
   models.User.findOne({

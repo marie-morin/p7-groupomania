@@ -11,21 +11,78 @@
       <p class="title">{{ post.title }}</p>
       <p class="text">{{ post.content }}</p>
 
-      <div class="post-comments">
+      <div class="post-comments" @click="displayComment()">
         <font-awesome-icon class="icon comment" icon="comment" />
         <p>{{ post.comments }} commentaires</p>
       </div>
+
+      <div v-show="showComment === true" class="comment-container">
+        <p>Ajouter un commentaire :</p>
+        <input type="text" @keyup.enter="postComment" />
+        <p>Commentaires :</p>
+        <div class="comment">
+          <p>
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Alias
+            exercitationem ipsum, asperiores ratione ut corrupti similique ipsa
+            eligendi expedita, libero labore, repudiandae dignissimos odit vel
+            itaque quisquam quas a omnis.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Alias
+            exercitationem ipsum, asperiores ratione ut corrupti similique ipsa
+            eligendi expedita, libero labore, repudiandae dignissimos odit vel
+            itaque quisquam quas a omnis.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Alias
+            exercitationem ipsum, asperiores ratione ut corrupti similique ipsa
+            eligendi expedita, libero labore, repudiandae dignissimos odit vel
+            itaque quisquam quas a omnis.
+          </p>
+        </div>
+      </div>
+
+      <!-- <Comment /> -->
     </div>
   </div>
 </template>
 
 <script>
+// import Comment from "@/components/Comment.vue";
+import axios from "axios";
+let TOKEN = localStorage.getItem("jwt");
+const headers = {
+  Authorization: "Bearer " + TOKEN.replace(/['"']+/g, ""),
+};
+
 export default {
   name: "Post",
+  // components: { Comment },
   props: {
     post: {
       type: Object,
       required: true,
+    },
+  },
+
+  data: function() {
+    return {
+      showComment: false,
+    };
+  },
+
+  methods: {
+    displayComment: function() {
+      this.showComment = !this.showComment;
+      return this.showComment;
+    },
+    postComment: function(e) {
+      console.log(e.target.value);
+      axios.post(
+        "http://localhost:3000/api/posts",
+        { body: e.target.value },
+        { headers: headers }
+      );
     },
   },
 };
@@ -59,6 +116,7 @@ export default {
 
   &-comments {
     @include flexbox(flex-start, row, center);
+    cursor: pointer;
 
     p {
       margin: 0 0 0 5px;

@@ -8,7 +8,7 @@
           :userId="userId"
           v-on:display-form="displayFrom()"
         />
-        <Form
+        <ProfilForm
           v-show="showForm === true"
           :settings="settings"
           :schema="schema"
@@ -27,7 +27,7 @@
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
 import UserInfos from "@/components/UserInfos.vue";
-import Form from "@/components/Form.vue";
+import ProfilForm from "@/components/ProfilForm.vue";
 import axios from "axios";
 let id = localStorage.getItem("user");
 
@@ -37,7 +37,7 @@ export default {
     Header,
     Footer,
     UserInfos,
-    Form,
+    ProfilForm,
   },
 
   data: function() {
@@ -47,7 +47,6 @@ export default {
       showForm: false,
       settings: {
         userId: id,
-        goal: "put",
         title: "Enregistrer",
         urlPost: "http://localhost:3000/api/users/",
       },

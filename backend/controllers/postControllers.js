@@ -8,10 +8,11 @@ const regex = /^[a-zA-Z0-9 _.,!()&]+$/;
 //Création d'un message
 exports.addPost = (req, res) => {
   const id = jwt.getUserId(req.headers.authorization);
+  const newPost = JSON.parse(req.body.body);
 
   models.Post.create({
-    content: req.body.content,
-    title: req.body.title,
+    content: newPost.content,
+    title: newPost.title,
     UserId: id,
   })
     .then((post) => {
