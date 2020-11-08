@@ -54,6 +54,8 @@ exports.signup = (req, res, next) => {
         const newUser = models.User.create({
           email: registeringUser.email,
           password: bcryptPassword,
+          firstname: registeringUser.firstname,
+          lastname: registeringUser.lastname,
           username: username,
           bio: registeringUser.bio,
           isAdmin: 0,
@@ -114,7 +116,16 @@ exports.login = (req, res, next) => {
 
 // Get all users
 exports.getAllUsers = (req, res, next) => {
-  models.User.findAll({ attributes: ["email", "username", "isAdmin", "bio"] })
+  models.User.findAll({
+    attributes: [
+      "email",
+      "firstname",
+      "lastname",
+      "username",
+      "isAdmin",
+      "bio",
+    ],
+  })
     .then((users) => res.status(200).json(users))
     .catch((error) => res.status(400).json({ error }));
 };
@@ -122,7 +133,15 @@ exports.getAllUsers = (req, res, next) => {
 // Get one user
 exports.getOneUser = (req, res) => {
   models.User.findOne({
-    attributes: ["email", "username", "isAdmin", "bio", "id"],
+    attributes: [
+      "email",
+      "firstname",
+      "lastname",
+      "username",
+      "isAdmin",
+      "bio",
+      "id",
+    ],
     where: { id: req.params.id },
   })
     .then((user) => res.status(200).json(user))
@@ -190,6 +209,8 @@ exports.modifyUser = (req, res, next) => {
                     password: bcryptNewPassword,
                     email: registeringUser.email,
                     bio: registeringUser.bio,
+                    firstname: registeringUser.firstname,
+                    lastname: registeringUser.lastname,
                     username: newUsername,
                   },
                   { where: { id: user.id } }
@@ -209,6 +230,8 @@ exports.modifyUser = (req, res, next) => {
           {
             email: registeringUser.email,
             bio: registeringUser.bio,
+            firstname: registeringUser.firstname,
+            lastname: registeringUser.lastname,
             username: newUsername,
           },
           { where: { id: user.id } }
@@ -227,20 +250,34 @@ exports.modifyUser = (req, res, next) => {
 // // Delete an acount
 exports.deleteUser = (req, res, next) => {
   const userId = jwt.getUserId(req.headers.authorization);
+  console.log("----------");
+  console.log("Utilisateur connecté");
+  console.log(userId);
+
+  console.log("Utilisateur visé");
+  console.log(req.params.id);
 
   models.User.findOne({
-    where: { id: userId },
+    where: { id: req.params.id },
   })
     .then((user) => {
       if (!user) {
         res.status(401).json({ error: "Veuillez vous connecter !" });
       }
+      console.log("Utilisateur trouvé dans la base");
+      console.log(user);
 
-      models.User.destroy({
-        where: { id: user.id },
-      })
-        .then(() => res.end())
-        .catch((err) => console.log(err));
+      if (req.params.id !== userId || userId.isAdmin !== 1) {
+        res.status(401).json({
+          error: "Vous n'êtes pas autoriser à effectuer cette action !",
+        });
+      }
+
+      // models.User.destroy({
+      //   where: { id: req.params.id },
+      // })
+      //   .then(() => res.end())
+      //   .catch((err) => console.log(err));
     })
     .catch((err) => res.status(500).json(err));
 };

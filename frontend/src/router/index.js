@@ -52,6 +52,22 @@ const routes = [
     },
   },
   {
+    path: "/users/",
+    name: "Users",
+    component: () => import("../views/Users.vue"),
+    meta: {
+      requiresAuth: true,
+    },
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem("jwt") == null) {
+        next({ name: "Landing" });
+      } else {
+        next();
+      }
+      next();
+    },
+  },
+  {
     path: "/post/:id",
     name: "Post",
     component: () => import("../views/PostPage.vue"),

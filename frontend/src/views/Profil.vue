@@ -2,12 +2,15 @@
   <div class="profil">
     <div class="top-content">
       <Header />
+
       <div class="content">
         <UserInfos
           :user="user"
           :userId="userId"
           v-on:display-form="displayFrom()"
         />
+        <button @click="displayFrom()">Modifier mon profil</button>
+        <button @click.prevent="deleteProfil">Supprimer mon profil</button>
         <ProfilForm
           v-show="showForm === true"
           :settings="settings"
@@ -30,9 +33,15 @@ import UserInfos from "@/components/UserInfos.vue";
 import ProfilForm from "@/components/ProfilForm.vue";
 import axios from "axios";
 let id = localStorage.getItem("user");
+// let isAdmin = localStorage.getItem("isAdmin");
+let TOKEN = localStorage.getItem("jwt");
+const headers = {
+  Authorization: "Bearer " + TOKEN.replace(/['"']+/g, ""),
+};
 
 export default {
   name: "Profil",
+
   components: {
     Header,
     Footer,
@@ -70,36 +79,46 @@ export default {
     };
   },
 
+  created: function() {
+    this.displayUser();
+  },
+
   methods: {
+
     displayUser: function() {
       axios
         .get("http://localhost:3000/api/users/" + id)
         .then((response) => {
           this.user = response.data;
-          // console.log(this.user);
+          console.log(this.user);
         })
         .catch((error) => console.log(error));
     },
+
     displayFrom: function() {
       this.showForm = !this.showForm;
       return this.showForm;
     },
-  },
 
-  created: function() {
-    this.displayUser();
-  },
-  // beforeCreate: function() {
-  //   axios
-  //     .get("http://localhost:3000/api/users/" + id)
-  //     .then((response) => {
-  //       this.user = response.data;
-  //     })
-  //     .catch((error) => console.log(error));
-  // },
-  beforeMount: function() {
-    console.log(this.user);
-    console.log(this.schema);
+    deleteProfil: function() {
+      console.log(this.userId);
+      console.log(this.user);
+      if (window.confirm("Voulez-vous vraiment supprimer votre compte ?")) {
+        axios.delete("http://localhost:3000/api/users/" + id,
+        { body: this.user },
+        { headers: headers },
+      );
+
+        // localStorage.clear();
+        // this.$router.push("Home");
+      }
+    },
+
+    modifyProfil: function() {
+      console.log(this.userId);
+      this.showForm = true;
+      return this.showForm;
+    },
   },
 };
 </script>

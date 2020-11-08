@@ -8,14 +8,16 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      models.User.hasMany(models.Post);
-      models.User.hasMany(models.Comment);
+      models.User.hasMany(models.Post, { onDelete: "CASCADE", hooks: true });
+      models.User.hasMany(models.Comment, { onDelete: "CASCADE", hooks: true });
     }
   }
   User.init(
     {
       email: DataTypes.STRING,
       password: DataTypes.STRING,
+      lastname: DataTypes.STRING,
+      firstname: DataTypes.STRING,
       username: DataTypes.STRING,
       bio: DataTypes.STRING,
       isAdmin: DataTypes.BOOLEAN,

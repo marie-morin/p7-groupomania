@@ -2,24 +2,23 @@
   <div class="form-section">
     <div class="form-container">
       <form @submit.prevent="checkForm" class="form">
-        <h1 v-if="settings.goal === 'post'">{{ settings.title }} !</h1>
 
         <div class="form-row" v-for="(item, name) in schema" :key="name">
           <label :for="name">{{ item.label }}</label>
-          <!-- <pre style="color: #000;">{{ item }}</pre> -->
           <input
             :type="item.type"
             :name="name"
             :id="name"
-            v-model="user"
+            v-model="user[name]"
             v-if="item.elt === 'input'"
+            :required="user[name] !== 'bio' ? true : false"
           />
           <textarea
             :name="name"
             :id="name"
             cols="10"
             rows="10"
-            v-model="user"
+            v-model="user[name]"
             v-if="item.elt === 'textarea'"
           ></textarea>
         </div>
@@ -28,7 +27,7 @@
           <input type="submit" class="form-submit" :value="settings.title" />
         </div>
 
-        <div class="form-btn" v-if="settings.goal === 'put'">
+        <div class="form-btn">
           <input
             type="submit"
             class="form-submit"
@@ -38,13 +37,6 @@
         </div>
       </form>
     </div>
-    <p v-if="settings.goal === 'post'">
-      {{ settings.question }} ?
-      <router-link :to="'/' + settings.destination" class="option">{{
-        settings.option
-      }}</router-link>
-      !
-    </p>
   </div>
 </template>
 
@@ -82,8 +74,6 @@ export default {
       // for (const [key, value] of Object.entries(this.test)) {
       //   this.user[key] = value;
       // }
-
-      if (this.settings.goal === "put") {
         let TOKEN = localStorage.getItem("jwt");
         const headers = {
           Authorization: "Bearer " + TOKEN.replace(/['"']+/g, ""),
@@ -94,22 +84,7 @@ export default {
           { headers: headers }
         );
         this.$router.go();
-      } else {
-        axios
-          .post(this.settings.urlPost, {
-            method: "POST",
-            body: JSON.stringify(this.user),
-            headers: {
-              Authorization: "Bearer token test",
-              "Content-type": "application/json; charset=UTF-8",
-            },
-          })
-          .then((res) => {
-            localStorage.setItem("jwt", JSON.stringify(res.data.token));
-            localStorage.setItem("user", JSON.stringify(res.data.userId));
-            this.$router.push("Home");
-          });
-      }
+      
     },
   },
 };

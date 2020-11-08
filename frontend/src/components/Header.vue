@@ -4,6 +4,7 @@
       <img src="../../public/images/icon-white.png" alt="Logo" class="logo" />
       <div id="nav">
         <router-link to="/home">Accueil</router-link>
+        <router-link to="/users">Utilisateurs</router-link>
         <router-link to="/profil">Profil</router-link>
         <a v-if="connected" href="#" @click.prevent="logout">Déconnexion</a>
       </div>

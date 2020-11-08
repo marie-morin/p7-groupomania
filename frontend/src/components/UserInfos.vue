@@ -1,32 +1,25 @@
 <template>
   <div class="page-content">
     <div class="infos-container">
-      <!-- <h1>Bienvenue {{ user.username.split(" ")[0] }} !</h1> -->
-      <!-- <h1>Bienvenue {{ user.username.split(" ")[0] }} !</h1> -->
+      <h1>Bienvenue {{ user.firstname }} !</h1>
+
       <h3>Nom d'utilisateur :</h3>
-      <p>{{ user.username }}</p>
+      <p>{{ user.firstname }} {{ user.lastname }}</p>
+
       <h3>Email :</h3>
       <p>{{ user.email }}</p>
+
       <h3>Biographie :</h3>
-      <p>{{ user.bio }}</p>
-      <button v-on:click="$emit('display-form')">
-        Modifier mon profil
-      </button>
-      <!-- <button @click.prevent="modifyProfil" v-on:click="$emit('show-form')">
-        Modifier mon profil
-      </button> -->
-      <button @click.prevent="deleteProfil">Supprimer mon profil</button>
+      <p v-if="user.bio">{{ user.bio }}</p>
+      <p v-else>Vous n'avez pas encore ajouté de biographie à votre profil !</p>
+
+      <h3 v-if="user.isAdmin == 1">Administration :</h3>
+      <p v-if="user.isAdmin == 1">Vous êtes administrateur.</p>
     </div>
   </div>
 </template>
 
 <script>
-import axios from "axios";
-let TOKEN = localStorage.getItem("jwt");
-const headers = {
-  Authorization: "Bearer " + TOKEN.replace(/['"']+/g, ""),
-};
-
 export default {
   name: "UserInfos",
 
@@ -39,31 +32,7 @@ export default {
       type: String,
       required: true,
     },
-  },
-
-  data: function() {
-    return {
-      showForm: false,
-    };
-  },
-
-  methods: {
-    deleteProfil: function() {
-      if (window.confirm("Voulez-vous vraiment supprimer votre compte ?")) {
-        axios.delete("http://localhost:3000/api/users/" + this.userId, {
-          headers: headers,
-        });
-
-        localStorage.clear();
-        this.$router.push("Home");
-      }
-    },
-    modifyProfil: function() {
-      console.log(this.userId);
-      this.showForm = true;
-      return this.showForm;
-    },
-  },
+  },  
 };
 </script>
 

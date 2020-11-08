@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      models.Post.hasMany(models.Comment);
+      models.Post.hasMany(models.Comment, { onDelete: "CASCADE", hooks: true });
 
       models.Post.belongsTo(models.User, {
         foreignKey: {

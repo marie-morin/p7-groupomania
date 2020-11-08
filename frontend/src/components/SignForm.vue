@@ -72,6 +72,7 @@ export default {
         .then((res) => {
           localStorage.setItem("jwt", JSON.stringify(res.data.token));
           localStorage.setItem("user", JSON.stringify(res.data.userId));
+          localStorage.setItem("isAdmin", JSON.stringify(res.data.isAdmin));
           this.$router.push("Home");
         })
     },
