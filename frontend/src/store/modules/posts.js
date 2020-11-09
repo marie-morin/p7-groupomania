@@ -1,12 +1,24 @@
 import axios from "axios";
 
-const state = {};
+const state = {
+  posts: [],
+};
 
-const getters = {};
+const getters = {
+  allPosts: (state) => state.posts,
+};
 
-const actions = {};
+const actions = {
+  async fetchPosts({ commit }) {
+    const response = await axios.get("http://localhost:3000/api/posts");
+    console.log(response);
+    commit("setPosts", response.data);
+  },
+};
 
-const mutations = {};
+const mutations = {
+  setPosts: (state, posts) => (state.posts = posts),
+};
 
 export default {
   state,
