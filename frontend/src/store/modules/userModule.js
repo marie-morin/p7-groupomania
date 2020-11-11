@@ -1,4 +1,5 @@
 import axios from "axios";
+import router from "../../router";
 
 const state = {
   user: {},
@@ -19,9 +20,9 @@ const actions = {
         "Content-type": "application/json; charset=UTF-8",
       },
     });
-    console.log(response.data);
     localStorage.setItem("jwt", response.data.token);
     dispatch("getUserInfos", response.data.token);
+    router.push("Home");
   },
 
   async getUserInfos({ commit }, token) {
@@ -32,7 +33,6 @@ const actions = {
         "Content-type": "application/json; charset=UTF-8",
       },
     });
-    console.log(response.data);
     commit("saveUser", response.data.user);
     commit("loginIn", true);
   },
