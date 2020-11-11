@@ -1,35 +1,18 @@
 <template>
   <div class="home">
-
     <div class="top-content">
-
       <Header />
-
       <div class="content">
-
-        <PostForm />
-
+        <!-- <PostForm /> -->
         <!-- <ListOfPosts :listOfPosts="listOfPosts" /> -->
-
-        <div class="posts">
-          <!-- <div
-            v-for="post in allPosts"
-            :key="post.id"
-          >
-           {{ post.title }}
-          </div> -->
-
+        <!-- <div class="posts">
           <div class="listOfPosts-unit" v-for="post in allPosts" :key="post.id">
-           <Post :post="post" />
+            <Post :post="post" />
           </div>
-        </div>
-
+        </div> -->
       </div>
-
     </div>
-
     <Footer />
-
   </div>
 </template>
 
@@ -39,15 +22,16 @@ import { mapGetters, mapActions } from "vuex";
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
 // import ListOfPosts from "@/components/ListOfPosts.vue";
-import PostForm from "@/components/PostForm.vue";
-import Post from "@/components/Post.vue";
+// import PostForm from "@/components/PostForm.vue";
+// import Post from "@/components/Post.vue";
 
 
 export default {
   name: "Home",
 
   // components: { Header, Footer, ListOfPosts, PostForm },
-  components: { Header, Footer, PostForm, Post },
+  // components: { Header, Footer, PostForm, Post },
+  components: { Header, Footer },
 
   data: function() {
     return {

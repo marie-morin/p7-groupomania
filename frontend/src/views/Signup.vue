@@ -2,25 +2,25 @@
   <div class="signup">
     <div class="top-content">
       <Header />
-
       <div class="content">
         <SignForm :settings="settings" :schema="schema" :user="user" />
       </div>
     </div>
-
     <Footer />
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
+
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
 import SignForm from "@/components/SignForm.vue";
 
 export default {
   name: "Signup",
+
   components: { Header, Footer, SignForm },
+
   data() {
     return {
       user: {
@@ -30,6 +30,7 @@ export default {
         password: "",
         bio: "",
       },
+
       settings: {
         title: "Inscrivez-vous",
         question: "Déjà un compte",
@@ -37,6 +38,7 @@ export default {
         destination: "login",
         urlPost: "http://localhost:3000/api/users/signup",
       },
+
       schema: {
         email: { elt: "input", type: "text", label: "Email" },
         firstname: { elt: "input", type: "text", label: "Prénom" },

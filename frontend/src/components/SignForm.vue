@@ -40,10 +40,12 @@
 </template>
 
 <script>
-import axios from "axios";
+
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "SignForm",
+
   props: {
     settings: {
       type: Object,
@@ -58,23 +60,17 @@ export default {
     },
   },
 
+  computed: mapGetters(["currentUser"]),
+
   methods: {
+    ...mapActions(["registerUser"]),
+
     checkForm: function() {
-      axios
-        .post(this.settings.urlPost, {
-          method: "POST",
-          body: JSON.stringify(this.user),
-          headers: {
-              Authorization: "Bearer token test",
-              "Content-type": "application/json; charset=UTF-8",
-            },
-        })
-        .then((res) => {
-          localStorage.setItem("jwt", JSON.stringify(res.data.token));
-          localStorage.setItem("user", JSON.stringify(res.data.userId));
-          localStorage.setItem("isAdmin", JSON.stringify(res.data.isAdmin));
-          this.$router.push("Home");
-        })
+      let data = {
+        user : JSON.stringify(this.user),
+        url: this.settings.urlPost,
+      }
+      this.registerUser(data);
     },
   },
 };

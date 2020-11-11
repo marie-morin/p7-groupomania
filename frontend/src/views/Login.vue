@@ -6,26 +6,28 @@
         <SignForm :settings="settings" :schema="schema" :user="user" />
       </div>
     </div>
-
     <Footer />
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
+
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
 import SignForm from "@/components/SignForm.vue";
 
 export default {
   name: "Login",
+
   components: { Header, Footer, SignForm },
+
   data() {
     return {
       user: {
         email: "",
         password: "",
       },
+
       settings: {
         title: "Connectez-vous",
         question: "Pas encore de compte",
@@ -33,6 +35,7 @@ export default {
         destination: "signup",
         urlPost: "http://localhost:3000/api/users/login",
       },
+      
       schema: {
         email: { elt: "input", type: "text", label: "Email" },
         password: { elt: "input", type: "password", label: "Mot de passe" },
