@@ -13,13 +13,20 @@ module.exports = {
   getUserId: function (data) {
     if (data !== null) {
       try {
-        const token = jwt.verify(
-          data.split(" ")[1],
-          "process.env.JWT_SECRET_TOKEN"
-        );
+        let token;
+
+        if (data.split(" ") > 0) {
+          token = jwt.verify(
+            data.split(" ")[1],
+            "process.env.JWT_SECRET_TOKEN"
+          );
+        } else {
+          token = jwt.verify(data, "process.env.JWT_SECRET_TOKEN");
+        }
         return token.userId;
       } catch (err) {
-        return err;
+        console.log(err.message);
+        return err.message;
       }
     }
   },

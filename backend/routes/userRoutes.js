@@ -13,6 +13,10 @@ router.post("/signup", userCtrl.signup);
 router.post("/login", userCtrl.login);
 // router.post("/login", bruteforce, bouncer.block, userCtrl.login);
 
+// Login
+router.post("/me", userCtrl.me);
+// router.post("/me", bruteforce, bouncer.block, userCtrl.em);
+
 // Get all users
 router.get("/", userCtrl.getAllUsers);
 

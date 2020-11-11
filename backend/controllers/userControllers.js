@@ -13,7 +13,7 @@ const nameRegex = /^[a-zA-Z ,.'-]+$/;
 
 // Signup
 exports.signup = (req, res, next) => {
-  const registeringUser = JSON.parse(req.body.body);
+  const registeringUser = JSON.parse(req.body.data);
   // if (
   //   !mailValidator.validate(req.body.email) ||
   //   !passwordRegex.test(req.body.password) ||
@@ -62,9 +62,9 @@ exports.signup = (req, res, next) => {
         })
           .then((user) => {
             res.status(200).json({
-              userId: user.dataValues.id,
+              // userId: user.dataValues.id,
               token: jwt.generateToken(user.dataValues),
-              isAdmin: user.dataValues.isAdmin,
+              // isAdmin: user.dataValues.isAdmin,
             });
           })
           .catch((err) => {
@@ -80,8 +80,12 @@ exports.signup = (req, res, next) => {
 // Login
 exports.login = (req, res, next) => {
   console.log("------------------");
+  console.log("req.body");
   console.log(req.body);
-  const loginUser = JSON.parse(req.body.body);
+  console.log("req.body.data");
+  console.log(req.body.data);
+  const loginUser = JSON.parse(req.body.data);
+  console.log(loginUser);
 
   models.User.findOne({
     where: { email: loginUser.email },
@@ -99,15 +103,51 @@ exports.login = (req, res, next) => {
         (errComparePassword, resComparePassword) => {
           if (resComparePassword) {
             res.status(200).json({
-              userId: user.id,
+              // userId: user.id,
               token: jwt.generateToken(user),
-              isAdmin: user.isAdmin,
+              // isAdmin: user.isAdmin,
             });
           } else {
             res.status(403).json({ error: "Le mot de passe est invalide !" });
           }
         }
       );
+    })
+    .catch((err) => {
+      res.status(500).json({ err });
+    });
+};
+
+// Me
+exports.me = (req, res, next) => {
+  console.log("------------------");
+
+  console.log("------req.body");
+  console.log(req.body);
+
+  console.log("------req.body.token");
+  console.log(req.body.token);
+
+  const userId = jwt.getUserId(req.body.token);
+  console.log("-----userId");
+  console.log(userId);
+
+  if (userId === "invalid signature") {
+    res.status(401).json({ error: "Vous n'êtes pas connecté " });
+  }
+
+  models.User.findOne({
+    where: { id: userId },
+  })
+    .then((user) => {
+      console.log(user);
+      if (!user) {
+        res.status(404).json({
+          erreur: "Aucun compte ne correspond à l'adresse email renseignée !",
+        });
+      }
+      console.log(user);
+      res.status(200).json({ user });
     })
     .catch((err) => {
       res.status(500).json({ err });
