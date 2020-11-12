@@ -8,7 +8,6 @@
         <Button url="/signup" text="S'inscrire" class="btn" />
         <Button url="/login" text="Se connecter" class="btn" />
       </div>
-      <!-- <img src="../../public/images/icon-white.png" alt="Logo Groupamania" /> -->
     </div>
   </div>
 </template>

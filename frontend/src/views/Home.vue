@@ -3,13 +3,14 @@
     <div class="top-content">
       <Header />
       <div class="content">
-        <!-- <PostForm /> -->
-        <!-- <ListOfPosts :listOfPosts="listOfPosts" /> -->
-        <!-- <div class="posts">
-          <div class="listOfPosts-unit" v-for="post in allPosts" :key="post.id">
+        <PostForm />
+
+        <div class="posts">
+          <div class="post" v-for="post in allPosts" :key="post.id">
             <Post :post="post" />
           </div>
-        </div> -->
+        </div>
+
       </div>
     </div>
     <Footer />
@@ -21,17 +22,14 @@
 import { mapGetters, mapActions } from "vuex";
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
-// import ListOfPosts from "@/components/ListOfPosts.vue";
-// import PostForm from "@/components/PostForm.vue";
-// import Post from "@/components/Post.vue";
+import PostForm from "@/components/PostForm.vue";
+import Post from "@/components/Post.vue";
 
 
 export default {
   name: "Home",
 
-  // components: { Header, Footer, ListOfPosts, PostForm },
-  // components: { Header, Footer, PostForm, Post },
-  components: { Header, Footer },
+  components: { Header, Footer, PostForm, Post },
 
   data: function() {
     return {
@@ -75,5 +73,16 @@ export default {
   min-height: 80vh;
   background-color: $groupomania-background;
   padding: 70px 0;
+}
+.posts {
+  width: 50%;
+  margin: 30px auto;
+
+  @media screen and(max-width: $large + 100) {
+    width: 70%;
+  }
+  @media screen and(max-width: $small) {
+    width: 90%;
+  }
 }
 </style>

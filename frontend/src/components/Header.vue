@@ -29,7 +29,6 @@ export default {
     if (localStorage.getItem("jwt") !== null) {
       this.connected = true;
     }
-
     return this.connected;
   },
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="post">
+  <div class="post-unit">
     <div class="post-likes">
       <font-awesome-icon class="icon up" icon="arrow-up" />
       <p class="likes">{{ post.likes }}</p>
@@ -90,15 +90,18 @@ export default {
 
 <style scope lang="scss">
 .post {
-  width: 100%;
-  height: 100%;
-  padding: 0;
-  @include flexbox(flex-start, row, stretch);
-  background-color: $groupomania-background;
-  color: $groupomania-font-blue;
-  border-radius: $radius;
-  border: 1px solid $groupomania-medium-grey;
-  text-align: left;
+
+  &-unit{
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    @include flexbox(flex-start, row, stretch);
+    background-color: $groupomania-background;
+    color: $groupomania-font-blue;
+    border-radius: $radius;
+    border: 1px solid $groupomania-medium-grey;
+    text-align: left;
+  }
 
   &-likes {
     width: 40px;
