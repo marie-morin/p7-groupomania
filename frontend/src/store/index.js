@@ -1,8 +1,9 @@
 import Vuex from "vuex";
 import Vue from "vue";
+
 import userModule from "./modules/userModule";
-import posts from "./modules/postModule";
-import comments from "./modules/commentModule";
+import postModule from "./modules/postModule";
+import commentModule from "./modules/commentModule";
 
 // Load Vuex
 Vue.use(Vuex);
@@ -11,7 +12,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   modules: {
     userModule,
-    posts,
-    comments,
+    postModule,
+    commentModule,
   },
 });

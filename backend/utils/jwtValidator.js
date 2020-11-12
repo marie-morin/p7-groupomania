@@ -15,7 +15,7 @@ module.exports = {
       try {
         let token;
 
-        if (data.split(" ") > 0) {
+        if (data.split(" ").length > 1) {
           token = jwt.verify(
             data.split(" ")[1],
             "process.env.JWT_SECRET_TOKEN"
@@ -25,7 +25,6 @@ module.exports = {
         }
         return token.userId;
       } catch (err) {
-        console.log(err.message);
         return err.message;
       }
     }

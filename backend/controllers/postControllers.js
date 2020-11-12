@@ -7,8 +7,22 @@ const regex = /^[a-zA-Z0-9 _.,!()&]+$/;
 
 //Création d'un message
 exports.addPost = (req, res) => {
+  console.log("-------------");
+
+  // console.log("----req.headers.authoriztion");
+  // console.log(req.headers.authorization);
+
+  // console.log("----id");
   const id = jwt.getUserId(req.headers.authorization);
-  const newPost = JSON.parse(req.body.body);
+  // console.log(id);
+
+  // console.log("-----req.body");
+  // console.log(req.body);
+
+  // console.log("---- req.body parsed");
+  // console.log(JSON.parse(req.body.post));
+
+  const newPost = JSON.parse(req.body.post);
 
   models.Post.create({
     content: newPost.content,
@@ -16,7 +30,19 @@ exports.addPost = (req, res) => {
     UserId: id,
   })
     .then((post) => {
-      res.status(201).json(post);
+      models.Post.findOne({
+        where: { id: post.id },
+        include: [
+          {
+            model: models.User,
+            attributes: ["username"],
+          },
+        ],
+      })
+        .then((post) => {
+          res.status(200).json(post);
+        })
+        .catch((err) => res.status(500).json(err));
     })
     .catch((err) => {
       res.status(500).json(err);

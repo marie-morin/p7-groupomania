@@ -18,7 +18,7 @@
 </template>
 
 <script>
-// @ is an alias to /src
+
 import { mapGetters, mapActions } from "vuex";
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
@@ -31,30 +31,15 @@ export default {
 
   components: { Header, Footer, PostForm, Post },
 
-  data: function() {
-    return {
-      listOfPosts: [],
-    };
-  },
-
   methods: {
     ...mapActions(["fetchPosts"]),
   },
 
-  computed: mapGetters(["allPosts"]),
-
   created() {
     this.fetchPosts();
-  }
-  
-  // beforeCreate: function() {
-  //   axios
-  //     .get("http://localhost:3000/api/posts")
-  //     .then((response) => {
-  //       this.listOfPosts = response.data;
-  //     })
-  //     .catch((error) => console.log(error));
-  // },
+  },
+
+  computed: mapGetters(["allPosts"]),
 };
 </script>
 

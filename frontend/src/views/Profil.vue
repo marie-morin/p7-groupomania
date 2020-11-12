@@ -31,9 +31,10 @@ import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
 import UserInfos from "@/components/UserInfos.vue";
 import ProfilForm from "@/components/ProfilForm.vue";
+
 import axios from "axios";
 let id = localStorage.getItem("user");
-// let isAdmin = localStorage.getItem("isAdmin");
+
 let TOKEN = localStorage.getItem("jwt");
 const headers = {
   Authorization: "Bearer " + TOKEN.replace(/['"']+/g, ""),

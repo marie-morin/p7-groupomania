@@ -1,6 +1,6 @@
 <template>
   <div class="postForm">
-    <form action="">
+    <form @submit.prevent="onSubmit">
       <h2>Partager avec vos collègues :</h2>
 
       <input
@@ -8,7 +8,7 @@
         name="title"
         id="title"
         placeholder="Titre"
-        v-model="postContent.title"
+        v-model="newPost.title"
       />
       <br />
 
@@ -17,25 +17,27 @@
         name="content"
         id="content"
         placeholder="Que voulez-vous partager ?"
-        v-model="postContent.content"
+        v-model="newPost.content"
       />
 
       <div class="btn">
-        <input type="submit" class="submit" @click.prevent="post" />
+        <input type="submit" class="submit" />
       </div>
+
     </form>
   </div>
 </template>
 
 <script>
-import axios from "axios";
+
+import { mapActions } from 'vuex';
 
 export default {
   name: "PostForm",
 
   data: function() {
     return {
-      postContent: {
+      newPost: {
         title: "",
         content: "",
       },
@@ -43,23 +45,12 @@ export default {
   },
 
   methods: {
-    post: function() {
-      let TOKEN = localStorage.getItem("jwt");
-      const headers = {
-        Authorization: "Bearer " + TOKEN.replace(/['"']+/g, ""),
-      };
+    ...mapActions(["addPost"]),
 
-      const post = this.postContent;
-      axios
-        .post(
-          "http://localhost:3000/api/posts/",
-          { body: JSON.stringify(post) },
-          { headers: headers }
-        )
-        .then(() => {
-          this.$router.go();
-        })
-        .catch((error) => (this.msgError = error));
+    onSubmit() {
+      this.addPost(JSON.stringify(this.newPost));
+      this.newPost.title = "";
+      this.newPost.content = "";
     },
   },
 };

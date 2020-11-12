@@ -17,47 +17,21 @@
       </div>
 
       <div v-show="showComment === true" class="comment-container">
-        <p>Ajouter un commentaire :</p>
-        <input type="text" @keyup.enter="postComment" />
-        <p>Commentaires :</p>
+        <input type="text" @keyup.enter="postComment" placeholder="Ajouter un commentaire..."/>
         <div class="comment">
-          <p>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Alias
-            exercitationem ipsum, asperiores ratione ut corrupti similique ipsa
-            eligendi expedita, libero labore, repudiandae dignissimos odit vel
-            itaque quisquam quas a omnis.
-          </p>
-          <p>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Alias
-            exercitationem ipsum, asperiores ratione ut corrupti similique ipsa
-            eligendi expedita, libero labore, repudiandae dignissimos odit vel
-            itaque quisquam quas a omnis.
-          </p>
-          <p>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Alias
-            exercitationem ipsum, asperiores ratione ut corrupti similique ipsa
-            eligendi expedita, libero labore, repudiandae dignissimos odit vel
-            itaque quisquam quas a omnis.
-          </p>
         </div>
       </div>
+      <button>Supprimer le post</button>
 
-      <!-- <Comment /> -->
     </div>
   </div>
 </template>
 
 <script>
-// import Comment from "@/components/Comment.vue";
-import axios from "axios";
-let TOKEN = localStorage.getItem("jwt");
-const headers = {
-  Authorization: "Bearer " + TOKEN.replace(/['"']+/g, ""),
-};
 
 export default {
   name: "Post",
-  // components: { Comment },
+
   props: {
     post: {
       type: Object,
@@ -76,14 +50,14 @@ export default {
       this.showComment = !this.showComment;
       return this.showComment;
     },
-    postComment: function(e) {
-      console.log(e.target.value);
-      axios.post(
-        "http://localhost:3000/api/posts",
-        { body: e.target.value },
-        { headers: headers }
-      );
-    },
+    // postComment: function(e) {
+    //   console.log(e.target.value);
+    //   axios.post(
+    //     "http://localhost:3000/api/posts",
+    //     { body: e.target.value },
+    //     { headers: headers }
+    //   );
+    // },
   },
 };
 </script>
