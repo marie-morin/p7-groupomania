@@ -41,6 +41,7 @@ const actions = {
 const mutations = {
   saveUser: (state, user) => (state.user = user),
   loginIn: (state, current) => (state.isLoged = current),
+  userLogout: (state) => ((state.user = {}), (state.isLoged = false)),
 };
 
 export default {
