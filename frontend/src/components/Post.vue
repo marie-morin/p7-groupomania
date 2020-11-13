@@ -21,13 +21,15 @@
         <div class="comment">
         </div>
       </div>
-      <button>Supprimer le post</button>
+      <button @click="deletePost(post.id)">Supprimer le post</button>
 
     </div>
   </div>
 </template>
 
 <script>
+
+import { mapActions } from 'vuex';
 
 export default {
   name: "Post",
@@ -46,6 +48,8 @@ export default {
   },
 
   methods: {
+    ...mapActions(['deletePost']),
+    
     displayComment: function() {
       this.showComment = !this.showComment;
       return this.showComment;

@@ -139,6 +139,14 @@ exports.modifyPost = (req, res) => {
 
 // Delete a post
 exports.deletePost = (req, res) => {
+  console.log("---------");
+
+  console.log("req.params");
+  console.log(req.params);
+
+  console.log("req.headers.authorization");
+  console.log(req.headers.authorization);
+
   const userId = jwt.getUserId(req.headers.authorization);
 
   models.Post.findOne({
@@ -149,11 +157,20 @@ exports.deletePost = (req, res) => {
         res
           .status(403)
           .json("Vous n'êtes pas autorisé effectuer cette action !");
-      }
-      if (post.imageUrl) {
-        const filename = post.imageUrl.split("/images/")[1];
-        console.log(filename);
-        fs.unlink(`images/${filename}`, () => {
+      } else {
+        if (post.imageUrl) {
+          const filename = post.imageUrl.split("/images/")[1];
+          console.log(filename);
+          fs.unlink(`images/${filename}`, () => {
+            models.Post.destroy({
+              where: { id: req.params.id },
+            })
+              .then(() =>
+                res.status(200).json({ message: "Le post a été supprimé !" })
+              )
+              .catch((err) => res.status(500).json(err));
+          });
+        } else {
           models.Post.destroy({
             where: { id: req.params.id },
           })
@@ -161,17 +178,7 @@ exports.deletePost = (req, res) => {
               res.status(200).json({ message: "Le post a été supprimé !" })
             )
             .catch((err) => res.status(500).json(err));
-        });
-      } else {
-        console.log("a supprimer");
-        console.log(post);
-        models.Post.destroy({
-          where: { id: req.params.id },
-        })
-          .then(() =>
-            res.status(200).json({ message: "Le post a été supprimé !" })
-          )
-          .catch((err) => res.status(500).json(err));
+        }
       }
     })
     .catch((err) => res.status(500).json(err));
