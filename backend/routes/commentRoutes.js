@@ -12,7 +12,7 @@ router.post("/", commentCtrl.addComment);
 router.get("/", commentCtrl.getAllComments);
 // Get one post
 router.get("/:id", commentCtrl.getOneComment);
-// Get all posts from one user
+// Get all posts from one post
 router.get("/from/:post", commentCtrl.getCommentsFromPost);
 // Get all posts from one user
 router.get("/by/:user", commentCtrl.getCommentsFromUser);

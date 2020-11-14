@@ -1,5 +1,7 @@
 <template>
   <div class="post-unit">
+
+    <!-- Partie likes du bloc Post -->
     <div class="post-likes">
       <font-awesome-icon class="icon up" icon="arrow-up" />
       <p class="likes">{{ post.likes }}</p>
@@ -7,21 +9,39 @@
     </div>
 
     <div class="post-content">
+      <!-- Partie contenu du bloc Post -->
       <p class="meta">Par {{ post.User.username }}, il y a</p>
       <p class="title">{{ post.title }}</p>
       <p class="text">{{ post.content }}</p>
 
-      <div class="post-comments" @click="displayComment()">
+      <!-- Partie visible des commentaires du Post -->
+      <div class="post-comments" @click="displayComment(), fetchComments(post.id)">
         <font-awesome-icon class="icon comment" icon="comment" />
-        <p>{{ post.comments }} commentaires</p>
+        <!-- <p>{{ post.comments }} commentaires</p> -->
+        <p>commentaires</p>
       </div>
 
+      <!-- Partie cachée des commentaire du Post / Toggle -->
       <div v-show="showComment === true" class="comment-container">
-        <input type="text" @keyup.enter="postComment" placeholder="Ajouter un commentaire..."/>
+        <!-- Commentaires -->
         <div class="comment">
+          <div v-for="comment in post.comments" :key="comment.id" class="comment-unit">
+            {{ comment.content }} par {{ comment.User.username }} <br/>
+            <!-- Bouton de suppression du Post -->
+            <button>Supprimer le commentaire</button>
+            <!-- Bouton d'édition du Post -->
+            <button>Modifier votre commentaire</button>
+          </div>
         </div>
-      </div>
+        <!-- Input pour ajouter un commentaire -->
+        <input type="text" v-model="newComment" @keyup.enter="onSubmit()" placeholder="Ajouter un commentaire..."/>
+      </div> 
+
+      <!-- Bouton de suppression du Post -->
       <button @click="deletePost(post.id)">Supprimer le post</button>
+
+      <!-- Bouton d'édition du Post -->
+      <button>Modifier votre post</button>
 
     </div>
   </div>
@@ -44,25 +64,28 @@ export default {
   data: function() {
     return {
       showComment: false,
+      newComment: "",
     };
   },
 
   methods: {
-    ...mapActions(['deletePost']),
-    
+    ...mapActions(['deletePost', 'fetchComments', 'addComment']),
+
     displayComment: function() {
       this.showComment = !this.showComment;
       return this.showComment;
     },
-    // postComment: function(e) {
-    //   console.log(e.target.value);
-    //   axios.post(
-    //     "http://localhost:3000/api/posts",
-    //     { body: e.target.value },
-    //     { headers: headers }
-    //   );
-    // },
+
+    onSubmit() {
+      const comment = {
+        content: this.newComment,
+        PostId: this.post.id
+      };
+      this.addComment(comment);
+      this.newComment = "";
+    },
   },
+
 };
 </script>
 
@@ -146,5 +169,11 @@ export default {
     font-size: 20px;
     margin: 5px 0;
   }
+}
+
+.comment-unit {
+  border: 1px solid black;
+  margin: 10px 0 10px 10px;
+  background-color: darkgray;
 }
 </style>

@@ -120,17 +120,17 @@ exports.login = (req, res, next) => {
 
 // Me
 exports.me = (req, res, next) => {
-  console.log("------------------");
+  // console.log("------------------");
 
-  console.log("------req.body");
-  console.log(req.body);
+  // console.log("------req.body");
+  // console.log(req.body);
 
-  console.log("------req.body.token");
-  console.log(req.body.token);
+  // console.log("------req.body.token");
+  // console.log(req.body.token);
 
   const userId = jwt.getUserId(req.body.token);
-  console.log("-----userId");
-  console.log(userId);
+  // console.log("-----userId");
+  // console.log(userId);
 
   if (userId === "invalid signature") {
     res.status(401).json({ error: "Vous n'êtes pas connecté " });
@@ -146,7 +146,7 @@ exports.me = (req, res, next) => {
           erreur: "Aucun compte ne correspond à l'adresse email renseignée !",
         });
       }
-      console.log(user);
+      // console.log(user);
       res.status(200).json({ user });
     })
     .catch((err) => {

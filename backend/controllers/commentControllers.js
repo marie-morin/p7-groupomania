@@ -7,19 +7,46 @@ const regex = /^[a-zA-Z0-9 _.,!()&]+$/;
 
 // Create a comment
 exports.addComment = (req, res) => {
-  console.log(req.body.postId);
+  console.log("---------------");
+
+  // console.log("----req.headers.authorization");
+  // console.log(req.headers.authorization);
+
+  // console.log("----req.body");
+  // console.log(req.body);
+
+  // console.log("----req.body.comment.content");
+  // console.log(req.body.comment.content);
+
+  // console.log("----req.body.comment.PostId");
+  // console.log(req.body.comment.PostId);
+
+  // console.log("----id");
   const id = jwt.getUserId(req.headers.authorization);
+  // console.log(id);
 
   models.Comment.create({
-    content: req.body.content,
-    PostId: req.body.postId,
+    content: req.body.comment.content,
+    PostId: req.body.comment.PostId,
     UserId: id,
   })
     .then((comment) => {
-      res.status(201).json(comment);
+      models.Comment.findOne({
+        where: { id: comment.id },
+        include: [
+          {
+            model: models.User,
+            attributes: ["username"],
+          },
+        ],
+      })
+        .then((comment) => {
+          res.status(200).json(comment);
+        })
+        .catch((err) => res.status(500).json(err));
     })
     .catch((err) => {
-      res.status(500).json(err);
+      res.status(501).json(err);
     });
 };
 
@@ -64,6 +91,15 @@ exports.getOneComment = (req, res, next) => {
 
 // Get all posts from one post
 exports.getCommentsFromPost = (req, res, next) => {
+  console.log("-----------");
+  console.log("test");
+
+  console.log("req.params");
+  console.log(req.params);
+
+  console.log("req.params.post");
+  console.log(req.params.post);
+
   models.Comment.findAll({
     where: { postId: req.params.post },
     include: [

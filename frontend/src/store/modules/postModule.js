@@ -11,6 +11,7 @@ const getters = {
 const actions = {
   async fetchPosts({ commit }) {
     const response = await axios.get("http://localhost:3000/api/posts");
+    console.log(response.data);
     commit("setPosts", response.data);
   },
 
@@ -43,7 +44,14 @@ const actions = {
 };
 
 const mutations = {
-  setPosts: (state, posts) => (state.posts = posts),
+  // setPosts: (state, posts) => (state.posts = posts),
+
+  setPosts: (state, posts) => {
+    posts.forEach((post) => {
+      state.posts.push({ comments: [], ...post });
+    });
+  },
+
   newPost: (state, post) => state.posts.unshift(post),
   removePost: (state, id) =>
     (state.posts = state.posts.filter((todo) => todo.id !== id)),
