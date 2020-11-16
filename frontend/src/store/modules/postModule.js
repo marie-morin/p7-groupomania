@@ -11,7 +11,6 @@ const getters = {
 const actions = {
   async fetchPosts({ commit }) {
     const response = await axios.get("http://localhost:3000/api/posts");
-    console.log(response.data);
     commit("setPosts", response.data);
   },
 
@@ -26,7 +25,6 @@ const actions = {
       { post },
       { headers: headers }
     );
-    console.log(response);
     commit("newPost", response.data);
   },
 
@@ -41,11 +39,23 @@ const actions = {
     });
     commit("removePost", id);
   },
+
+  async updatePost({ commit }, { title, content, id }) {
+    const TOKEN = localStorage.getItem("jwt");
+    const headers = {
+      Authorization: "Bearer " + TOKEN.replace(/['"']+/g, ""),
+    };
+
+    const response = await axios.put(
+      `http://localhost:3000/api/posts/${id}`,
+      { content, title },
+      { headers: headers }
+    );
+    commit("updatePost", response.data);
+  },
 };
 
 const mutations = {
-  // setPosts: (state, posts) => (state.posts = posts),
-
   setPosts: (state, posts) => {
     posts.forEach((post) => {
       state.posts.push({ comments: [], ...post });
@@ -53,8 +63,18 @@ const mutations = {
   },
 
   newPost: (state, post) => state.posts.unshift(post),
+
   removePost: (state, id) =>
-    (state.posts = state.posts.filter((todo) => todo.id !== id)),
+    (state.posts = state.posts.filter((post) => post.id !== id)),
+
+  updatePost: (state, post) => {
+    state.posts.forEach((item) => {
+      if (item.id === post.id) {
+        item.title = post.title;
+        item.content = post.content;
+      }
+    });
+  },
 };
 
 export default {

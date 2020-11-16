@@ -9,39 +9,36 @@
     </div>
 
     <div class="post-content">
-      <!-- Partie contenu du bloc Post -->
       <p class="meta">Par {{ post.User.username }}, il y a</p>
       <p class="title">{{ post.title }}</p>
       <p class="text">{{ post.content }}</p>
 
-      <!-- Partie visible des commentaires du Post -->
+      <div v-if="editing">
+        <label for="title">Nouveau titre</label>
+        <input type="text" v-model="updatedPost.title" @keyup.enter="submitComment()" name="title"><br>
+
+        <label for="content">Nouveau contenu</label>
+        <input type="text" v-model="updatedPost.content" @keyup.enter="submitComment()" name="content">
+
+        <button @click="sendUpdatedPost()">Valider la modification</button>
+        <button @click="stopEditing()">Annuler</button>
+      </div>
+
       <div class="post-comments" @click="displayComment(), fetchComments(post.id)">
         <font-awesome-icon class="icon comment" icon="comment" />
         <!-- <p>{{ post.comments }} commentaires</p> -->
         <p>commentaires</p>
       </div>
 
-      <!-- Partie cachée des commentaire du Post / Toggle -->
       <div v-show="showComment === true" class="comment-container">
-        <!-- Commentaires -->
-        <div class="comment">
-          <div v-for="comment in post.comments" :key="comment.id" class="comment-unit">
-            {{ comment.content }} par {{ comment.User.username }} <br/>
-            <!-- Bouton de suppression du Post -->
-            <button>Supprimer le commentaire</button>
-            <!-- Bouton d'édition du Post -->
-            <button>Modifier votre commentaire</button>
-          </div>
+        <div v-for="comment in post.comments" :key="comment.id">
+          <Comment :comment="comment" />
         </div>
-        <!-- Input pour ajouter un commentaire -->
         <input type="text" v-model="newComment" @keyup.enter="onSubmit()" placeholder="Ajouter un commentaire..."/>
       </div> 
 
-      <!-- Bouton de suppression du Post -->
       <button @click="deletePost(post.id)">Supprimer le post</button>
-
-      <!-- Bouton d'édition du Post -->
-      <button>Modifier votre post</button>
+      <button @click="editPost()">Modifier votre post</button>
 
     </div>
   </div>
@@ -50,9 +47,12 @@
 <script>
 
 import { mapActions } from 'vuex';
+import Comment from "@/components/Comment.vue"
 
 export default {
   name: "Post",
+
+  components: { Comment },
 
   props: {
     post: {
@@ -65,15 +65,29 @@ export default {
     return {
       showComment: false,
       newComment: "",
+      editing : false,
+      updatedPost: {
+        title: this.post.title,
+        content: this.post.content,
+        id: this.post.id
+      }
     };
   },
 
   methods: {
-    ...mapActions(['deletePost', 'fetchComments', 'addComment']),
+    ...mapActions(['deletePost', 'fetchComments', 'addComment', 'deleteComment', 'updatePost']),
 
     displayComment: function() {
       this.showComment = !this.showComment;
       return this.showComment;
+    },
+
+    editPost() {
+      this.editing = true;
+    },
+
+    stopEditing() {
+      this.editing = false;
     },
 
     onSubmit() {
@@ -84,6 +98,17 @@ export default {
       this.addComment(comment);
       this.newComment = "";
     },
+
+    sendUpdatedPost() {
+      // const post = {
+      //   title : this.post.title,
+      //   content : this.post.content,
+      //   id : this.post.id,
+      // };
+      console.log("post ready : ", this.updatedPost);
+      this.updatePost(this.updatedPost);
+      this.editing = false;
+    }
   },
 
 };
@@ -169,11 +194,5 @@ export default {
     font-size: 20px;
     margin: 5px 0;
   }
-}
-
-.comment-unit {
-  border: 1px solid black;
-  margin: 10px 0 10px 10px;
-  background-color: darkgray;
 }
 </style>

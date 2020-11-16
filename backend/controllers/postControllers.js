@@ -8,6 +8,7 @@ const regex = /^[a-zA-Z0-9 _.,!()&]+$/;
 //Création d'un message
 exports.addPost = (req, res) => {
   console.log("-------------");
+  console.log("addPost");
 
   // console.log("----req.headers.authoriztion");
   // console.log(req.headers.authorization);
@@ -51,6 +52,9 @@ exports.addPost = (req, res) => {
 
 // Get all posts
 exports.getAllPosts = (req, res) => {
+  console.log("------------");
+  console.log("getAllPosts");
+
   models.Post.findAll({
     include: [
       {
@@ -72,6 +76,9 @@ exports.getAllPosts = (req, res) => {
 
 // Get one post
 exports.getOnePost = (req, res, next) => {
+  console.log("----------");
+  console.log("getOnePost");
+
   models.Post.findOne({
     where: { id: req.params.id },
     include: [
@@ -90,7 +97,9 @@ exports.getOnePost = (req, res, next) => {
 // Get all posts from one user
 exports.getPostsFrom = (req, res, next) => {
   console.log("---------");
-  console.log(req.params.user);
+  console.log("getPostsFrom");
+
+  // console.log(req.params.user);
   models.Post.findAll({
     where: { userId: req.params.user },
     include: [
@@ -113,6 +122,11 @@ exports.getPostsFrom = (req, res, next) => {
 
 // Update a post
 exports.modifyPost = (req, res) => {
+  console.log("----------");
+  console.log("modifyPost");
+
+  console.log("req.body", req.body);
+
   const userId = jwt.getUserId(req.headers.authorization);
 
   models.Post.findOne({
@@ -129,9 +143,24 @@ exports.modifyPost = (req, res) => {
         { content: req.body.content, title: req.body.title },
         { where: { id: req.params.id } }
       )
-        .then(() =>
-          res.status(200).json({ message: "Le post a été modifié !" })
-        )
+        .then((post) => {
+          console.log(post);
+          models.Post.findOne({
+            where: { id: req.params.id },
+            include: [
+              {
+                model: models.User,
+                attributes: ["username"],
+              },
+            ],
+            order: [["createdAt", "DESC"]],
+          })
+            .then((post) => {
+              console.log(post);
+              res.status(200).json(post);
+            })
+            .catch((err) => res.status(501).json(err));
+        })
         .catch((err) => res.status(500).json(err));
     })
     .catch((err) => res.status(500).json(err));
@@ -140,12 +169,13 @@ exports.modifyPost = (req, res) => {
 // Delete a post
 exports.deletePost = (req, res) => {
   console.log("---------");
+  console.log("deletePost");
 
-  console.log("req.params");
-  console.log(req.params);
+  // console.log("req.params");
+  // console.log(req.params);
 
-  console.log("req.headers.authorization");
-  console.log(req.headers.authorization);
+  // console.log("req.headers.authorization");
+  // console.log(req.headers.authorization);
 
   const userId = jwt.getUserId(req.headers.authorization);
 
@@ -185,4 +215,7 @@ exports.deletePost = (req, res) => {
 };
 
 // Like or dislike a post
-exports.giveOpinion = (req, res, next) => {};
+exports.giveOpinion = (req, res, next) => {
+  console.log("-----------");
+  console.log("giveOpinion");
+};
