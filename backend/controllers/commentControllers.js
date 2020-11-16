@@ -8,6 +8,7 @@ const regex = /^[a-zA-Z0-9 _.,!()&]+$/;
 // Create a comment
 exports.addComment = (req, res) => {
   console.log("---------------");
+  console.log("addComment");
 
   // console.log("----req.headers.authorization");
   // console.log(req.headers.authorization);
@@ -52,6 +53,9 @@ exports.addComment = (req, res) => {
 
 // Get all comments
 exports.getAllComments = (req, res) => {
+  console.log("------------");
+  console.log("getAllComments");
+
   models.Comment.findAll({
     include: [
       {
@@ -73,7 +77,10 @@ exports.getAllComments = (req, res) => {
 
 // Get one comment
 exports.getOneComment = (req, res, next) => {
+  console.log("-----------");
+  console.log("getOneComment");
   console.log(req.params.id);
+
   models.Comment.findOne({
     where: { id: req.params.id },
     include: [
@@ -92,13 +99,14 @@ exports.getOneComment = (req, res, next) => {
 // Get all posts from one post
 exports.getCommentsFromPost = (req, res, next) => {
   console.log("-----------");
-  console.log("test");
+  console.log("getCommentsFromPost");
+  // console.log("test");
 
-  console.log("req.params");
-  console.log(req.params);
+  // console.log("req.params");
+  // console.log(req.params);
 
-  console.log("req.params.post");
-  console.log(req.params.post);
+  // console.log("req.params.post");
+  // console.log(req.params.post);
 
   models.Comment.findAll({
     where: { postId: req.params.post },
@@ -123,6 +131,9 @@ exports.getCommentsFromPost = (req, res, next) => {
 
 // Get all posts from one user
 exports.getCommentsFromUser = (req, res, next) => {
+  console.log("----------");
+  console.log("getCommentsFromUser");
+
   models.Comment.findAll({
     where: { userId: req.params.user },
     include: [
@@ -146,32 +157,53 @@ exports.getCommentsFromUser = (req, res, next) => {
 
 // Update a post
 exports.modifyComment = (req, res) => {
+  console.log("----------");
+  console.log("modifyComment");
+
+  console.log("req.body", req.body);
+
   const userId = jwt.getUserId(req.headers.authorization);
 
-  models.Comment.findOne({
-    where: { id: req.params.id },
-  })
+  models.Comment.findOne({ where: { id: req.params.id } })
     .then((comment) => {
       if (comment.userId !== userId) {
         res
           .status(403)
           .json("Vous n'êtes pas autorisé effectuer cette action !");
-      }
-
-      models.Comment.update(
-        { content: req.body.content },
-        { where: { id: req.params.id } }
-      )
-        .then(() =>
-          res.status(200).json({ message: "Le commentaire a été modifié !" })
+      } else {
+        models.Comment.update(
+          { content: req.body.content },
+          { where: { id: req.params.id } }
         )
-        .catch((err) => res.status(500).json(err));
+          .then((comment) => {
+            console.log(comment);
+            models.Comment.findOne({
+              where: { id: req.params.id },
+              include: [
+                {
+                  model: models.User,
+                  attributes: ["username"],
+                },
+              ],
+              order: [["createdAt", "DESC"]],
+            })
+              .then((comment) => {
+                console.log(comment);
+                res.status(200).json(comment);
+              })
+              .catch((err) => res.status(501).json(err));
+          })
+          .catch((err) => res.status(502).json(err));
+      }
     })
-    .catch((err) => res.status(500).json(err));
+    .catch((err) => res.status(503).json(err));
 };
 
 // Delete a post
 exports.deleteComment = (req, res) => {
+  console.log("----------");
+  console.log("deleteComment");
+
   const userId = jwt.getUserId(req.headers.authorization);
 
   models.Comment.findOne({
@@ -195,4 +227,7 @@ exports.deleteComment = (req, res) => {
 };
 
 // Like or dislike a post
-exports.giveOpinion = (req, res, next) => {};
+exports.giveOpinion = (req, res, next) => {
+  console.log("-----------");
+  console.log("giveOpinion");
+};

@@ -26,6 +26,32 @@ const actions = {
     );
     commit("newComment", response.data);
   },
+
+  async deleteComment({ commit }, id) {
+    const TOKEN = localStorage.getItem("jwt");
+    const headers = {
+      Authorization: "Bearer " + TOKEN.replace(/['"']+/g, ""),
+    };
+
+    await axios.delete(`http://localhost:3000/api/comments/${id}`, {
+      headers: headers,
+    });
+    commit("removeComment", id);
+  },
+
+  async updateComment({ commit }, { content, id }) {
+    const TOKEN = localStorage.getItem("jwt");
+    const headers = {
+      Authorization: "Bearer " + TOKEN.replace(/['"']+/g, ""),
+    };
+
+    const response = await axios.put(
+      `http://localhost:3000/api/comments/${id}`,
+      { content },
+      { headers: headers }
+    );
+    commit("updateComment", response.data);
+  },
 };
 
 const mutations = {
@@ -45,6 +71,27 @@ const mutations = {
     posts.forEach((post) => {
       if (post.id === comment.postId) {
         post.comments.push(comment);
+      }
+    });
+  },
+
+  removeComment: (state, id) => {
+    const posts = postModule.default.state.posts;
+    posts.forEach((post) => {
+      post.comments = post.comments.filter((comment) => comment.id !== id);
+    });
+  },
+
+  updateComment: (state, comment) => {
+    const posts = postModule.default.state.posts;
+
+    posts.forEach((post) => {
+      if (post.id === comment.postId) {
+        post.comments.forEach((com) => {
+          if (com.id === comment.id) {
+            com.content = comment.content;
+          }
+        });
       }
     });
   },

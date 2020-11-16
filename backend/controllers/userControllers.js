@@ -13,6 +13,9 @@ const nameRegex = /^[a-zA-Z ,.'-]+$/;
 
 // Signup
 exports.signup = (req, res, next) => {
+  console.log("-----------");
+  console.log("signup");
+
   const registeringUser = JSON.parse(req.body.data);
   // if (
   //   !mailValidator.validate(req.body.email) ||
@@ -80,12 +83,13 @@ exports.signup = (req, res, next) => {
 // Login
 exports.login = (req, res, next) => {
   console.log("------------------");
-  console.log("req.body");
-  console.log(req.body);
-  console.log("req.body.data");
-  console.log(req.body.data);
+  console.log("login");
+  // console.log("req.body");
+  // console.log(req.body);
+  // console.log("req.body.data");
+  // console.log(req.body.data);
   const loginUser = JSON.parse(req.body.data);
-  console.log(loginUser);
+  // console.log(loginUser);
 
   models.User.findOne({
     where: { email: loginUser.email },
@@ -120,7 +124,8 @@ exports.login = (req, res, next) => {
 
 // Me
 exports.me = (req, res, next) => {
-  // console.log("------------------");
+  console.log("------------------");
+  console.log("me");
 
   // console.log("------req.body");
   // console.log(req.body);
@@ -156,6 +161,9 @@ exports.me = (req, res, next) => {
 
 // Get all users
 exports.getAllUsers = (req, res, next) => {
+  console.log("----------");
+  console.log("getAllUsers");
+
   models.User.findAll({
     attributes: [
       "email",
@@ -172,6 +180,9 @@ exports.getAllUsers = (req, res, next) => {
 
 // Get one user
 exports.getOneUser = (req, res) => {
+  console.log("-----------");
+  console.log("getOneUser");
+
   models.User.findOne({
     attributes: [
       "email",
@@ -209,6 +220,9 @@ exports.getUserByUsername = (req, res, next) => {};
 
 // Update user acount
 exports.modifyUser = (req, res, next) => {
+  console.log("------------");
+  console.log("modifyUser");
+
   const registeringUser = JSON.parse(req.body.body);
   const userId = jwt.getUserId(req.headers.authorization);
   let newPassword;
@@ -289,13 +303,15 @@ exports.modifyUser = (req, res, next) => {
 
 // // Delete an acount
 exports.deleteUser = (req, res, next) => {
-  const userId = jwt.getUserId(req.headers.authorization);
   console.log("----------");
-  console.log("Utilisateur connecté");
-  console.log(userId);
+  console.log("deleteUser");
 
-  console.log("Utilisateur visé");
-  console.log(req.params.id);
+  const userId = jwt.getUserId(req.headers.authorization);
+  // console.log("Utilisateur connecté");
+  // console.log(userId);
+
+  // console.log("Utilisateur visé");
+  // console.log(req.params.id);
 
   models.User.findOne({
     where: { id: req.params.id },

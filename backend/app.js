@@ -5,7 +5,7 @@ const path = require("path");
 const cors = require("cors");
 // Security Imports
 const helmet = require("helmet");
-const rateLimit = require("express-rate-limit");
+// const rateLimit = require("express-rate-limit");
 const hpp = require("hpp");
 // Routes Imports
 const userRoutes = require("./routes/userRoutes");
@@ -20,11 +20,11 @@ app.use(helmet());
 app.use(cors());
 
 // express-rate-limit middleware to limit the amount of request done
-const limiter = rateLimit({
-  windowMs: 30 * 60 * 1000,
-  max: 100,
-});
-app.use(limiter);
+// const limiter = rateLimit({
+//   windowMs: 30 * 60 * 1000,
+//   max: 100,
+// });
+// app.use(limiter);
 
 // Setting CORS headers
 app.use((req, res, next) => {
