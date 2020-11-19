@@ -1,4 +1,5 @@
 import axios from "axios";
+import * as userModule from "./userModule";
 
 const state = {
   posts: [],
@@ -9,6 +10,7 @@ const getters = {
 };
 
 const actions = {
+  // Concernant les posts
   async fetchPosts({ commit }) {
     const response = await axios.get("http://localhost:3000/api/posts");
     commit("setPosts", response.data);
@@ -53,12 +55,34 @@ const actions = {
     );
     commit("updatePost", response.data);
   },
+
+  // Concernant les likes des posts
+  async fetchPostLikes({ commit }, postId) {
+    const response = await axios.get(
+      `http://localhost:3000/api/posts/${postId}/like`
+    );
+    commit("setPostLikes", response.data);
+  },
+
+  async ratePost({ commit }, postId) {
+    const userId = userModule.default.state.user.id;
+    const response = await axios.post(`http://localhost:3000/api/posts/like`, {
+      postId,
+      userId,
+    });
+    const rate = {
+      response,
+      postId,
+      userId,
+    };
+    commit("setPostRate", rate);
+  },
 };
 
 const mutations = {
   setPosts: (state, posts) => {
     posts.forEach((post) => {
-      state.posts.push({ comments: [], ...post });
+      state.posts.push({ comments: [], likes: [], ...post });
     });
   },
 
@@ -72,6 +96,36 @@ const mutations = {
       if (item.id === post.id) {
         item.title = post.title;
         item.content = post.content;
+      }
+    });
+  },
+
+  setPostLikes: (state, likes) => {
+    if (!likes.message) {
+      likes.forEach((like) => {
+        state.posts.forEach((post) => {
+          if (post.id === like.postId) {
+            post.likes.push(like);
+          }
+        });
+      });
+    }
+  },
+
+  setPostRate: (state, rate) => {
+    // console.log("rate : ", rate);
+    // console.log("rate.postId : ", rate.postId);
+    // console.log("rate.userId : ", rate.userId);
+
+    state.posts.forEach((post) => {
+      if (post.id === rate.postId) {
+        // console.log("post.id : ", post.id);
+        if (rate.response.data.like) {
+          post.likes.push(rate);
+        } else {
+          // console.log("unlike");
+          post.likes = post.likes.filter((like) => like.userId !== rate.userId);
+        }
       }
     });
   },

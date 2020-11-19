@@ -3,13 +3,15 @@
 
     <!-- Partie likes du bloc Post -->
     <div class="post-likes">
-      <font-awesome-icon class="icon up" icon="arrow-up" />
-      <p class="likes">{{ post.likes }}</p>
-      <font-awesome-icon class="icon down" icon="arrow-down" />
+      <p class="likes">{{ post.likes.length }}</p>
+      <font-awesome-icon @click="sendLike()" v-bind:class="{ liked: wasLiked }" class="icon up" icon="arrow-up" />
     </div>
 
     <div class="post-content">
-      <p class="meta">Par {{ post.User.username }}, il y a</p>
+      <p class="meta">
+        <router-link :to="{ name: 'Profil', params: { id: post.UserId }}">{{ post.User.username }}</router-link>
+        , il y a
+      </p>
       <p class="title">{{ post.title }}</p>
       <p class="text">{{ post.content }}</p>
 
@@ -21,13 +23,12 @@
         <input type="text" v-model="updatedPost.content" @keyup.enter="submitComment()" name="content">
 
         <button @click="sendUpdatedPost()">Valider la modification</button>
-        <button @click="stopEditing()">Annuler</button>
+        <button @click="edit()">Annuler</button>
       </div>
 
-      <div class="post-comments" @click="displayComment(), fetchComments(post.id)">
+      <div class="post-comments" @click="displayComment()">
         <font-awesome-icon class="icon comment" icon="comment" />
-        <!-- <p>{{ post.comments }} commentaires</p> -->
-        <p>commentaires</p>
+        <p>{{ post.comments.length }} commentaires</p>
       </div>
 
       <div v-show="showComment === true" class="comment-container">
@@ -37,8 +38,8 @@
         <input type="text" v-model="newComment" @keyup.enter="onSubmit()" placeholder="Ajouter un commentaire..."/>
       </div> 
 
-      <button @click="deletePost(post.id)">Supprimer le post</button>
-      <button @click="editPost()">Modifier votre post</button>
+      <button @click="deletePost(post.id)" v-if="isAllowed">Supprimer le post</button>
+      <button @click="edit()" v-if="isCreator">Modifier votre post</button>
 
     </div>
   </div>
@@ -46,7 +47,7 @@
 
 <script>
 
-import { mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import Comment from "@/components/Comment.vue"
 
 export default {
@@ -70,25 +71,29 @@ export default {
         title: this.post.title,
         content: this.post.content,
         id: this.post.id
-      }
+      },
+      wasLiked: false,
     };
   },
 
+  computed: { 
+    ...mapGetters(['currentUser']),
+
+    isAllowed() {
+      return this.currentUser.isAdmin === true || this.post.userId === this.currentUser.id
+    },
+
+    isCreator() {
+      return this.post.userId === this.currentUser.id
+    }
+  },
+
   methods: {
-    ...mapActions(['deletePost', 'fetchComments', 'addComment', 'deleteComment', 'updatePost']),
+    ...mapActions(['deletePost', 'fetchComments', 'addComment', 'deleteComment', 'updatePost', 'ratePost', 'fetchPostLikes']),
 
-    displayComment: function() {
-      this.showComment = !this.showComment;
-      return this.showComment;
-    },
+    displayComment() { this.showComment = !this.showComment },
 
-    editPost() {
-      this.editing = true;
-    },
-
-    stopEditing() {
-      this.editing = false;
-    },
+    edit() { this.editing = !this.editing },
 
     onSubmit() {
       const comment = {
@@ -100,17 +105,23 @@ export default {
     },
 
     sendUpdatedPost() {
-      // const post = {
-      //   title : this.post.title,
-      //   content : this.post.content,
-      //   id : this.post.id,
-      // };
-      console.log("post ready : ", this.updatedPost);
       this.updatePost(this.updatedPost);
       this.editing = false;
-    }
+    },
+
+    sendLike() {   
+      this.ratePost(this.post.id);
+      this.wasLiked = !this.wasLiked;
+    },
   },
 
+  created() {
+    console.log(this.currentUser);
+    console.log(this.isAllowed);
+
+    this.fetchComments(this.post.id);
+    this.fetchPostLikes(this.post.id);
+  },
 };
 </script>
 
@@ -194,5 +205,9 @@ export default {
     font-size: 20px;
     margin: 5px 0;
   }
+}
+
+.liked {
+  background-color: green;
 }
 </style>

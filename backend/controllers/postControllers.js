@@ -9,21 +9,16 @@ const regex = /^[a-zA-Z0-9 _.,!()&]+$/;
 exports.addPost = (req, res) => {
   console.log("-------------");
   console.log("addPost");
+  console.log("----req.headers.authoriztion : ", req.headers.authorization);
 
-  // console.log("----req.headers.authoriztion");
-  // console.log(req.headers.authorization);
-
-  // console.log("----id");
   const id = jwt.getUserId(req.headers.authorization);
-  // console.log(id);
-
-  // console.log("-----req.body");
-  // console.log(req.body);
-
-  // console.log("---- req.body parsed");
-  // console.log(JSON.parse(req.body.post));
+  console.log("----id : ", id);
+  console.log("-----req.body : ", req.body);
 
   const newPost = JSON.parse(req.body.post);
+  console.log("newPost : ", newPost);
+  console.log("newPost.title : ", newPost.title);
+  console.log("newPost.content : ", newPost.content);
 
   models.Post.create({
     content: newPost.content,
@@ -43,10 +38,10 @@ exports.addPost = (req, res) => {
         .then((post) => {
           res.status(200).json(post);
         })
-        .catch((err) => res.status(500).json(err));
+        .catch((err) => res.status(501).json(err));
     })
     .catch((err) => {
-      res.status(500).json(err);
+      res.status(502).json(err);
     });
 };
 
@@ -214,8 +209,94 @@ exports.deletePost = (req, res) => {
     .catch((err) => res.status(500).json(err));
 };
 
-// Like or dislike a post
-exports.giveOpinion = (req, res, next) => {
+// Like a post
+exports.like = (req, res, next) => {
   console.log("-----------");
   console.log("giveOpinion");
+  console.log("req.body : ", req.body);
+  console.log("req.body.userId : ", req.body.userId);
+  console.log("req.body.postId : ", req.body.postId);
+
+  models.PostLikes.findOne({
+    where: {
+      UserId: req.body.userId,
+      PostId: req.body.postId,
+    },
+  })
+    .then((like) => {
+      if (like) {
+        models.PostLikes.destroy({ where: { id: like.id } })
+          .then(() => res.status(200).json({ message: "Like supprimé !" }))
+          .catch((err) => res.status(500).json(err));
+      } else {
+        models.PostLikes.create({
+          UserId: req.body.userId,
+          PostId: req.body.postId,
+        })
+          .then((like) => res.status(200).json({ like }))
+          .catch((err) => res.status(500).json(err));
+      }
+    })
+    .catch((err) => res.status(500).json(err));
 };
+
+// Get likes from one post
+exports.getLikesFromPost = (req, res, next) => {
+  console.log("---------");
+  console.log("getLikesFromPost");
+
+  console.log("req.params : ", req.params);
+  console.log("req.params.id : ", req.params.id);
+
+  models.PostLikes.findAll({
+    where: { postId: req.params.id },
+    include: [
+      {
+        model: models.User,
+        attributes: ["username"],
+      },
+    ],
+    order: [["createdAt", "DESC"]],
+  })
+    .then((likes) => {
+      if (likes.length > null) {
+        res.status(200).json(likes);
+      } else {
+        res.status(200).json({ message: "Pas de likes à afficher" });
+      }
+    })
+    .catch((err) => res.status(500).json(err));
+};
+
+// Remove like from a post
+// exports.deleteLike = (req, res, next) => {
+//   console.log("-----------");
+//   console.log("deleteLike");
+//   console.log("req.params.id : ", req.params.id);
+//   console.log("req.body : ", req.body);
+//   console.log("req.body.userId : ", req.body.userId);
+//   console.log("req.body.postId : ", req.body.postId);
+
+//   models.PostLikes.findOne({
+//     where: {
+//       UserId: req.body.userId,
+//       PostId: req.body.postId,
+//     },
+//   })
+//     .then((like) => {
+//       console.log("like : ", like);
+
+//       if (!like) {
+//         res.status(404).json({ error: "Aucun like ne correspond !" });
+//       } else {
+//         if (like.userId === req.body.userId) {
+//           models.PostLikes.destroy({ where: { id: like.id } })
+//             .then(() => res.status(200).json({ message: "Like supprimé !" }))
+//             .catch((err) => res.status(500).json(err));
+//         } else {
+//           res.status(403).json({ error: "Vous n'avez pas l'autorisation !" });
+//         }
+//       }
+//     })
+//     .catch((err) => res.status(500).json(err));
+// };

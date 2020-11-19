@@ -19,8 +19,12 @@ router.get("/from/:user", postCtrl.getPostsFrom);
 router.put("/:id", postCtrl.modifyPost);
 // Delete a post
 router.delete("/:id", postCtrl.deletePost);
-// Like or dislike a post
-router.post("/:id/like", postCtrl.giveOpinion);
+// Like a post
+router.post("/like", postCtrl.like);
+// Get likes from one post
+router.get("/:id/like", postCtrl.getLikesFromPost);
+// Remove like from a post
+// router.delete("/unlike", postCtrl.deleteLike);
 
 // // Create a post
 // router.post("/", auth, postCtrl.addPost);
