@@ -1,10 +1,11 @@
 <template>
-    <div class="infos-container">
-      <p>{{ user.firstname }} {{ user.lastname }}</p>
-    </div>
+  <div class="infos-container">
+    <router-link :to="{ name: 'Profil', params: { id: user.id }}">{{ user.firstname }} {{ user.lastname }}</router-link>
+  </div>
 </template>
 
 <script>
+
 export default {
   name: "UserCard",
 

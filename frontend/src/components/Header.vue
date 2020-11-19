@@ -5,15 +5,16 @@
       <div id="nav">
         <router-link v-if="connected" to="/home">Accueil</router-link>
         <router-link v-if="connected" to="/users">Utilisateurs</router-link>
-        <router-link v-if="connected" to="/profil">Profil</router-link>
+        <router-link v-if="connected" :to="{ name: 'Profil', params: { id: currentUser.id }}">Profil</router-link>
         <a v-if="connected" href="#" @click.prevent="logout">Déconnexion</a>
+        <p>Bonjour <span>{{ currentUser.firstname }}</span></p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-
+import { mapGetters } from 'vuex';
 import store from "../store";
 
 export default {
@@ -26,10 +27,14 @@ export default {
   },
 
   created: function() {
-    if (localStorage.getItem("jwt") !== null) {
+    if (this.currentUser !== null) {
       this.connected = true;
     }
     return this.connected;
+  },
+
+  computed: { 
+    ...mapGetters(['currentUser']),
   },
 
   methods: {
@@ -42,7 +47,6 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .header {
   width: 100vw;

@@ -1,3 +1,4 @@
+
 <template>
   <div class="profil">
     <div class="top-content">
@@ -9,8 +10,10 @@
           :userId="userId"
           v-on:display-form="displayFrom()"
         />
-        <button @click="displayFrom()">Modifier mon profil</button>
-        <button @click.prevent="deleteProfil">Supprimer mon profil</button>
+
+        <button @click="displayFrom()" v-if="isCreator">Modifier mon profil</button>
+        <button @click.prevent="deleteProfil" v-if="isAllowed">Supprimer mon profil</button>
+
         <ProfilForm
           v-show="showForm === true"
           :settings="settings"
@@ -19,6 +22,7 @@
           :userId="userId"
           v-on:display-form="displayFrom()"
         />
+
       </div>
     </div>
     <Footer />
@@ -31,6 +35,7 @@ import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
 import UserInfos from "@/components/UserInfos.vue";
 import ProfilForm from "@/components/ProfilForm.vue";
+import { mapGetters } from 'vuex';
 
 import axios from "axios";
 let id = localStorage.getItem("user");
@@ -80,18 +85,15 @@ export default {
     };
   },
 
-  created: function() {
-    this.displayUser();
-  },
-
   methods: {
 
     displayUser: function() {
+      // console.log(this.$route.params.id);
       axios
-        .get("http://localhost:3000/api/users/" + id)
+        .get("http://localhost:3000/api/users/" + this.$route.params.id)
         .then((response) => {
           this.user = response.data;
-          console.log(this.user);
+          // console.log(this.user);
         })
         .catch((error) => console.log(error));
     },
@@ -102,24 +104,46 @@ export default {
     },
 
     deleteProfil: function() {
-      console.log(this.userId);
-      console.log(this.user);
+      // console.log(this.userId);
+      // console.log(this.user);
       if (window.confirm("Voulez-vous vraiment supprimer votre compte ?")) {
         axios.delete("http://localhost:3000/api/users/" + id,
         { body: this.user },
         { headers: headers },
       );
-
         // localStorage.clear();
         // this.$router.push("Home");
       }
     },
 
     modifyProfil: function() {
-      console.log(this.userId);
+      // console.log(this.userId);
       this.showForm = true;
       return this.showForm;
     },
+  },
+
+  
+
+  computed: { 
+    ...mapGetters(['currentUser']),
+
+    isAllowed() {
+      return this.currentUser.isAdmin === true || this.$route.params.id === this.currentUser.id
+    },
+
+    isCreator() {
+      return this.$route.params.id === this.currentUser.id
+    }
+  },
+
+  created: function() {
+    this.displayUser();
+    // console.log("isAllowed : ", this.isAllowed);
+    // console.log("isCreator : ", this.isCreator);
+    // console.log("this.currentUser : ", this.currentUser);
+    // console.log("this.user.id : ", this.user.id);
+    // console.log("this.$route.params.id : ", this.$route.params.id);
   },
 };
 </script>
