@@ -119,11 +119,11 @@ exports.getCommentsFromPost = (req, res, next) => {
     order: [["createdAt", "DESC"]],
   })
     .then((comments) => {
-      console.log(comments);
-      if (comments.length > null) {
+      console.log(comments.length);
+      if (comments.length > 0) {
         res.status(200).json(comments);
       } else {
-        res.status(404).json({ error: "Pas de commentaire à afficher" });
+        res.status(200).json({ message: "Pas de commentaire à afficher" });
       }
     })
     .catch((err) => res.status(500).json(err));
@@ -226,8 +226,61 @@ exports.deleteComment = (req, res) => {
     .catch((err) => res.status(500).json(err));
 };
 
-// Like or dislike a post
-exports.giveOpinion = (req, res, next) => {
+// Like a comment
+exports.like = (req, res, next) => {
   console.log("-----------");
-  console.log("giveOpinion");
+  console.log("giveOpinion on comment");
+  console.log("req.body : ", req.body);
+  console.log("req.body.userId : ", req.body.userId);
+  console.log("req.body.commentId : ", req.body.commentId);
+
+  models.CommentLikes.findOne({
+    where: {
+      UserId: req.body.userId,
+      CommentId: req.body.commentId,
+    },
+  })
+    .then((like) => {
+      if (like) {
+        models.CommentLikes.destroy({ where: { id: like.id } })
+          .then(() => res.status(200).json({ message: "Like supprimé !" }))
+          .catch((err) => res.status(500).json(err));
+      } else {
+        models.CommentLikes.create({
+          UserId: req.body.userId,
+          CommentId: req.body.commentId,
+        })
+          .then((like) => res.status(200).json({ like }))
+          .catch((err) => res.status(500).json(err));
+      }
+    })
+    .catch((err) => res.status(500).json(err));
+};
+
+// Get likes from one post
+exports.getLikesFromComment = (req, res, next) => {
+  console.log("---------");
+  console.log("getLikesFromComment");
+
+  console.log("req.params : ", req.params);
+  console.log("req.params.id : ", req.params.id);
+
+  models.CommentLikes.findAll({
+    where: { commentId: req.params.id },
+    include: [
+      {
+        model: models.User,
+        attributes: ["username"],
+      },
+    ],
+    order: [["createdAt", "DESC"]],
+  })
+    .then((likes) => {
+      if (likes.length > null) {
+        res.status(200).json(likes);
+      } else {
+        res.status(200).json({ message: "Pas de likes à afficher" });
+      }
+    })
+    .catch((err) => res.status(500).json(err));
 };

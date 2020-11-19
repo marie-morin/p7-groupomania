@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import axios from "axios";
+import store from "../store";
 
 Vue.use(VueRouter);
 
@@ -40,7 +41,7 @@ const routes = [
     },
   },
   {
-    path: "/profil/",
+    path: "/profil/:id",
     name: "Profil",
     component: () => import("../views/Profil.vue"),
     meta: {
@@ -88,6 +89,8 @@ router.beforeEach((to, from, next) => {
             next();
           }
         } else {
+          store.commit("saveUser", response.data.user);
+          store.commit("loginIn", true);
           if (requiresAuth) {
             next();
           } else {

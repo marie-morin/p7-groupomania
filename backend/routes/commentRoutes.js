@@ -21,7 +21,9 @@ router.put("/:id", commentCtrl.modifyComment);
 // Delete a post
 router.delete("/:id", commentCtrl.deleteComment);
 // Like or dislike a post
-router.post("/:id/like", commentCtrl.giveOpinion);
+router.post("/like", commentCtrl.like);
+// Get likes from one comment
+router.get("/:id/like", commentCtrl.getLikesFromComment);
 
 // // Create a post
 // router.post("/", auth, multer, postCtrl.addPost);

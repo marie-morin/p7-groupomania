@@ -1,11 +1,13 @@
 import axios from "axios";
 import * as postModule from "./postModule";
+import * as userModule from "./userModule";
 
 const state = {};
 
 const getters = {};
 
 const actions = {
+  // Concernant les commentaires
   async fetchComments({ commit }, postId) {
     const response = await axios.get(
       `http://localhost:3000/api/comments/from/${postId}`
@@ -52,18 +54,47 @@ const actions = {
     );
     commit("updateComment", response.data);
   },
+
+  // Concernant les likes des posts
+  async fetchCommentLikes({ commit }, commentId) {
+    const response = await axios.get(
+      `http://localhost:3000/api/comments/${commentId}/like`
+    );
+    commit("setCommentLikes", response.data);
+  },
+
+  async rateComment({ commit }, commentId) {
+    const userId = userModule.default.state.user.id;
+    const response = await axios.post(
+      `http://localhost:3000/api/comments/like`,
+      {
+        commentId,
+        userId,
+      }
+    );
+    const rate = {
+      response,
+      commentId,
+      userId,
+    };
+    console.log("response.data : ", response.data);
+    commit("setCommentRate", rate);
+  },
 };
 
 const mutations = {
   setComments: (state, comments) => {
     const posts = postModule.default.state.posts;
-    comments.forEach((comment) => {
-      posts.forEach((post) => {
-        if (post.id === comment.postId) {
-          post.comments.push(comment);
-        }
+
+    if (!comments.message) {
+      comments.forEach((comment) => {
+        posts.forEach((post) => {
+          if (post.id === comment.postId) {
+            post.comments.push({ likes: [], ...comment });
+          }
+        });
       });
-    });
+    }
   },
 
   newComment: (state, comment) => {
@@ -93,6 +124,44 @@ const mutations = {
           }
         });
       }
+    });
+  },
+
+  setCommentLikes: (state, likes) => {
+    const posts = postModule.default.state.posts;
+    if (!likes.message) {
+      likes.forEach((like) => {
+        posts.forEach((post) => {
+          post.comments.forEach((comment) => {
+            if (comment.id === like.commentId) {
+              comment.likes.push(like);
+            }
+          });
+        });
+      });
+    }
+  },
+
+  setCommentRate: (state, rate) => {
+    const posts = postModule.default.state.posts;
+    // console.log("rate : ", rate);
+    // console.log("rate.postId : ", rate.postId);
+    // console.log("rate.userId : ", rate.userId);
+
+    posts.forEach((post) => {
+      post.comments.forEach((comment) => {
+        if (comment.id === rate.commentId) {
+          // console.log("post.id : ", post.id);
+          if (rate.response.data.like) {
+            comment.likes.push(rate);
+          } else {
+            // console.log("unlike");
+            comment.likes = comment.likes.filter(
+              (like) => like.userId !== rate.userId
+            );
+          }
+        }
+      });
     });
   },
 };

@@ -172,6 +172,7 @@ exports.getAllUsers = (req, res, next) => {
       "username",
       "isAdmin",
       "bio",
+      "id",
     ],
   })
     .then((users) => res.status(200).json(users))
