@@ -107,9 +107,7 @@ exports.deleteComment = (req, res) => {
     const userId = token.userId;
     const isAdmin = token.isAdmin;
 
-    models.Comment.findOne({
-      where: { id: req.params.id },
-    })
+    models.Comment.findOne({ where: { id: req.params.id } })
       .then((comment) => {
         if (userId === comment.userId || isAdmin) {
           models.Comment.destroy({ where: { id: comment.id } })
@@ -178,99 +176,3 @@ exports.getLikesFromComment = (req, res, next) => {
       .catch((error) => res.status(500).json(error));
   }
 };
-
-// Get all comments
-// exports.getAllComments = (req, res) => {
-//   console.log("------------ getAllComments");
-
-//   console.log("req.body.data : ", req.body.data);
-//   const data = JSON.parse(req.body.data);
-//   console.log("data : ", data);
-
-//   console.log("----req.headers.authorization");
-//   console.log(req.headers.authorization);
-
-//   models.Comment.findAll({
-//     include: [
-//       {
-//         model: models.User,
-//         attributes: ["username"],
-//       },
-//     ],
-//     order: [["createdAt", "DESC"]],
-//   })
-//     .then((comments) => {
-//       if (comments.length > null) {
-//         res.status(200).json(comments);
-//       } else {
-//         res.status(404).json({ error: "Pas de commentaire à afficher" });
-//       }
-//     })
-//     .catch((err) => res.status(500).json(err));
-// };
-
-// Get one comment
-// exports.getOneComment = (req, res, next) => {
-//   console.log("----------- getOneComment");
-
-//   console.log("req.body.data : ", req.body.data);
-//   const data = JSON.parse(req.body.data);
-//   console.log("data : ", data);
-
-//   console.log("----req.headers.authorization");
-//   console.log(req.headers.authorization);
-
-//   // console.log(req.params.id);
-
-//   models.Comment.findOne({
-//     where: { id: req.params.id },
-//     include: [
-//       {
-//         model: models.User,
-//         attributes: ["username"],
-//       },
-//     ],
-//   })
-//     .then((comment) => {
-//       res.status(200).json(comment);
-//     })
-//     .catch((err) => res.status(500).json(err));
-// };
-
-// Get all posts from one user
-// exports.getCommentsFromUser = (req, res, next) => {
-//   console.log("---------- getCommentsFromUser");
-
-//   console.log("req.body.data : ", req.body.data);
-//   const data = JSON.parse(req.body.data);
-//   console.log("data : ", data);
-
-//   console.log("----req.headers.authorization");
-//   console.log(req.headers.authorization);
-
-//   // console.log("req.params");
-//   // console.log(req.params);
-
-//   // console.log("req.params.user");
-//   // console.log(req.params.user);
-
-//   models.Comment.findAll({
-//     where: { userId: req.params.user },
-//     include: [
-//       {
-//         model: models.User,
-//         attributes: ["username"],
-//       },
-//     ],
-//     order: [["createdAt", "DESC"]],
-//   })
-//     .then((comments) => {
-//       console.log(comments);
-//       if (comments.length > null) {
-//         res.status(200).json(comments);
-//       } else {
-//         res.status(404).json({ error: "Pas de commentaire à afficher" });
-//       }
-//     })
-//     .catch((err) => res.status(500).json(err));
-// };

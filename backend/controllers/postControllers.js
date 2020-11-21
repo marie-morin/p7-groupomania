@@ -9,38 +9,32 @@ const regex = /^[a-zA-Z0-9 _.,!()&]+$/;
 exports.addPost = (req, res) => {
   console.log("------------- addPost");
 
-  const data = JSON.parse(req.body.data);
-  const token = jwt.getUserId(req.headers.authorization);
-  const userId = token.userId;
+  if (
+    !req.body.data.title ||
+    !req.body.data.content ||
+    !req.headers.authorization
+  ) {
+    res.status(400).json({ message: "Requête incomplète." });
+  } else {
+    const data = JSON.parse(req.body.data);
+    const token = jwt.getUserId(req.headers.authorization);
+    const userId = token.userId;
 
-  // console.log("data : ", data);
-  // console.log("data.title : ", data.title);
-  // console.log("data.content : ", data.content);
-  // console.log("userId : ", userId);
-
-  models.Post.create({
-    content: data.content,
-    title: data.title,
-    UserId: userId,
-  })
-    .then((post) => {
-      models.Post.findOne({
-        where: { id: post.id },
-        include: [
-          {
-            model: models.User,
-            attributes: ["username"],
-          },
-        ],
-      })
-        .then((post) => {
-          res.status(200).json(post);
-        })
-        .catch((err) => res.status(501).json(err));
+    models.Post.create({
+      content: data.content,
+      title: data.title,
+      UserId: userId,
     })
-    .catch((err) => {
-      res.status(502).json(err);
-    });
+      .then((post) => {
+        models.Post.findOne({
+          where: { id: post.id },
+          include: [{ model: models.User, attributes: ["username"] }],
+        })
+          .then((post) => res.status(200).json(post))
+          .catch((error) => res.status(404).json(error));
+      })
+      .catch((error) => res.status(500).json(error));
+  }
 };
 
 // Get all posts
@@ -48,278 +42,198 @@ exports.getAllPosts = (req, res) => {
   console.log("------------ getAllPosts");
 
   models.Post.findAll({
-    include: [
-      {
-        model: models.User,
-        attributes: ["username"],
-      },
-    ],
+    include: [{ model: models.User, attributes: ["username"] }],
     order: [["createdAt", "DESC"]],
   })
     .then((posts) => {
-      if (posts.length > null) {
+      if (posts.length > 0) {
         res.status(200).json(posts);
       } else {
-        res.status(404).json({ error: "Pas de post à afficher" });
+        res.status(200).json({ message: "Pas de post à afficher" });
       }
     })
-    .catch((err) => res.status(500).json(err));
+    .catch((error) => res.status(500).json(error));
 };
 
 // Get all posts from one user
 exports.getPostsFrom = (req, res, next) => {
   console.log("--------- getPostsFrom");
 
-  console.log("req.body.data : ", req.body.data);
-  const data = JSON.parse(req.body.data);
-  console.log("data : ", data);
-
-  console.log("----req.headers.authorization");
-  console.log(req.headers.authorization);
-
-  // console.log(req.params.user);
-  models.Post.findAll({
-    where: { userId: req.params.user },
-    include: [
-      {
-        model: models.User,
-        attributes: ["username"],
-      },
-    ],
-    order: [["createdAt", "DESC"]],
-  })
-    .then((posts) => {
-      if (posts.length > null) {
-        res.status(200).json(posts);
-      } else {
-        res.status(404).json({ error: "Pas de post à afficher" });
-      }
+  if (!req.params.id) {
+    res.status(400).json({ message: "Requête incomplète." });
+  } else {
+    models.Post.findAll({
+      where: { userId: req.params.user },
+      include: [{ model: models.User, attributes: ["username"] }],
+      order: [["createdAt", "DESC"]],
     })
-    .catch((err) => res.status(500).json(err));
+      .then((posts) => {
+        if (posts.length > 0) {
+          res.status(200).json(posts);
+        } else {
+          res.status(200).json({ message: "Pas de post à afficher" });
+        }
+      })
+      .catch((error) => res.status(500).json(error));
+  }
 };
 
 // Update a post
 exports.modifyPost = (req, res) => {
   console.log("---------- modifyPost");
 
-  const data = req.body.data;
-  const token = jwt.getUserId(req.headers.authorization);
-  const userId = token.userId;
+  if (
+    !req.body.data.content ||
+    !req.body.data.title ||
+    !req.params.id ||
+    !req.headers.authorization
+  ) {
+    res.status(400).json({ message: "Requête incomplète." });
+  } else {
+    const data = req.body.data;
+    const token = jwt.getUserId(req.headers.authorization);
+    const userId = token.userId;
+    const postId = req.params.id;
 
-  // console.log("data : ", data);
-  // console.log("----req.headers.authorization");
-  // console.log(req.headers.authorization);
-  // console.log(userId);
-
-  models.Post.findOne({
-    where: { id: req.params.id },
-  })
-    .then((post) => {
-      if (post.userId !== userId) {
-        res
-          .status(403)
-          .json("Vous n'êtes pas autorisé effectuer cette action !");
-      }
-
-      models.Post.update(
-        { content: data.content, title: data.title },
-        { where: { id: post.id } }
-      )
-        .then((post) => {
-          // console.log(post);
-          models.Post.findOne({
-            where: { id: req.params.id },
-            include: [
-              {
-                model: models.User,
-                attributes: ["username"],
-              },
-            ],
-            order: [["createdAt", "DESC"]],
-          })
-            .then((post) => {
-              // console.log(post);
-              res.status(200).json(post);
+    models.Post.findOne({ where: { id: postId } })
+      .then((post) => {
+        if (post.userId == userId) {
+          models.Post.update(
+            { content: data.content, title: data.title, updatedAt: new Date() },
+            { where: { id: post.id } }
+          )
+            .then(() => {
+              models.Post.findOne({
+                where: { id: postId },
+                include: [{ model: models.User, attributes: ["username"] }],
+              })
+                .then((post) => res.status(200).json(post))
+                .catch((error) => res.status(501).json(error));
             })
-            .catch((err) => res.status(501).json(err));
-        })
-        .catch((err) => res.status(500).json(err));
-    })
-    .catch((err) => res.status(500).json(err));
+            .catch((error) => res.status(501).json(error));
+        } else {
+          res.status(403).json({ message: "Action non autorisée." });
+        }
+      })
+      .catch((error) => res.status(500).json(error));
+  }
 };
 
 // Delete a post
 exports.deletePost = (req, res) => {
   console.log("--------- deletePost");
 
-  const token = jwt.getUserId(req.headers.authorization);
-  const userId = token.userId;
-  const isAdmin = token.isAdmin;
+  if (!req.params.id || !req.headers.authorization) {
+    res.status(400).json({ message: "Requête incomplète." });
+  } else {
+    const token = jwt.getUserId(req.headers.authorization);
+    const userId = token.userId;
+    const isAdmin = token.isAdmin;
 
-  // console.log("req.params : ", req.params);
-  // console.log("----req.headers.authorization");
-  // console.log(req.headers.authorization);
-  // console.log(userId);
-
-  models.Post.findOne({
-    where: { id: req.params.id },
-  })
-    .then((post) => {
-      if (post.userId !== userId) {
-        res
-          .status(403)
-          .json("Vous n'êtes pas autorisé effectuer cette action !");
-      } else {
-        if (post.imageUrl) {
-          const filename = post.imageUrl.split("/images/")[1];
-          console.log(filename);
-          fs.unlink(`images/${filename}`, () => {
-            models.Post.destroy({
-              where: { id: req.params.id },
-            })
-              .then(() =>
-                res.status(200).json({ message: "Le post a été supprimé !" })
-              )
-              .catch((err) => res.status(500).json(err));
-          });
+    models.Post.findOne({ where: { id: req.params.id } })
+      .then((post) => {
+        if (post.userId == userId || isAdmin) {
+          models.Post.destroy({ where: { id: post.id } })
+            .then(() => res.status(204).json({ message: "Elément supprimé." }))
+            .catch((error) => res.status(501).json(error));
         } else {
-          models.Post.destroy({
-            where: { id: req.params.id },
-          })
-            .then(() =>
-              res.status(200).json({ message: "Le post a été supprimé !" })
-            )
-            .catch((err) => res.status(500).json(err));
+          res.status(403).json({ message: "Action non autorisée." });
         }
-      }
-    })
-    .catch((err) => res.status(500).json(err));
+      })
+      .catch((error) => res.status(500).json(error));
+  }
 };
+// exports.deletePost = (req, res) => {
+//   console.log("--------- deletePost");
+
+//   if (!req.params.id || !req.headers.authorization) {
+//     res.status(400).json({ message: "Requête incomplète." });
+//   } else {
+//     const token = jwt.getUserId(req.headers.authorization);
+//     const userId = token.userId;
+//     const isAdmin = token.isAdmin;
+
+//     models.Post.findOne({ where: { id: req.params.id } })
+//       .then((post) => {
+//         if (post.userId == userId || isAdmin) {
+//           // if (post.imageUrl) {
+//           //   const filename = post.imageUrl.split("/images/")[1];
+//           //   console.log(filename);
+//           //   fs.unlink(`images/${filename}`, () => {
+//           //     models.Post.destroy({
+//           //       where: { id: req.params.id },
+//           //     })
+//           //       .then(() =>
+//           //         res.status(200).json({ message: "Le post a été supprimé !" })
+//           //       )
+//           //       .catch((err) => res.status(500).json(err));
+//           //   });
+//           // } else {
+//           models.Post.destroy({ where: { id: req.params.id } })
+//             .then(() => res.status(200).json({ message: "Elément supprimé." }))
+//             .catch((err) => res.status(500).json(err));
+//           // }
+//         } else {
+//           res.status(403).json({ message: "Action non autorisée." });
+//         }
+//       })
+//       .catch((err) => res.status(500).json(err));
+//   }
+// };
 
 // Like a post
+
 exports.like = (req, res, next) => {
   console.log("----------- giveOpinion on post");
 
-  const data = req.body.data;
-  const token = jwt.getUserId(req.headers.authorization);
-  const userId = token.userId;
+  if (!req.body.data || !req.headers.authorization) {
+    res.status(400).json({ message: "Requête incomplète." });
+  } else {
+    const data = req.body.data;
+    const token = jwt.getUserId(req.headers.authorization);
+    const userId = token.userId;
 
-  // console.log("data : ", data);
-  // console.log("----req.headers.authorization");
-  // console.log(req.headers.authorization);
-
-  // console.log("userId : ", userId);
-
-  // // console.log("req.body : ", req.body);
-  // console.log("data.postId : ", data);
-  // console.log("data.userId : ", userId);
-
-  models.PostLikes.findOne({
-    where: {
-      UserId: userId,
-      PostId: data,
-    },
-  })
-    .then((like) => {
-      if (like) {
-        models.PostLikes.destroy({ where: { id: like.id } })
-          .then(() => res.status(200).json({ message: "Like supprimé !" }))
-          .catch((err) => res.status(500).json(err));
-      } else {
-        models.PostLikes.create({
-          UserId: userId,
-          PostId: data,
-        })
-          .then((like) => res.status(200).json({ like }))
-          .catch((err) => res.status(500).json(err));
-      }
-    })
-    .catch((err) => res.status(500).json(err));
+    models.PostLikes.findOne({ where: { UserId: userId, PostId: data } })
+      .then((like) => {
+        if (like) {
+          if (userId === like.userId) {
+            models.PostLikes.destroy({ where: { id: like.id } })
+              .then(() =>
+                res.status(204).json({ message: "Elément supprimé." })
+              )
+              .catch((error) => res.status(501).json(error));
+          } else {
+            res.status(403).json({ message: "Action non autorisée." });
+          }
+        } else {
+          models.PostLikes.create({ UserId: userId, PostId: data })
+            .then((like) => res.status(201).json(like))
+            .catch((error) => res.status(501).json(error));
+        }
+      })
+      .catch((error) => res.status(500).json(error));
+  }
 };
 
 // Get likes from one post
 exports.getLikesFromPost = (req, res, next) => {
   console.log("--------- getLikesFromPost");
 
-  // console.log("req.params : ", req.params);
-  // console.log("req.params.id : ", req.params.id);
-
-  models.PostLikes.findAll({
-    where: { postId: req.params.id },
-    include: [
-      {
-        model: models.User,
-        attributes: ["username"],
-      },
-    ],
-    order: [["createdAt", "DESC"]],
-  })
-    .then((likes) => {
-      if (likes.length > null) {
-        res.status(200).json(likes);
-      } else {
-        res.status(200).json({ message: "Pas de likes à afficher" });
-      }
+  if (!req.params.id) {
+    res.status(400).json({ message: "Requête incomplète." });
+  } else {
+    models.PostLikes.findAll({
+      where: { postId: req.params.id },
+      include: [{ model: models.User, attributes: ["username"] }],
+      order: [["createdAt", "ASC"]],
     })
-    .catch((err) => res.status(500).json(err));
+      .then((likes) => {
+        if (likes.length > 0) {
+          res.status(200).json(likes);
+        } else {
+          res.status(200).json({ message: "Aucun élément à afficher." });
+        }
+      })
+      .catch((error) => res.status(500).json(error));
+  }
 };
-
-// Remove like from a post
-// exports.deleteLike = (req, res, next) => {
-//   console.log("-----------");
-//   console.log("deleteLike");
-//   console.log("req.params.id : ", req.params.id);
-//   console.log("req.body : ", req.body);
-//   console.log("req.body.userId : ", req.body.userId);
-//   console.log("req.body.postId : ", req.body.postId);
-
-//   models.PostLikes.findOne({
-//     where: {
-//       UserId: req.body.userId,
-//       PostId: req.body.postId,
-//     },
-//   })
-//     .then((like) => {
-//       console.log("like : ", like);
-
-//       if (!like) {
-//         res.status(404).json({ error: "Aucun like ne correspond !" });
-//       } else {
-//         if (like.userId === req.body.userId) {
-//           models.PostLikes.destroy({ where: { id: like.id } })
-//             .then(() => res.status(200).json({ message: "Like supprimé !" }))
-//             .catch((err) => res.status(500).json(err));
-//         } else {
-//           res.status(403).json({ error: "Vous n'avez pas l'autorisation !" });
-//         }
-//       }
-//     })
-//     .catch((err) => res.status(500).json(err));
-// };
-
-// Get one post
-// exports.getOnePost = (req, res, next) => {
-//   console.log("---------- getOnePost");
-//   console.log("getOnePost");
-
-//   console.log("req.body.data : ", req.body.data);
-//   const data = JSON.parse(req.body.data);
-//   console.log("data : ", data);
-
-//   console.log("----req.headers.authorization");
-//   console.log(req.headers.authorization);
-
-//   models.Post.findOne({
-//     where: { id: req.params.id },
-//     include: [
-//       {
-//         model: models.User,
-//         attributes: ["username"],
-//       },
-//     ],
-//   })
-//     .then((post) => {
-//       res.status(200).json(post);
-//     })
-//     .catch((err) => res.status(500).json(err));
-// };
