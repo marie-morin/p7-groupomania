@@ -13,10 +13,14 @@ const nameRegex = /^[a-zA-Z ,.'-]+$/;
 
 // Signup
 exports.signup = (req, res, next) => {
-  console.log("-----------");
-  console.log("signup");
+  console.log("----------- signup");
 
-  const registeringUser = JSON.parse(req.body.data);
+  console.log("req.body.data : ", req.body.data);
+  const data = JSON.parse(req.body.data);
+  console.log("data : ", data);
+  console.log("data.email : ", data.email);
+
+  // const registeringUser = JSON.parse(req.body.data);
   // if (
   //   !mailValidator.validate(req.body.email) ||
   //   !passwordRegex.test(req.body.password) ||
@@ -25,9 +29,10 @@ exports.signup = (req, res, next) => {
   // ) {
   //   console.log("Les champs contiennent des valeurs interdites !");
   // }
+
   models.User.findOne({
     attributes: ["email"],
-    where: { email: registeringUser.email },
+    where: { email: data.email },
   })
     .then((user) => {
       if (user) {
@@ -52,15 +57,14 @@ exports.signup = (req, res, next) => {
       //     });
       // });
       bcrypt.hash(registeringUser.password, 10, function (err, bcryptPassword) {
-        const username =
-          registeringUser.firstname + " " + registeringUser.lastname;
-        const newUser = models.User.create({
-          email: registeringUser.email,
+        const username = data.firstname + " " + data.lastname;
+        models.User.create({
+          email: data.email,
           password: bcryptPassword,
-          firstname: registeringUser.firstname,
-          lastname: registeringUser.lastname,
+          firstname: data.firstname,
+          lastname: data.lastname,
           username: username,
-          bio: registeringUser.bio,
+          bio: data.bio,
           isAdmin: 0,
         })
           .then((user) => {
@@ -82,17 +86,13 @@ exports.signup = (req, res, next) => {
 
 // Login
 exports.login = (req, res, next) => {
-  console.log("------------------");
-  console.log("login");
-  // console.log("req.body");
-  // console.log(req.body);
-  // console.log("req.body.data");
-  // console.log(req.body.data);
-  const loginUser = JSON.parse(req.body.data);
-  // console.log(loginUser);
+  console.log("------------------ login");
+
+  const data = JSON.parse(req.body.data);
+  // console.log("data : ", data);
 
   models.User.findOne({
-    where: { email: loginUser.email },
+    where: { email: data.email },
   })
     .then((user) => {
       if (!user) {
@@ -102,7 +102,7 @@ exports.login = (req, res, next) => {
       }
 
       bcrypt.compare(
-        loginUser.password,
+        data.password,
         user.password,
         (errComparePassword, resComparePassword) => {
           if (resComparePassword) {
@@ -124,17 +124,13 @@ exports.login = (req, res, next) => {
 
 // Me
 exports.me = (req, res, next) => {
-  console.log("------------------");
-  console.log("me");
+  console.log("------------------ me");
+  const data = req.body.data;
+  const token = jwt.getUserId(req.body.data);
+  const userId = token.userId;
 
-  // console.log("------req.body");
-  // console.log(req.body);
-
-  // console.log("------req.body.token");
-  // console.log(req.body.token);
-
-  const userId = jwt.getUserId(req.body.token);
-  // console.log("-----userId");
+  // console.log("data : ", data);
+  // console.log("token : ", token);
   // console.log(userId);
 
   if (userId === "invalid signature") {
@@ -145,13 +141,12 @@ exports.me = (req, res, next) => {
     where: { id: userId },
   })
     .then((user) => {
-      console.log(user);
+      // console.log(user);
       if (!user) {
         res.status(404).json({
           erreur: "Aucun compte ne correspond à l'adresse email renseignée !",
         });
       }
-      // console.log(user);
       res.status(200).json({ user });
     })
     .catch((err) => {
@@ -161,7 +156,7 @@ exports.me = (req, res, next) => {
 
 // Get all users
 exports.getAllUsers = (req, res, next) => {
-  console.log("----------");
+  console.log("---------- getAllUsers");
   console.log("getAllUsers");
 
   models.User.findAll({
@@ -181,8 +176,7 @@ exports.getAllUsers = (req, res, next) => {
 
 // Get one user
 exports.getOneUser = (req, res) => {
-  console.log("-----------");
-  console.log("getOneUser");
+  console.log("----------- getOneUser");
 
   models.User.findOne({
     attributes: [
@@ -198,6 +192,128 @@ exports.getOneUser = (req, res) => {
   })
     .then((user) => res.status(200).json(user))
     .catch((error) => res.status(500).json(error));
+};
+
+// Update user acount
+exports.modifyUser = (req, res, next) => {
+  console.log("------------ modifyUser");
+
+  const data = JSON.parse(req.body.data);
+  console.log("data : ", data);
+
+  console.log("----req.headers.authorization");
+  console.log(req.headers.authorization);
+
+  const token = jwt.getUserId(req.headers.authorization);
+  const userId = token.userId;
+
+  let newPassword;
+  if (data.password) {
+    newPassword = data.password;
+  }
+
+  // if (req.body.newPassword && !passwordRegex.test(newPassword)) {
+  //   res
+  //     .status(406)
+  //     .json({ error: "Le mot de passe contient des caractères interdits !" });
+  // }
+
+  if (userId != req.params.id) {
+    res.status(401).json({ err: "Vous d'avez pas d'authorisation !" });
+  }
+
+  models.User.findOne({
+    where: { id: userId },
+  })
+    .then((user) => {
+      const newUsername = data.firstname + " " + data.lastname;
+      if (newPassword) {
+        bcrypt.compare(
+          newPassword,
+          user.password,
+          (errComparePassword, resComparePassword) => {
+            if (resComparePassword) {
+              res.status(406).json({
+                error:
+                  "L'ancien et le nouveau mot de passe doivent être différents !",
+              });
+            } else {
+              bcrypt.hash(newPassword, 10, function (err, bcryptNewPassword) {
+                models.User.update(
+                  {
+                    password: bcryptNewPassword,
+                    email: data.email,
+                    bio: data.bio,
+                    firstname: data.firstname,
+                    lastname: data.lastname,
+                    username: newUsername,
+                  },
+                  { where: { id: user.id } }
+                )
+                  .then(() =>
+                    res.status(201).json({
+                      confirmation: "Les modifications ont été enregistrées !",
+                    })
+                  )
+                  .catch((err) => res.status(501).json(err));
+              });
+            }
+          }
+        );
+      } else {
+        models.User.update(
+          {
+            email: data.email,
+            bio: data.bio,
+            firstname: data.firstname,
+            lastname: data.lastname,
+            username: newUsername,
+          },
+          { where: { id: user.id } }
+        )
+          .then(
+            res
+              .status(201)
+              .json({ message: "Les modifications ont été enregistrées !" })
+          )
+          .catch((err) => res.status(502).json(err));
+      }
+    })
+    .catch((err) => res.status(503).json(err));
+};
+
+// // Delete an acount
+exports.deleteUser = (req, res, next) => {
+  console.log("---------- deleteUser");
+
+  const token = jwt.getUserId(req.headers.authorization);
+  const userId = token.userId;
+
+  console.log(req.params.id);
+
+  models.User.findOne({
+    where: { id: req.params.id },
+  })
+    .then((user) => {
+      if (!user) {
+        res.status(401).json({ error: "Veuillez vous connecter !" });
+      }
+      // console.log("Utilisateur trouvé dans la base");
+      // console.log(user);
+
+      if (req.params.id !== userId || userId.isAdmin !== 1) {
+        res.status(401).json({
+          error: "Vous n'êtes pas autoriser à effectuer cette action !",
+        });
+      }
+
+      // models.User.destroy({
+      //   where: { id: req.params.id },
+      // })
+      //   .then(() => res.end())
+      //   .catch((err) => console.log(err));
+    })
+    .catch((err) => res.status(500).json(err));
 };
 
 // A voir plus tard mais normalement pas besoin de cette méthode puisque peut importe si je regarde
@@ -217,124 +333,4 @@ exports.getOneUser = (req, res) => {
 // };
 
 // Get one user by its username
-exports.getUserByUsername = (req, res, next) => {};
-
-// Update user acount
-exports.modifyUser = (req, res, next) => {
-  console.log("------------");
-  console.log("modifyUser");
-
-  const registeringUser = JSON.parse(req.body.body);
-  const userId = jwt.getUserId(req.headers.authorization);
-  let newPassword;
-  if (registeringUser.password) {
-    newPassword = registeringUser.password;
-  }
-
-  // if (req.body.newPassword && !passwordRegex.test(newPassword)) {
-  //   res
-  //     .status(406)
-  //     .json({ error: "Le mot de passe contient des caractères interdits !" });
-  // }
-
-  if (userId != req.params.id) {
-    res.status(401).json({ err: "Vous d'avez pas d'authorisation !" });
-  }
-
-  models.User.findOne({
-    where: { id: userId },
-  })
-    .then((user) => {
-      const newUsername =
-        registeringUser.firstname + " " + registeringUser.lastname;
-      if (newPassword) {
-        bcrypt.compare(
-          newPassword,
-          user.password,
-          (errComparePassword, resComparePassword) => {
-            if (resComparePassword) {
-              res.status(406).json({
-                error:
-                  "L'ancien et le nouveau mot de passe doivent être différents !",
-              });
-            } else {
-              bcrypt.hash(newPassword, 10, function (err, bcryptNewPassword) {
-                models.User.update(
-                  {
-                    password: bcryptNewPassword,
-                    email: registeringUser.email,
-                    bio: registeringUser.bio,
-                    firstname: registeringUser.firstname,
-                    lastname: registeringUser.lastname,
-                    username: newUsername,
-                  },
-                  { where: { id: user.id } }
-                )
-                  .then(() =>
-                    res.status(201).json({
-                      confirmation: "Les modifications ont été enregistrées !",
-                    })
-                  )
-                  .catch((err) => res.status(501).json(err));
-              });
-            }
-          }
-        );
-      } else {
-        models.User.update(
-          {
-            email: registeringUser.email,
-            bio: registeringUser.bio,
-            firstname: registeringUser.firstname,
-            lastname: registeringUser.lastname,
-            username: newUsername,
-          },
-          { where: { id: user.id } }
-        )
-          .then(
-            res
-              .status(201)
-              .json({ message: "Les modifications ont été enregistrées !" })
-          )
-          .catch((err) => res.status(502).json(err));
-      }
-    })
-    .catch((err) => res.status(503).json(err));
-};
-
-// // Delete an acount
-exports.deleteUser = (req, res, next) => {
-  console.log("----------");
-  console.log("deleteUser");
-
-  const userId = jwt.getUserId(req.headers.authorization);
-  // console.log("Utilisateur connecté");
-  // console.log(userId);
-
-  // console.log("Utilisateur visé");
-  // console.log(req.params.id);
-
-  models.User.findOne({
-    where: { id: req.params.id },
-  })
-    .then((user) => {
-      if (!user) {
-        res.status(401).json({ error: "Veuillez vous connecter !" });
-      }
-      console.log("Utilisateur trouvé dans la base");
-      console.log(user);
-
-      if (req.params.id !== userId || userId.isAdmin !== 1) {
-        res.status(401).json({
-          error: "Vous n'êtes pas autoriser à effectuer cette action !",
-        });
-      }
-
-      // models.User.destroy({
-      //   where: { id: req.params.id },
-      // })
-      //   .then(() => res.end())
-      //   .catch((err) => console.log(err));
-    })
-    .catch((err) => res.status(500).json(err));
-};
+// exports.getUserByUsername = (req, res, next) => {};

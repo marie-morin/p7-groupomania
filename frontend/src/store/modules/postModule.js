@@ -1,5 +1,5 @@
 import axios from "axios";
-import * as userModule from "./userModule";
+// import * as userModule from "./userModule";
 
 const state = {
   posts: [],
@@ -24,7 +24,7 @@ const actions = {
 
     const response = await axios.post(
       "http://localhost:3000/api/posts/",
-      { post },
+      { data: post },
       { headers: headers }
     );
     commit("newPost", response.data);
@@ -47,10 +47,14 @@ const actions = {
     const headers = {
       Authorization: "Bearer " + TOKEN.replace(/['"']+/g, ""),
     };
+    const data = {
+      title,
+      content,
+    };
 
     const response = await axios.put(
       `http://localhost:3000/api/posts/${id}`,
-      { content, title },
+      { data },
       { headers: headers }
     );
     commit("updatePost", response.data);
@@ -65,17 +69,23 @@ const actions = {
   },
 
   async ratePost({ commit }, postId) {
-    const userId = userModule.default.state.user.id;
-    const response = await axios.post(`http://localhost:3000/api/posts/like`, {
-      postId,
-      userId,
-    });
-    const rate = {
-      response,
-      postId,
-      userId,
+    const TOKEN = localStorage.getItem("jwt");
+    const headers = {
+      Authorization: "Bearer " + TOKEN.replace(/['"']+/g, ""),
     };
-    commit("setPostRate", rate);
+
+    const response = await axios.post(
+      `http://localhost:3000/api/posts/like`,
+      { data: postId },
+      { headers: headers }
+    );
+
+    // const rate = {
+    //   response,
+    //   postId,
+    //   userId,
+    // };
+    commit("setPostRate", response.data);
   },
 };
 

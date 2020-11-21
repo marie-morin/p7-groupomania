@@ -74,17 +74,18 @@ export default {
       // for (const [key, value] of Object.entries(this.test)) {
       //   this.user[key] = value;
       // }
-        let TOKEN = localStorage.getItem("jwt");
-        const headers = {
-          Authorization: "Bearer " + TOKEN.replace(/['"']+/g, ""),
-        };
-        axios.put(
-          this.settings.urlPost + this.settings.userId,
-          { body: JSON.stringify(this.user) },
-          { headers: headers }
-        );
-        this.$router.go();
-      
+      let TOKEN = localStorage.getItem("jwt");
+      const headers = {
+        Authorization: "Bearer " + TOKEN.replace(/['"']+/g, ""),
+      };
+
+      axios.put(
+        this.settings.urlPost + this.settings.userId,
+        { data: JSON.stringify(this.user) },
+        { headers: headers }
+      );
+
+      this.$router.go();
     },
   },
 };

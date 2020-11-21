@@ -23,7 +23,7 @@ module.exports = {
         } else {
           token = jwt.verify(data, "process.env.JWT_SECRET_TOKEN");
         }
-        return token.userId;
+        return token;
       } catch (err) {
         return err.message;
       }

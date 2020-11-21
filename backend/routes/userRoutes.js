@@ -28,7 +28,7 @@ router.get("/:id", userCtrl.getOneUser);
 // router.get("/myself", userCtrl.getMyProfil);
 
 // Get one user by its username
-router.get("/username/:username", userCtrl.getUserByUsername);
+// router.get("/username/:username", userCtrl.getUserByUsername);
 
 // Update user acount
 router.put("/:id", userCtrl.modifyUser);

@@ -1,6 +1,6 @@
 import axios from "axios";
 import * as postModule from "./postModule";
-import * as userModule from "./userModule";
+// import * as userModule from "./userModule";
 
 const state = {};
 
@@ -12,6 +12,7 @@ const actions = {
     const response = await axios.get(
       `http://localhost:3000/api/comments/from/${postId}`
     );
+    console.log("reponse.data : ", response.data);
     commit("setComments", response.data);
   },
 
@@ -23,10 +24,25 @@ const actions = {
 
     const response = await axios.post(
       "http://localhost:3000/api/comments/",
-      { comment },
+      { data: comment },
       { headers: headers }
     );
+    console.log("response.data : ", response.data);
     commit("newComment", response.data);
+  },
+
+  async updateComment({ commit }, { content, id }) {
+    const TOKEN = localStorage.getItem("jwt");
+    const headers = {
+      Authorization: "Bearer " + TOKEN.replace(/['"']+/g, ""),
+    };
+
+    const response = await axios.put(
+      `http://localhost:3000/api/comments/${id}`,
+      { data: content },
+      { headers: headers }
+    );
+    commit("updateComment", response.data);
   },
 
   async deleteComment({ commit }, id) {
@@ -41,20 +57,6 @@ const actions = {
     commit("removeComment", id);
   },
 
-  async updateComment({ commit }, { content, id }) {
-    const TOKEN = localStorage.getItem("jwt");
-    const headers = {
-      Authorization: "Bearer " + TOKEN.replace(/['"']+/g, ""),
-    };
-
-    const response = await axios.put(
-      `http://localhost:3000/api/comments/${id}`,
-      { content },
-      { headers: headers }
-    );
-    commit("updateComment", response.data);
-  },
-
   // Concernant les likes des posts
   async fetchCommentLikes({ commit }, commentId) {
     const response = await axios.get(
@@ -64,21 +66,27 @@ const actions = {
   },
 
   async rateComment({ commit }, commentId) {
-    const userId = userModule.default.state.user.id;
+    const TOKEN = localStorage.getItem("jwt");
+    const headers = {
+      Authorization: "Bearer " + TOKEN.replace(/['"']+/g, ""),
+    };
+    // const data = {
+    //   commentId,
+    //   userId,
+    // };
     const response = await axios.post(
       `http://localhost:3000/api/comments/like`,
-      {
-        commentId,
-        userId,
-      }
+      { data: commentId },
+      { headers: headers }
     );
-    const rate = {
-      response,
-      commentId,
-      userId,
-    };
+
+    // const rate = {
+    //   response,
+    //   commentId,
+    //   userId,
+    // };
     console.log("response.data : ", response.data);
-    commit("setCommentRate", rate);
+    commit("setCommentRate", response.data);
   },
 };
 

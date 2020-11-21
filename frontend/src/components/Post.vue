@@ -98,7 +98,7 @@ export default {
     onSubmit() {
       const comment = {
         content: this.newComment,
-        PostId: this.post.id
+        postId: this.post.id
       };
       this.addComment(comment);
       this.newComment = "";
@@ -116,8 +116,8 @@ export default {
   },
 
   created() {
-    console.log(this.currentUser);
-    console.log(this.isAllowed);
+    // console.log(this.currentUser);
+    // console.log(this.isAllowed);
 
     this.fetchComments(this.post.id);
     this.fetchPostLikes(this.post.id);

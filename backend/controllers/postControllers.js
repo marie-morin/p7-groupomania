@@ -7,23 +7,21 @@ const regex = /^[a-zA-Z0-9 _.,!()&]+$/;
 
 //Création d'un message
 exports.addPost = (req, res) => {
-  console.log("-------------");
-  console.log("addPost");
-  console.log("----req.headers.authoriztion : ", req.headers.authorization);
+  console.log("------------- addPost");
 
-  const id = jwt.getUserId(req.headers.authorization);
-  console.log("----id : ", id);
-  console.log("-----req.body : ", req.body);
+  const data = JSON.parse(req.body.data);
+  const token = jwt.getUserId(req.headers.authorization);
+  const userId = token.userId;
 
-  const newPost = JSON.parse(req.body.post);
-  console.log("newPost : ", newPost);
-  console.log("newPost.title : ", newPost.title);
-  console.log("newPost.content : ", newPost.content);
+  // console.log("data : ", data);
+  // console.log("data.title : ", data.title);
+  // console.log("data.content : ", data.content);
+  // console.log("userId : ", userId);
 
   models.Post.create({
-    content: newPost.content,
-    title: newPost.title,
-    UserId: id,
+    content: data.content,
+    title: data.title,
+    UserId: userId,
   })
     .then((post) => {
       models.Post.findOne({
@@ -47,8 +45,7 @@ exports.addPost = (req, res) => {
 
 // Get all posts
 exports.getAllPosts = (req, res) => {
-  console.log("------------");
-  console.log("getAllPosts");
+  console.log("------------ getAllPosts");
 
   models.Post.findAll({
     include: [
@@ -69,30 +66,16 @@ exports.getAllPosts = (req, res) => {
     .catch((err) => res.status(500).json(err));
 };
 
-// Get one post
-exports.getOnePost = (req, res, next) => {
-  console.log("----------");
-  console.log("getOnePost");
-
-  models.Post.findOne({
-    where: { id: req.params.id },
-    include: [
-      {
-        model: models.User,
-        attributes: ["username"],
-      },
-    ],
-  })
-    .then((post) => {
-      res.status(200).json(post);
-    })
-    .catch((err) => res.status(500).json(err));
-};
-
 // Get all posts from one user
 exports.getPostsFrom = (req, res, next) => {
-  console.log("---------");
-  console.log("getPostsFrom");
+  console.log("--------- getPostsFrom");
+
+  console.log("req.body.data : ", req.body.data);
+  const data = JSON.parse(req.body.data);
+  console.log("data : ", data);
+
+  console.log("----req.headers.authorization");
+  console.log(req.headers.authorization);
 
   // console.log(req.params.user);
   models.Post.findAll({
@@ -117,12 +100,16 @@ exports.getPostsFrom = (req, res, next) => {
 
 // Update a post
 exports.modifyPost = (req, res) => {
-  console.log("----------");
-  console.log("modifyPost");
+  console.log("---------- modifyPost");
 
-  console.log("req.body", req.body);
+  const data = req.body.data;
+  const token = jwt.getUserId(req.headers.authorization);
+  const userId = token.userId;
 
-  const userId = jwt.getUserId(req.headers.authorization);
+  // console.log("data : ", data);
+  // console.log("----req.headers.authorization");
+  // console.log(req.headers.authorization);
+  // console.log(userId);
 
   models.Post.findOne({
     where: { id: req.params.id },
@@ -135,11 +122,11 @@ exports.modifyPost = (req, res) => {
       }
 
       models.Post.update(
-        { content: req.body.content, title: req.body.title },
-        { where: { id: req.params.id } }
+        { content: data.content, title: data.title },
+        { where: { id: post.id } }
       )
         .then((post) => {
-          console.log(post);
+          // console.log(post);
           models.Post.findOne({
             where: { id: req.params.id },
             include: [
@@ -151,7 +138,7 @@ exports.modifyPost = (req, res) => {
             order: [["createdAt", "DESC"]],
           })
             .then((post) => {
-              console.log(post);
+              // console.log(post);
               res.status(200).json(post);
             })
             .catch((err) => res.status(501).json(err));
@@ -163,16 +150,16 @@ exports.modifyPost = (req, res) => {
 
 // Delete a post
 exports.deletePost = (req, res) => {
-  console.log("---------");
-  console.log("deletePost");
+  console.log("--------- deletePost");
 
-  // console.log("req.params");
-  // console.log(req.params);
+  const token = jwt.getUserId(req.headers.authorization);
+  const userId = token.userId;
+  const isAdmin = token.isAdmin;
 
-  // console.log("req.headers.authorization");
+  // console.log("req.params : ", req.params);
+  // console.log("----req.headers.authorization");
   // console.log(req.headers.authorization);
-
-  const userId = jwt.getUserId(req.headers.authorization);
+  // console.log(userId);
 
   models.Post.findOne({
     where: { id: req.params.id },
@@ -211,16 +198,26 @@ exports.deletePost = (req, res) => {
 
 // Like a post
 exports.like = (req, res, next) => {
-  console.log("-----------");
-  console.log("giveOpinion");
-  console.log("req.body : ", req.body);
-  console.log("req.body.userId : ", req.body.userId);
-  console.log("req.body.postId : ", req.body.postId);
+  console.log("----------- giveOpinion on post");
+
+  const data = req.body.data;
+  const token = jwt.getUserId(req.headers.authorization);
+  const userId = token.userId;
+
+  // console.log("data : ", data);
+  // console.log("----req.headers.authorization");
+  // console.log(req.headers.authorization);
+
+  // console.log("userId : ", userId);
+
+  // // console.log("req.body : ", req.body);
+  // console.log("data.postId : ", data);
+  // console.log("data.userId : ", userId);
 
   models.PostLikes.findOne({
     where: {
-      UserId: req.body.userId,
-      PostId: req.body.postId,
+      UserId: userId,
+      PostId: data,
     },
   })
     .then((like) => {
@@ -230,8 +227,8 @@ exports.like = (req, res, next) => {
           .catch((err) => res.status(500).json(err));
       } else {
         models.PostLikes.create({
-          UserId: req.body.userId,
-          PostId: req.body.postId,
+          UserId: userId,
+          PostId: data,
         })
           .then((like) => res.status(200).json({ like }))
           .catch((err) => res.status(500).json(err));
@@ -242,11 +239,10 @@ exports.like = (req, res, next) => {
 
 // Get likes from one post
 exports.getLikesFromPost = (req, res, next) => {
-  console.log("---------");
-  console.log("getLikesFromPost");
+  console.log("--------- getLikesFromPost");
 
-  console.log("req.params : ", req.params);
-  console.log("req.params.id : ", req.params.id);
+  // console.log("req.params : ", req.params);
+  // console.log("req.params.id : ", req.params.id);
 
   models.PostLikes.findAll({
     where: { postId: req.params.id },
@@ -297,6 +293,33 @@ exports.getLikesFromPost = (req, res, next) => {
 //           res.status(403).json({ error: "Vous n'avez pas l'autorisation !" });
 //         }
 //       }
+//     })
+//     .catch((err) => res.status(500).json(err));
+// };
+
+// Get one post
+// exports.getOnePost = (req, res, next) => {
+//   console.log("---------- getOnePost");
+//   console.log("getOnePost");
+
+//   console.log("req.body.data : ", req.body.data);
+//   const data = JSON.parse(req.body.data);
+//   console.log("data : ", data);
+
+//   console.log("----req.headers.authorization");
+//   console.log(req.headers.authorization);
+
+//   models.Post.findOne({
+//     where: { id: req.params.id },
+//     include: [
+//       {
+//         model: models.User,
+//         attributes: ["username"],
+//       },
+//     ],
+//   })
+//     .then((post) => {
+//       res.status(200).json(post);
 //     })
 //     .catch((err) => res.status(500).json(err));
 // };

@@ -26,13 +26,18 @@ const actions = {
   },
 
   async getUserInfos({ commit }, token) {
-    const response = await axios.post("http://localhost:3000/api/users/me", {
+    const option = {
       method: "POST",
-      token: token,
+      data: token,
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
-    });
+    };
+    const response = await axios.post(
+      "http://localhost:3000/api/users/me",
+      option
+    );
+
     commit("saveUser", response.data.user);
     commit("loginIn", true);
   },

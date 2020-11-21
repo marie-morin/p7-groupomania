@@ -12,7 +12,7 @@ router.post("/", postCtrl.addPost);
 // Get all posts
 router.get("/", postCtrl.getAllPosts);
 // Get one post
-router.get("/:id", postCtrl.getOnePost);
+// router.get("/:id", postCtrl.getOnePost);
 // Get all posts from one user
 router.get("/from/:user", postCtrl.getPostsFrom);
 // Update a post

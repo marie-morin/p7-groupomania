@@ -9,9 +9,11 @@
 
       <input type="text" v-if="editing" v-model="updatedComment" @keyup.enter="submitComment()">
 
-      <button @click="deleteComment(comment.id)" v-if="isAllowed">Supprimer le commentaire</button>
+      <button @click="deleteComment(comment.id)">Supprimer le commentaire</button>
+      <!-- <button @click="deleteComment(comment.id)" v-if="isAllowed">Supprimer le commentaire</button> -->
 
-      <button @click="editComment()" v-if="isCreator">Modifier votre commentaire</button>
+      <button @click="editComment()">Modifier votre commentaire</button>
+      <!-- <button @click="editComment()" v-if="isCreator">Modifier votre commentaire</button> -->
 
   </div>
 </template>

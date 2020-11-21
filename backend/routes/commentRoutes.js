@@ -9,13 +9,13 @@ const auth = require("../middleware/auth");
 // Create a post
 router.post("/", commentCtrl.addComment);
 // Get all posts
-router.get("/", commentCtrl.getAllComments);
+// router.get("/", commentCtrl.getAllComments);
 // Get one post
-router.get("/:id", commentCtrl.getOneComment);
+// router.get("/:id", commentCtrl.getOneComment);
 // Get all posts from one post
-router.get("/from/:post", commentCtrl.getCommentsFromPost);
+router.get("/from/:id", commentCtrl.getCommentsFromPost);
 // Get all posts from one user
-router.get("/by/:user", commentCtrl.getCommentsFromUser);
+// router.get("/by/:user", commentCtrl.getCommentsFromUser);
 // Update a post
 router.put("/:id", commentCtrl.modifyComment);
 // Delete a post

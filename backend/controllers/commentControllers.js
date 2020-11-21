@@ -7,280 +7,270 @@ const regex = /^[a-zA-Z0-9 _.,!()&]+$/;
 
 // Create a comment
 exports.addComment = (req, res) => {
-  console.log("---------------");
-  console.log("addComment");
+  console.log("--------------- addComment");
 
-  // console.log("----req.headers.authorization");
-  // console.log(req.headers.authorization);
+  if (
+    !req.body.data.content ||
+    !req.body.data.postId ||
+    !req.headers.authorization
+  ) {
+    res.status(400).json({ message: "Requête incomplète." });
+  } else {
+    const data = req.body.data;
+    const token = jwt.getUserId(req.headers.authorization);
+    const userId = token.userId;
 
-  // console.log("----req.body");
-  // console.log(req.body);
-
-  // console.log("----req.body.comment.content");
-  // console.log(req.body.comment.content);
-
-  // console.log("----req.body.comment.PostId");
-  // console.log(req.body.comment.PostId);
-
-  // console.log("----id");
-  const id = jwt.getUserId(req.headers.authorization);
-  // console.log(id);
-
-  models.Comment.create({
-    content: req.body.comment.content,
-    PostId: req.body.comment.PostId,
-    UserId: id,
-  })
-    .then((comment) => {
-      models.Comment.findOne({
-        where: { id: comment.id },
-        include: [
-          {
-            model: models.User,
-            attributes: ["username"],
-          },
-        ],
-      })
-        .then((comment) => {
-          res.status(200).json(comment);
+    models.Comment.create({
+      content: data.content,
+      PostId: data.postId,
+      UserId: userId,
+    })
+      .then((comment) => {
+        models.Comment.findOne({
+          where: { id: comment.id },
+          include: [{ model: models.User, attributes: ["username"] }],
         })
-        .catch((err) => res.status(500).json(err));
-    })
-    .catch((err) => {
-      res.status(501).json(err);
-    });
-};
-
-// Get all comments
-exports.getAllComments = (req, res) => {
-  console.log("------------");
-  console.log("getAllComments");
-
-  models.Comment.findAll({
-    include: [
-      {
-        model: models.User,
-        attributes: ["username"],
-      },
-    ],
-    order: [["createdAt", "DESC"]],
-  })
-    .then((comments) => {
-      if (comments.length > null) {
-        res.status(200).json(comments);
-      } else {
-        res.status(404).json({ error: "Pas de commentaire à afficher" });
-      }
-    })
-    .catch((err) => res.status(500).json(err));
-};
-
-// Get one comment
-exports.getOneComment = (req, res, next) => {
-  console.log("-----------");
-  console.log("getOneComment");
-  console.log(req.params.id);
-
-  models.Comment.findOne({
-    where: { id: req.params.id },
-    include: [
-      {
-        model: models.User,
-        attributes: ["username"],
-      },
-    ],
-  })
-    .then((comment) => {
-      res.status(200).json(comment);
-    })
-    .catch((err) => res.status(500).json(err));
+          .then((comment) => res.status(201).json(comment))
+          .catch((error) => res.status(404).json(error));
+      })
+      .catch((error) => res.status(501).json(error));
+  }
 };
 
 // Get all posts from one post
 exports.getCommentsFromPost = (req, res, next) => {
-  console.log("-----------");
-  console.log("getCommentsFromPost");
-  // console.log("test");
+  console.log("----------- getCommentsFromPost");
 
-  // console.log("req.params");
-  // console.log(req.params);
-
-  // console.log("req.params.post");
-  // console.log(req.params.post);
-
-  models.Comment.findAll({
-    where: { postId: req.params.post },
-    include: [
-      {
-        model: models.User,
-        attributes: ["username"],
-      },
-    ],
-    order: [["createdAt", "DESC"]],
-  })
-    .then((comments) => {
-      console.log(comments.length);
-      if (comments.length > 0) {
-        res.status(200).json(comments);
-      } else {
-        res.status(200).json({ message: "Pas de commentaire à afficher" });
-      }
+  if (!req.params.id) {
+    res.status(400).json({ message: "Requête incomplète." });
+  } else {
+    models.Comment.findAll({
+      where: { postId: req.params.id },
+      include: [{ model: models.User, attributes: ["username"] }],
+      order: [["createdAt", "ASC"]],
     })
-    .catch((err) => res.status(500).json(err));
-};
-
-// Get all posts from one user
-exports.getCommentsFromUser = (req, res, next) => {
-  console.log("----------");
-  console.log("getCommentsFromUser");
-
-  models.Comment.findAll({
-    where: { userId: req.params.user },
-    include: [
-      {
-        model: models.User,
-        attributes: ["username"],
-      },
-    ],
-    order: [["createdAt", "DESC"]],
-  })
-    .then((comments) => {
-      console.log(comments);
-      if (comments.length > null) {
-        res.status(200).json(comments);
-      } else {
-        res.status(404).json({ error: "Pas de commentaire à afficher" });
-      }
-    })
-    .catch((err) => res.status(500).json(err));
+      .then((comments) => {
+        if (comments.length > 0) {
+          res.status(200).json(comments);
+        } else {
+          res.status(200).json({ message: "Aucun élément à afficher" });
+        }
+      })
+      .catch((error) => res.status(500).json(error));
+  }
 };
 
 // Update a post
 exports.modifyComment = (req, res) => {
-  console.log("----------");
-  console.log("modifyComment");
+  console.log("---------- modifyComment");
 
-  console.log("req.body", req.body);
+  if (!req.body.data || !req.params.id || !req.headers.authorization) {
+    res.status(400).json({ message: "Requête incomplète." });
+  } else {
+    const data = req.body.data;
+    const token = jwt.getUserId(req.headers.authorization);
+    const userId = token.userId;
+    const commentId = req.params.id;
 
-  const userId = jwt.getUserId(req.headers.authorization);
-
-  models.Comment.findOne({ where: { id: req.params.id } })
-    .then((comment) => {
-      if (comment.userId !== userId) {
-        res
-          .status(403)
-          .json("Vous n'êtes pas autorisé effectuer cette action !");
-      } else {
-        models.Comment.update(
-          { content: req.body.content },
-          { where: { id: req.params.id } }
-        )
-          .then((comment) => {
-            console.log(comment);
-            models.Comment.findOne({
-              where: { id: req.params.id },
-              include: [
-                {
-                  model: models.User,
-                  attributes: ["username"],
-                },
-              ],
-              order: [["createdAt", "DESC"]],
-            })
-              .then((comment) => {
-                console.log(comment);
-                res.status(200).json(comment);
+    models.Comment.findOne({ where: { id: commentId } })
+      .then((comment) => {
+        if (comment.userId == userId) {
+          models.Comment.update(
+            { content: data, updatedAt: new Date() },
+            { where: { id: comment.id } }
+          )
+            .then(() => {
+              models.Comment.findOne({
+                where: { id: commentId },
+                include: [{ model: models.User, attributes: ["username"] }],
               })
-              .catch((err) => res.status(501).json(err));
-          })
-          .catch((err) => res.status(502).json(err));
-      }
-    })
-    .catch((err) => res.status(503).json(err));
+                .then((comment) => res.status(200).json(comment))
+                .catch((error) => res.status(404).json(error));
+            })
+            .catch((error) => res.status(501).json(error));
+        } else {
+          res.status(403).json({ message: "Action non autorisée." });
+        }
+      })
+      .catch((error) => res.status(500).json(error));
+  }
 };
 
 // Delete a post
 exports.deleteComment = (req, res) => {
-  console.log("----------");
-  console.log("deleteComment");
+  console.log("---------- deleteComment");
 
-  const userId = jwt.getUserId(req.headers.authorization);
+  if (!req.params.id || !req.headers.authorization) {
+    res.status(400).json({ message: "Requête incomplète." });
+  } else {
+    const token = jwt.getUserId(req.headers.authorization);
+    const userId = token.userId;
+    const isAdmin = token.isAdmin;
 
-  models.Comment.findOne({
-    where: { id: req.params.id },
-  })
-    .then((comment) => {
-      if (comment.userId !== userId) {
-        res
-          .status(403)
-          .json("Vous n'êtes pas autorisé effectuer cette action !");
-      }
-      models.Comment.destroy({
-        where: { id: req.params.id },
-      })
-        .then(() =>
-          res.status(200).json({ message: "Le commentaire a été supprimé !" })
-        )
-        .catch((err) => res.status(500).json(err));
+    models.Comment.findOne({
+      where: { id: req.params.id },
     })
-    .catch((err) => res.status(500).json(err));
+      .then((comment) => {
+        if (userId === comment.userId || isAdmin) {
+          models.Comment.destroy({ where: { id: comment.id } })
+            .then(() => res.status(204).json({ message: "Elément supprimé." }))
+            .catch((error) => res.status(501).json(error));
+        } else {
+          res.status(403).json({ message: "Action non autorisée." });
+        }
+      })
+      .catch((error) => res.status(500).json(error));
+  }
 };
 
 // Like a comment
 exports.like = (req, res, next) => {
-  console.log("-----------");
-  console.log("giveOpinion on comment");
-  console.log("req.body : ", req.body);
-  console.log("req.body.userId : ", req.body.userId);
-  console.log("req.body.commentId : ", req.body.commentId);
+  console.log("----------- giveOpinion on comment");
 
-  models.CommentLikes.findOne({
-    where: {
-      UserId: req.body.userId,
-      CommentId: req.body.commentId,
-    },
-  })
-    .then((like) => {
-      if (like) {
-        models.CommentLikes.destroy({ where: { id: like.id } })
-          .then(() => res.status(200).json({ message: "Like supprimé !" }))
-          .catch((err) => res.status(500).json(err));
-      } else {
-        models.CommentLikes.create({
-          UserId: req.body.userId,
-          CommentId: req.body.commentId,
-        })
-          .then((like) => res.status(200).json({ like }))
-          .catch((err) => res.status(500).json(err));
-      }
-    })
-    .catch((err) => res.status(500).json(err));
+  if (!req.body.data || !req.headers.authorization) {
+    res.status(400).json({ message: "Requête incomplète." });
+  } else {
+    const data = req.body.data;
+    const token = jwt.getUserId(req.headers.authorization);
+    const userId = token.userId;
+
+    models.CommentLikes.findOne({ where: { UserId: userId, CommentId: data } })
+      .then((like) => {
+        if (like) {
+          if (userId === like.userId) {
+            models.CommentLikes.destroy({ where: { id: like.id } })
+              .then(() =>
+                res.status(204).json({ message: "Elément supprimé." })
+              )
+              .catch((error) => res.status(501).json(error));
+          } else {
+            res.status(403).json({ message: "Action non autorisée." });
+          }
+        } else {
+          models.CommentLikes.create({ UserId: userId, CommentId: data })
+            .then((like) => res.status(201).json(like))
+            .catch((error) => res.status(501).json(error));
+        }
+      })
+      .catch((error) => res.status(500).json(error));
+  }
 };
 
 // Get likes from one post
 exports.getLikesFromComment = (req, res, next) => {
-  console.log("---------");
-  console.log("getLikesFromComment");
+  console.log("--------- getLikesFromComment");
 
-  console.log("req.params : ", req.params);
-  console.log("req.params.id : ", req.params.id);
-
-  models.CommentLikes.findAll({
-    where: { commentId: req.params.id },
-    include: [
-      {
-        model: models.User,
-        attributes: ["username"],
-      },
-    ],
-    order: [["createdAt", "DESC"]],
-  })
-    .then((likes) => {
-      if (likes.length > null) {
-        res.status(200).json(likes);
-      } else {
-        res.status(200).json({ message: "Pas de likes à afficher" });
-      }
+  if (!req.params.id) {
+    res.status(400).json({ message: "Requête incomplète." });
+  } else {
+    models.CommentLikes.findAll({
+      where: { commentId: req.params.id },
+      include: [{ model: models.User, attributes: ["username"] }],
+      order: [["createdAt", "ASC"]],
     })
-    .catch((err) => res.status(500).json(err));
+      .then((likes) => {
+        if (likes.length > 0) {
+          res.status(200).json(likes);
+        } else {
+          res.status(200).json({ message: "Aucun élément à afficher." });
+        }
+      })
+      .catch((error) => res.status(500).json(error));
+  }
 };
+
+// Get all comments
+// exports.getAllComments = (req, res) => {
+//   console.log("------------ getAllComments");
+
+//   console.log("req.body.data : ", req.body.data);
+//   const data = JSON.parse(req.body.data);
+//   console.log("data : ", data);
+
+//   console.log("----req.headers.authorization");
+//   console.log(req.headers.authorization);
+
+//   models.Comment.findAll({
+//     include: [
+//       {
+//         model: models.User,
+//         attributes: ["username"],
+//       },
+//     ],
+//     order: [["createdAt", "DESC"]],
+//   })
+//     .then((comments) => {
+//       if (comments.length > null) {
+//         res.status(200).json(comments);
+//       } else {
+//         res.status(404).json({ error: "Pas de commentaire à afficher" });
+//       }
+//     })
+//     .catch((err) => res.status(500).json(err));
+// };
+
+// Get one comment
+// exports.getOneComment = (req, res, next) => {
+//   console.log("----------- getOneComment");
+
+//   console.log("req.body.data : ", req.body.data);
+//   const data = JSON.parse(req.body.data);
+//   console.log("data : ", data);
+
+//   console.log("----req.headers.authorization");
+//   console.log(req.headers.authorization);
+
+//   // console.log(req.params.id);
+
+//   models.Comment.findOne({
+//     where: { id: req.params.id },
+//     include: [
+//       {
+//         model: models.User,
+//         attributes: ["username"],
+//       },
+//     ],
+//   })
+//     .then((comment) => {
+//       res.status(200).json(comment);
+//     })
+//     .catch((err) => res.status(500).json(err));
+// };
+
+// Get all posts from one user
+// exports.getCommentsFromUser = (req, res, next) => {
+//   console.log("---------- getCommentsFromUser");
+
+//   console.log("req.body.data : ", req.body.data);
+//   const data = JSON.parse(req.body.data);
+//   console.log("data : ", data);
+
+//   console.log("----req.headers.authorization");
+//   console.log(req.headers.authorization);
+
+//   // console.log("req.params");
+//   // console.log(req.params);
+
+//   // console.log("req.params.user");
+//   // console.log(req.params.user);
+
+//   models.Comment.findAll({
+//     where: { userId: req.params.user },
+//     include: [
+//       {
+//         model: models.User,
+//         attributes: ["username"],
+//       },
+//     ],
+//     order: [["createdAt", "DESC"]],
+//   })
+//     .then((comments) => {
+//       console.log(comments);
+//       if (comments.length > null) {
+//         res.status(200).json(comments);
+//       } else {
+//         res.status(404).json({ error: "Pas de commentaire à afficher" });
+//       }
+//     })
+//     .catch((err) => res.status(500).json(err));
+// };

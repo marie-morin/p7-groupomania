@@ -73,14 +73,15 @@ router.beforeEach((to, from, next) => {
       next();
     }
   } else {
+    const option = {
+      method: "POST",
+      data: localStorage.getItem("jwt"),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    };
     axios
-      .post("http://localhost:3000/api/users/me", {
-        method: "POST",
-        token: localStorage.getItem("jwt"),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      })
+      .post("http://localhost:3000/api/users/me", option)
       .then((response) => {
         if (!response.data.user) {
           if (requiresAuth) {

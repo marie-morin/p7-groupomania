@@ -111,8 +111,8 @@ export default {
         { body: this.user },
         { headers: headers },
       );
-        // localStorage.clear();
-        // this.$router.push("Home");
+        localStorage.clear();
+        this.$router.push("Home");
       }
     },
 
