@@ -22,7 +22,6 @@ const actions = {
     });
     localStorage.setItem("jwt", response.data.token);
     dispatch("getUserInfos", response.data.token);
-    router.push("Home");
   },
 
   async getUserInfos({ commit }, token) {
@@ -38,8 +37,9 @@ const actions = {
       option
     );
 
-    commit("saveUser", response.data.user);
+    commit("saveUser", response.data);
     commit("loginIn", true);
+    router.push("Home");
   },
 };
 

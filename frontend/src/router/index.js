@@ -73,6 +73,7 @@ router.beforeEach((to, from, next) => {
       next();
     }
   } else {
+    console.log("pass");
     const option = {
       method: "POST",
       data: localStorage.getItem("jwt"),
@@ -83,14 +84,14 @@ router.beforeEach((to, from, next) => {
     axios
       .post("http://localhost:3000/api/users/me", option)
       .then((response) => {
-        if (!response.data.user) {
+        if (!response.data) {
           if (requiresAuth) {
             next({ name: "Landing" });
           } else {
             next();
           }
         } else {
-          store.commit("saveUser", response.data.user);
+          store.commit("saveUser", response.data);
           store.commit("loginIn", true);
           if (requiresAuth) {
             next();

@@ -12,7 +12,6 @@ const actions = {
     const response = await axios.get(
       `http://localhost:3000/api/comments/from/${postId}`
     );
-    console.log("reponse.data : ", response.data);
     commit("setComments", response.data);
   },
 
@@ -85,7 +84,6 @@ const actions = {
     //   commentId,
     //   userId,
     // };
-    console.log("response.data : ", response.data);
     commit("setCommentRate", response.data);
   },
 };

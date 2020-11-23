@@ -71,7 +71,7 @@ exports.getPostsFrom = (req, res, next) => {
         if (posts.length > 0) {
           res.status(200).json(posts);
         } else {
-          res.status(200).json({ message: "Pas de post à afficher" });
+          res.status(200).json({ message: "Aucun élément à afficher." });
         }
       })
       .catch((error) => res.status(500).json(error));
@@ -108,7 +108,7 @@ exports.modifyPost = (req, res) => {
                 include: [{ model: models.User, attributes: ["username"] }],
               })
                 .then((post) => res.status(200).json(post))
-                .catch((error) => res.status(501).json(error));
+                .catch((error) => res.status(404).json(error));
             })
             .catch((error) => res.status(501).json(error));
         } else {

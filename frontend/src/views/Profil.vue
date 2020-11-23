@@ -74,12 +74,7 @@ export default {
           value: "test",
         },
         lastname: { elt: "input", type: "text", label: "Nom", value: "test" },
-        password: {
-          elt: "input",
-          type: "password",
-          label: "Mot de passe",
-          value: "test",
-        },
+      
         bio: { elt: "textarea", label: "Biographie", value: "test" },
       },
     };
