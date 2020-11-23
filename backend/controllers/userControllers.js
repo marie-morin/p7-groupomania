@@ -8,8 +8,10 @@ const bcrypt = require("bcrypt");
 const mailValidator = require("email-validator");
 
 // Constantes
-const passwordRegex = /((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20})/;
-const nameRegex = /^[a-zA-Z ,.'-]+$/;
+const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%?]{6,}$/;
+
+const regex = /^[a-zA-Z0-9-.,!?()"]+$/;
 
 // Signup
 exports.signup = (req, res, next) => {
