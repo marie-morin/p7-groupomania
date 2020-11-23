@@ -2,7 +2,6 @@
 const models = require("../models");
 const jwt = require("../utils/jwtValidator");
 const fs = require("fs");
-const dotenv = require("dotenv").config();
 const regex = /^[A-Za-z\d\s.,;:!?"()/%]*$/;
 
 //Création d'un message
@@ -12,9 +11,11 @@ exports.addPost = (req, res) => {
   if (
     !req.body.data.title ||
     !req.body.data.content ||
-    !req.headers.authorization
+    !req.headers.authorization ||
+    !regex.test(req.body.data.title) ||
+    !regex.test(req.body.data.content)
   ) {
-    res.status(400).json({ message: "Requête incomplète." });
+    res.status(400).json({ message: "Requête erronée." });
   } else {
     const data = JSON.parse(req.body.data);
     const token = jwt.getUserId(req.headers.authorization);
@@ -60,7 +61,7 @@ exports.getPostsFrom = (req, res, next) => {
   console.log("--------- getPostsFrom");
 
   if (!req.params.id) {
-    res.status(400).json({ message: "Requête incomplète." });
+    res.status(400).json({ message: "Requête erronée." });
   } else {
     models.Post.findAll({
       where: { userId: req.params.user },
@@ -83,12 +84,14 @@ exports.modifyPost = (req, res) => {
   console.log("---------- modifyPost");
 
   if (
-    !req.body.data.content ||
     !req.body.data.title ||
+    !req.body.data.content ||
     !req.params.id ||
-    !req.headers.authorization
+    !req.headers.authorization ||
+    !regex.test(req.body.data.title) ||
+    !regex.test(req.body.data.content)
   ) {
-    res.status(400).json({ message: "Requête incomplète." });
+    res.status(400).json({ message: "Requête erronée." });
   } else {
     const data = req.body.data;
     const token = jwt.getUserId(req.headers.authorization);
@@ -124,7 +127,7 @@ exports.deletePost = (req, res) => {
   console.log("--------- deletePost");
 
   if (!req.params.id || !req.headers.authorization) {
-    res.status(400).json({ message: "Requête incomplète." });
+    res.status(400).json({ message: "Requête erronée." });
   } else {
     const token = jwt.getUserId(req.headers.authorization);
     const userId = token.userId;
@@ -186,8 +189,12 @@ exports.deletePost = (req, res) => {
 exports.like = (req, res, next) => {
   console.log("----------- giveOpinion on post");
 
-  if (!req.body.data || !req.headers.authorization) {
-    res.status(400).json({ message: "Requête incomplète." });
+  if (
+    !req.body.data ||
+    !req.headers.authorization ||
+    !regex.test(req.body.data)
+  ) {
+    res.status(400).json({ message: "Requête erronée." });
   } else {
     const data = req.body.data;
     const token = jwt.getUserId(req.headers.authorization);
@@ -220,7 +227,7 @@ exports.getLikesFromPost = (req, res, next) => {
   console.log("--------- getLikesFromPost");
 
   if (!req.params.id) {
-    res.status(400).json({ message: "Requête incomplète." });
+    res.status(400).json({ message: "Requête erronée." });
   } else {
     models.PostLikes.findAll({
       where: { postId: req.params.id },

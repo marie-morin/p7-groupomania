@@ -6,39 +6,32 @@ const auth = require("../middleware/auth");
 
 // Routes
 
-// Create a post
-router.post("/", commentCtrl.addComment);
-// Get all posts
-// router.get("/", commentCtrl.getAllComments);
-// Get one post
-// router.get("/:id", commentCtrl.getOneComment);
-// Get all posts from one post
-router.get("/from/:id", commentCtrl.getCommentsFromPost);
-// Get all posts from one user
-// router.get("/by/:user", commentCtrl.getCommentsFromUser);
-// Update a post
-router.put("/:id", commentCtrl.modifyComment);
-// Delete a post
-router.delete("/:id", commentCtrl.deleteComment);
-// Like or dislike a post
-router.post("/like", commentCtrl.like);
+// Create a comment
+router.post("/", auth, commentCtrl.addComment);
+// Get all comments from one post
+router.get("/from/:id", auth, commentCtrl.getCommentsFromPost);
+// Update a comment
+router.put("/:id", auth, commentCtrl.modifyComment);
+// Delete a comment
+router.delete("/:id", auth, commentCtrl.deleteComment);
+// Like or dislike a comment
+router.post("/like", auth, commentCtrl.like);
 // Get likes from one comment
-router.get("/:id/like", commentCtrl.getLikesFromComment);
+router.get("/:id/like", auth, commentCtrl.getLikesFromComment);
 
-// // Create a post
-// router.post("/", auth, multer, postCtrl.addPost);
-// // Get all posts
-// router.get("/", auth, postCtrl.getAllPosts);
-// // Get one post
-// router.get("/:id", auth, postCtrl.getOnePost);
-// // Get all posts from one user
-// router.get("/from/:user", auth, postCtrl.getPostsFrom);
-// // Update a post
-// router.put("/:id", auth, multer, postCtrl.modifyPost);
-// // Delete a post
-// router.delete("/:id", auth, postCtrl.deletePost);
-// // Like or dislike a post
-// router.post("/:id/like", auth, multer, postCtrl.giveOpinion);
+// Requête complètes
+// // Create a comment
+// router.post("/", auth, multer, commentCtrl.addComment);
+// // Update a comment
+// router.put("/:id", auth, multer, commentCtrl.modifyComment);
+
+// Requête non utilisées
+// Get all comments
+// router.get("/", auth, commentCtrl.getAllComments);
+// Get one comment
+// router.get("/:id", auth, commentCtrl.getOneComment);
+// Get all comments from one user
+// router.get("/by/:user", auth, commentCtrl.getCommentsFromUser);
 
 // Exporting Router
 module.exports = router;

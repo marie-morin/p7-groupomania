@@ -3,26 +3,30 @@ const models = require("../models");
 const jwt = require("../utils/jwtValidator");
 
 // Security imports
-const dotenv = require("dotenv").config();
 const bcrypt = require("bcrypt");
-const mailValidator = require("email-validator");
 
 // Constantes
 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%?]{6,}$/;
-
 const regex = /^[a-zA-Z0-9-.,!?()"]+$/;
 
 // Signup
 exports.signup = (req, res, next) => {
   console.log("----------- signup");
-  console.log("req.body.data : ", req.body.data);
 
   const data = JSON.parse(req.body.data);
-  console.log("data : ", data);
 
-  if (!data.email || !data.password || !data.firstname || !data.lastname) {
-    res.status(400).json({ message: "Requête incomplète." });
+  if (
+    !data.email ||
+    !data.password ||
+    !data.firstname ||
+    !data.lastname ||
+    !emailRegex.test(data.email) ||
+    !passwordRegex.test(data.password) ||
+    !regex.test(data.firstname) ||
+    !regex.test(data.lastname)
+  ) {
+    res.status(400).json({ message: "Requête erronée." });
   } else {
     bcrypt.hash(data.password, 10, function (err, bcryptPassword) {
       const username = data.firstname + " " + data.lastname;
@@ -50,12 +54,13 @@ exports.login = (req, res, next) => {
 
   const data = JSON.parse(req.body.data);
 
-  console.log("req.body.data : ", req.body.data);
-  console.log("req.body.data.email : ", data.email);
-  console.log("req.body.data.password : ", data.password);
-
-  if (!data.email || !data.password) {
-    res.status(400).json({ message: "Requête incomplète." });
+  if (
+    !data.email ||
+    !data.password ||
+    !emailRegex.test(data.email) ||
+    !passwordRegex.test(data.password)
+  ) {
+    res.status(400).json({ message: "Requête erronée." });
   } else {
     models.User.findOne({ where: { email: data.email } })
       .then((user) => {
@@ -81,8 +86,8 @@ exports.login = (req, res, next) => {
 exports.me = (req, res, next) => {
   console.log("------------------ me");
 
-  if (!req.body.data) {
-    res.status(400).json({ message: "Requête incomplète." });
+  if (!req.body.data || !regex.test(req.body.data)) {
+    res.status(400).json({ message: "Requête erronée." });
   } else {
     const token = jwt.getUserId(req.body.data);
 
@@ -117,7 +122,7 @@ exports.getOneUser = (req, res) => {
   console.log("----------- getOneUser");
 
   if (!req.params.id) {
-    res.status(400).json({ message: "Requête incomplète." });
+    res.status(400).json({ message: "Requête erronée." });
   } else {
     models.User.findOne({ where: { id: req.params.id } })
       .then((user) => res.status(200).json(user))
@@ -137,9 +142,12 @@ exports.modifyUser = (req, res, next) => {
     !data.email ||
     !data.firstname ||
     !data.lastname ||
-    !req.headers.authorization
+    !req.headers.authorization ||
+    !emailRegex.test(data.email) ||
+    !regex.test(data.firstname) ||
+    !regex.test(data.lastname)
   ) {
-    res.status(400).json({ message: "Requête incomplète." });
+    res.status(400).json({ message: "Requête erronée." });
   } else {
     const token = jwt.getUserId(req.headers.authorization);
     const userId = token.userId;
@@ -178,7 +186,7 @@ exports.deleteUser = (req, res, next) => {
   console.log("---------- deleteUser");
 
   if (!req.params.id || !req.headers.authorization) {
-    res.status(400).json({ message: "Requête incomplète." });
+    res.status(400).json({ message: "Requête erronée." });
   } else {
     const token = jwt.getUserId(req.headers.authorization);
     const userId = token.userId;

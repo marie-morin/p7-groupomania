@@ -1,8 +1,6 @@
 //Import
 const models = require("../models");
 const jwt = require("../utils/jwtValidator");
-const fs = require("fs");
-const dotenv = require("dotenv").config();
 const regex = /^[A-Za-z\d\s.,;:!?"()/%]*$/;
 
 // Create a comment
@@ -12,9 +10,11 @@ exports.addComment = (req, res) => {
   if (
     !req.body.data.content ||
     !req.body.data.postId ||
-    !req.headers.authorization
+    !req.headers.authorization ||
+    !regex.test(req.body.data.content) ||
+    !regex.test(req.body.data.postId)
   ) {
-    res.status(400).json({ message: "Requête incomplète." });
+    res.status(400).json({ message: "Requête erronée." });
   } else {
     const data = req.body.data;
     const token = jwt.getUserId(req.headers.authorization);
@@ -42,7 +42,7 @@ exports.getCommentsFromPost = (req, res, next) => {
   console.log("----------- getCommentsFromPost");
 
   if (!req.params.id) {
-    res.status(400).json({ message: "Requête incomplète." });
+    res.status(400).json({ message: "Requête erronée." });
   } else {
     models.Comment.findAll({
       where: { postId: req.params.id },
@@ -64,8 +64,13 @@ exports.getCommentsFromPost = (req, res, next) => {
 exports.modifyComment = (req, res) => {
   console.log("---------- modifyComment");
 
-  if (!req.body.data || !req.params.id || !req.headers.authorization) {
-    res.status(400).json({ message: "Requête incomplète." });
+  if (
+    !req.body.data ||
+    !req.params.id ||
+    !req.headers.authorization ||
+    !regex.test(req.body.data)
+  ) {
+    res.status(400).json({ message: "Requête erronée." });
   } else {
     const data = req.body.data;
     const token = jwt.getUserId(req.headers.authorization);
@@ -101,7 +106,7 @@ exports.deleteComment = (req, res) => {
   console.log("---------- deleteComment");
 
   if (!req.params.id || !req.headers.authorization) {
-    res.status(400).json({ message: "Requête incomplète." });
+    res.status(400).json({ message: "Requête erronée." });
   } else {
     const token = jwt.getUserId(req.headers.authorization);
     const userId = token.userId;
@@ -125,8 +130,12 @@ exports.deleteComment = (req, res) => {
 exports.like = (req, res, next) => {
   console.log("----------- giveOpinion on comment");
 
-  if (!req.body.data || !req.headers.authorization) {
-    res.status(400).json({ message: "Requête incomplète." });
+  if (
+    !req.body.data ||
+    !req.headers.authorization ||
+    !regex.test(req.body.data)
+  ) {
+    res.status(400).json({ message: "Requête erronée." });
   } else {
     const data = req.body.data;
     const token = jwt.getUserId(req.headers.authorization);
@@ -159,7 +168,7 @@ exports.getLikesFromComment = (req, res, next) => {
   console.log("--------- getLikesFromComment");
 
   if (!req.params.id) {
-    res.status(400).json({ message: "Requête incomplète." });
+    res.status(400).json({ message: "Requête erronée." });
   } else {
     models.CommentLikes.findAll({
       where: { commentId: req.params.id },

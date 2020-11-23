@@ -2,21 +2,18 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv").config();
 
 module.exports = (req, res, next) => {
-  console.log("ta race");
   try {
-    // if (0 === 0) {
-    //   res.redirect("http://localhost:8080");
-    //   //   res.url = "/";
-    //   //   next();
-    // }
-    // if (!req.headers.authorization) {
-    //     res.redirect('/home');
-    // }
-    console.log("ta mere");
-    const token = req.headers.authorization.split(" ")[1]; // Finding the token part of the authorization headers
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET_TOKEN); // Ckecking if it matchs the secret token key
+    const header = req.headers.authorization;
+    let token;
+
+    if (data.split(" ").length > 1) {
+      token = req.headers.authorization.split(" ")[1];
+    } else {
+      token = header;
+    }
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET_TOKEN);
     const userId = decodedToken.userId;
-    if (req.body.userId && req.body.userId !== userId) {
+    if (!userId) {
       throw "userId non valable !";
     } else {
       next();
