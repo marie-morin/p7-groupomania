@@ -3,50 +3,105 @@ import router from "../../router";
 
 const state = {
   user: {},
-  isLoged: false,
+  users: [],
+  guest: {},
 };
 
 const getters = {
   currentUser: (state) => state.user,
-  isLoged: (state) => state.isLoged,
+  allUsers: (state) => state.users,
+  guest: (state) => state.guest,
 };
 
 const actions = {
+  async fetchUsers({ commit }) {
+    const TOKEN = localStorage.getItem("jwt");
+    const headers = {
+      Authorization: "Bearer " + TOKEN.replace(/['"']+/g, ""),
+    };
+    const response = await axios.get("http://localhost:3000/api/users/", {
+      headers: headers,
+    });
+    commit("setUsers", response.data);
+  },
+
+  async fetchOneUser({ commit }, userId) {
+    const TOKEN = localStorage.getItem("jwt");
+    const headers = {
+      Authorization: "Bearer " + TOKEN.replace(/['"']+/g, ""),
+    };
+    const response = await axios.get(
+      `http://localhost:3000/api/users/${userId}`,
+      {
+        headers: headers,
+      }
+    );
+    commit("setGuest", response.data);
+  },
+
   async registerUser({ dispatch }, { url, user }) {
     const response = await axios.post(url, {
       method: "POST",
       data: user,
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
     });
     localStorage.setItem("jwt", response.data.token);
     dispatch("getUserInfos", response.data.token);
   },
 
   async getUserInfos({ commit }, token) {
-    const option = {
+    const TOKEN = localStorage.getItem("jwt");
+    const headers = {
+      Authorization: "Bearer " + TOKEN.replace(/['"']+/g, ""),
+    };
+    const response = await axios.post("http://localhost:3000/api/users/me", {
       method: "POST",
       data: token,
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    };
-    const response = await axios.post(
-      "http://localhost:3000/api/users/me",
-      option
-    );
+      headers: headers,
+    });
 
-    commit("saveUser", response.data);
-    commit("loginIn", true);
+    commit("setUser", response.data);
     router.push("Home");
+  },
+
+  async deleteUser({ commit }, id) {
+    const TOKEN = localStorage.getItem("jwt");
+    const headers = {
+      Authorization: "Bearer " + TOKEN.replace(/['"']+/g, ""),
+    };
+
+    await axios.delete(`http://localhost:3000/api/users/${id}`, {
+      headers: headers,
+    });
+    commit("removeUser");
+  },
+
+  async updateUser({ commit }, user) {
+    const TOKEN = localStorage.getItem("jwt");
+    const headers = {
+      Authorization: "Bearer " + TOKEN.replace(/['"']+/g, ""),
+    };
+
+    const response = await axios.put(
+      `http://localhost:3000/api/users/${user.id}`,
+      { data: user },
+      { headers: headers }
+    );
+    commit("setUser", response.data);
   },
 };
 
 const mutations = {
-  saveUser: (state, user) => (state.user = user),
-  loginIn: (state, current) => (state.isLoged = current),
+  setUser: (state, user) => (state.user = user),
+
   userLogout: (state) => ((state.user = {}), (state.isLoged = false)),
+
+  setUsers: (state, users) => {
+    users.forEach((user) => state.users.push(user));
+  },
+
+  removeUser: (state) => (state.user = {}),
+
+  setGuest: (state, user) => (state.guest = user),
 };
 
 export default {

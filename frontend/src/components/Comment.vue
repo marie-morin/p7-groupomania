@@ -72,7 +72,6 @@ export default {
       this.rateComment(this.comment.id);
       this.wasLiked = !this.wasLiked;
     },
-
   },
       created() {
       this.fetchCommentLikes(this.comment.id);

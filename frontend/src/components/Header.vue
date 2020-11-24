@@ -3,11 +3,11 @@
     <div class="inner">
       <img src="../../public/images/icon-white.png" alt="Logo" class="logo" />
       <div id="nav">
-        <router-link v-if="connected" to="/home">Accueil</router-link>
-        <router-link v-if="connected" to="/users">Utilisateurs</router-link>
-        <router-link v-if="connected" :to="{ name: 'Profil', params: { id: currentUser.id }}">Profil</router-link>
-        <a v-if="connected" href="#" @click.prevent="logout">Déconnexion</a>
-        <p>Bonjour <span>{{ currentUser.firstname }}</span></p>
+        <router-link v-if="currentUser.id" to="/home">Accueil</router-link>
+        <router-link v-if="currentUser.id" to="/users">Utilisateurs</router-link>
+        <router-link v-if="currentUser.id" :to="{ name: 'Profil', params: { id: currentUser.id }}">Profil</router-link>
+        <a v-if="currentUser.id" href="#" @click.prevent="logout">Déconnexion</a>
+        <p v-if="currentUser.id">Bonjour <span>{{ currentUser.firstname }}</span></p>
       </div>
     </div>
   </div>
@@ -19,19 +19,6 @@ import store from "../store";
 
 export default {
   name: "Header",
-
-  data() {
-    return {
-      connected: false,
-    };
-  },
-
-  created: function() {
-    if (this.currentUser !== null) {
-      this.connected = true;
-    }
-    return this.connected;
-  },
 
   computed: { 
     ...mapGetters(['currentUser']),

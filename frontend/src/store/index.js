@@ -15,4 +15,14 @@ export default new Vuex.Store({
     postModule,
     commentModule,
   },
+
+  // action: {
+  //   getToken() {
+  //     const TOKEN = localStorage.getItem("jwt");
+  //     const headers = {
+  //       Authorization: "Bearer " + TOKEN.replace(/['"']+/g, ""),
+  //     };
+  //     return headers;
+  //   },
+  // },
 });

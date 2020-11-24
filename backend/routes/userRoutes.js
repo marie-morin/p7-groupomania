@@ -10,7 +10,7 @@ router.post("/signup", userCtrl.signup);
 // Login
 router.post("/login", userCtrl.login);
 // Get current user info
-router.post("/me", auth, userCtrl.me);
+router.post("/me", userCtrl.me);
 // Get all users
 router.get("/", auth, userCtrl.getAllUsers);
 // Get One user

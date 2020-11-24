@@ -3,28 +3,20 @@
     <div class="form-container">
       <form @submit.prevent="checkForm" class="form">
 
-        <div class="form-row" v-for="(item, name) in schema" :key="name">
-          <label :for="name">{{ item.label }}</label>
-          <input
-            :type="item.type"
-            :name="name"
-            :id="name"
-            v-model="user[name]"
-            v-if="item.elt === 'input'"
-            :required="user[name] !== 'bio' ? true : false"
-          />
-          <textarea
-            :name="name"
-            :id="name"
-            cols="10"
-            rows="10"
-            v-model="user[name]"
-            v-if="item.elt === 'textarea'"
-          ></textarea>
-        </div>
+        <label for="email">Adresse email</label> 
+        <input v-model="user.email" type="email" name="email" id="email" required>
+
+        <label for="firstname">Prénom</label> 
+        <input v-model="user.firstname" type="text" name="firstname" id="firstname" required>
+
+        <label for="lastname">Nom</label> 
+        <input v-model="user.lastname" type="text" name="lastname" id="lastname" required>
+
+        <label for="bio">Biographie</label>
+        <textarea v-model="user.bio" name="bio" id="bio" cols="10" rows="10"></textarea>
 
         <div class="form-btn">
-          <input type="submit" class="form-submit" :value="settings.title" />
+          <input type="submit" class="form-submit" value="Enregistrer" />
         </div>
 
         <div class="form-btn">
@@ -41,53 +33,27 @@
 </template>
 
 <script>
-import axios from "axios";
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: "ProfilForm",
-  props: {
-    settings: {
-      type: Object,
-      required: true,
-    },
-    schema: {
-      type: Object,
-      required: true,
-    },
-    user: {
-      type: Object,
-    },
-  },
 
-  // data: function() {
-  //   // const obj = {};
-  //   // for (const [key] of Object.entries(this.schema)) {
-  //   //   obj[key] = "";
-  //   // }
-  //   // return { test: { ...obj } };
-  // },
+  computed: { 
+    ...mapGetters(['currentUser']),
+
+    user() {
+      return {...this.currentUser};
+    }
+  },
 
   methods: {
+    ...mapActions(['updateUser']),
+
     checkForm: function() {
-      // const user = {};
-      console.log(this.user);
-      // for (const [key, value] of Object.entries(this.test)) {
-      //   this.user[key] = value;
-      // }
-      let TOKEN = localStorage.getItem("jwt");
-      const headers = {
-        Authorization: "Bearer " + TOKEN.replace(/['"']+/g, ""),
-      };
-
-      axios.put(
-        this.settings.urlPost + this.settings.userId,
-        { data: JSON.stringify(this.user) },
-        { headers: headers }
-      );
-
-      this.$router.go();
+      this.updateUser(this.user);
     },
   },
+
 };
 </script>
 

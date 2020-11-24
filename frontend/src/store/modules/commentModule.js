@@ -9,8 +9,13 @@ const getters = {};
 const actions = {
   // Concernant les commentaires
   async fetchComments({ commit }, postId) {
+    const TOKEN = localStorage.getItem("jwt");
+    const headers = {
+      Authorization: "Bearer " + TOKEN.replace(/['"']+/g, ""),
+    };
     const response = await axios.get(
-      `http://localhost:3000/api/comments/from/${postId}`
+      `http://localhost:3000/api/comments/from/${postId}`,
+      { headers: headers }
     );
     commit("setComments", response.data);
   },
@@ -58,8 +63,15 @@ const actions = {
 
   // Concernant les likes des posts
   async fetchCommentLikes({ commit }, commentId) {
+    const TOKEN = localStorage.getItem("jwt");
+    const headers = {
+      Authorization: "Bearer " + TOKEN.replace(/['"']+/g, ""),
+    };
     const response = await axios.get(
-      `http://localhost:3000/api/comments/${commentId}/like`
+      `http://localhost:3000/api/comments/${commentId}/like`,
+      {
+        headers: headers,
+      }
     );
     commit("setCommentLikes", response.data);
   },

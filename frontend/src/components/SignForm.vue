@@ -1,26 +1,40 @@
 <template>
   <div class="form-section">
     <div class="form-container">
-      <form @submit.prevent="checkForm" class="form">
-        <h1>{{ settings.title }} !</h1>
+      
+      <h1 v-if="settings.destination === 'login'">Inscrivez-vous !</h1>
+      <h1 v-else>Connectez-vous !</h1>
 
-        <div class="form-row" v-for="(item, name) in schema" :key="name">
-          <label :for="name">{{ item.label }}</label>
-          <input
-            :type="item.type"
-            :name="name"
-            :id="name"
-            v-model="user[name]"
-            v-if="item.elt === 'input'"
-          />
-          <textarea
-            :name="name"
-            :id="name"
-            cols="10"
-            rows="10"
-            v-model="user[name]"
-            v-if="item.elt === 'textarea'"
-          ></textarea>
+      <form @submit.prevent="checkForm" class="form">
+
+        <div>
+          <label for="email">Adresse email</label> 
+          <input v-model="user.email" type="email" name="email" id="email" required>
+        </div>
+
+        <div v-if="settings.destination === 'login'">
+          <label for="firstname">Prénom</label> 
+          <input v-model="user.firstname" type="text" name="firstname" id="firstname" required>
+        </div>
+
+        <div v-if="settings.destination === 'login'">
+          <label for="lastname">Nom</label> 
+          <input v-model="user.lastname" type="text" name="lastname" id="lastname" required>
+        </div>
+
+        <div>
+          <label for="password">Mot de passe</label> 
+          <input v-model="user.password" type="password" name="password" id="password" required>
+        </div>
+
+        <div v-if="settings.destination === 'login'">
+          <label for="passwordConf">Confirmation mot de passe</label> 
+          <input v-model="user.passwordConf" type="password" name="passwordConf" id="passwordConf" required>
+        </div>
+
+        <div v-if="settings.destination === 'login'">
+          <label for="bio">Biographie</label>
+          <textarea v-model="user.bio" name="bio" id="bio" cols="10" rows="10"></textarea>
         </div>
 
         <div class="form-btn">
@@ -51,10 +65,6 @@ export default {
       type: Object,
       required: true,
     },
-    schema: {
-      type: Object,
-      required: true,
-    },
     user: {
       type: Object,
     },
@@ -67,7 +77,7 @@ export default {
 
     checkForm: function() {
       let data = {
-        user : JSON.stringify(this.user),
+        user : this.user,
         url: this.settings.urlPost,
       }
       this.registerUser(data);

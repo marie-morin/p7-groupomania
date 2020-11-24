@@ -1,63 +1,40 @@
 <template>
   <div class="page-content">
     <div class="infos-container">
-      <h1>Bienvenue {{ user.firstname }} !</h1>
+      <h1 v-if="isOwner">Bienvenue {{ user.firstname }} !</h1>
+      <h1 v-else>{{ user.username }}</h1>
 
       <h3>Nom d'utilisateur :</h3>
       <p>{{ user.firstname }} {{ user.lastname }}</p>
 
-      <h3>Email :</h3>
-      <p>{{ user.email }}</p>
+      <h3 v-if="isOwner">Email :</h3>
+      <p v-if="isOwner">{{ user.email }}</p>
 
       <h3>Biographie :</h3>
       <p v-if="user.bio">{{ user.bio }}</p>
       <p v-else>Vous n'avez pas encore ajouté de biographie à votre profil !</p>
 
-      <h3 v-if="user.isAdmin == 1">Administration :</h3>
-      <p v-if="user.isAdmin == 1">Vous êtes administrateur.</p>
+      <h3 v-if="user.isAdmin">Administration :</h3>
+      <p v-if="user.isAdmin">Vous êtes administrateur.</p>
     </div>
   </div>
 </template>
 
-// 
 
 <script>
-// import { mapGetters } from "vuex";
-
 export default {
   name: "UserInfos",
 
-  // computed: mapGetters(["currentUser"]),
-
   props: {
+    isOwner: {
+      type: Boolean,
+      requiered: true,
+    },
     user: {
       type: Object,
-      required: true,
+      requiered: true,
     }
   }
-
-
-  // <template>
-//   <div class="page-content">
-//     <div class="infos-container">
-//       <h1>Bienvenue {{ currentUser.firstname }} !</h1>
-
-//       <h3>Nom d'utilisateur :</h3>
-//       <p>{{ currentUser.firstname }} {{ currentUser.lastname }}</p>
-
-//       <h3>Email :</h3>
-//       <p>{{ currentUser.email }}</p>
-
-//       <h3>Biographie :</h3>
-//       <p v-if="currentUser.bio">{{ currentUser.bio }}</p>
-//       <p v-else>Vous n'avez pas encore ajouté de biographie à votre profil !</p>
-
-//       <h3 v-if="currentUser.isAdmin == 1">Administration :</h3>
-//       <p v-if="currentUser.isAdmin == 1">Vous êtes administrateur.</p>
-//     </div>
-//   </div>
-// </template>
-
 };
 </script>
 

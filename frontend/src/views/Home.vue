@@ -31,15 +31,13 @@ export default {
 
   components: { Header, Footer, PostForm, Post },
 
-  methods: {
-    ...mapActions(["fetchPosts"]),
-  },
+  computed: mapGetters(["allPosts"]),
+
+  methods: mapActions(["fetchPosts"]),
 
   created() {
     this.fetchPosts();
   },
-
-  computed: mapGetters(["allPosts"]),
 };
 </script>
 

@@ -2,7 +2,7 @@
 const models = require("../models");
 const jwt = require("../utils/jwtValidator");
 const fs = require("fs");
-const regex = /^[A-Za-z\d\s.,;:!?"()/%]*$/;
+const regex = /^[a-zA-Z0-9\s-_.,!?()"]+$/;
 
 //Création d'un message
 exports.addPost = (req, res) => {

@@ -3,7 +3,7 @@
     <div class="top-content">
       <Header />
       <div class="content">
-        <UserCard v-for="user in users" :key="user.id" :user="user"/>
+        <UserCard v-for="user in allUsers" :key="user.id" :user="user"/>
       </div>
     </div>
     <Footer />
@@ -11,32 +11,23 @@
 </template>
 
 <script>
-// @ is an alias to /src
+import { mapGetters, mapActions } from "vuex";
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
 import UserCard from "@/components/UserCard.vue";
-import axios from "axios";
 
 export default {
   name: "Users",
 
   components: { Header, Footer, UserCard },
 
-  data: function() {
-      return {
-          users: [],
-      };
+  methods: mapActions(["fetchUsers"]),
+
+  created() {
+    this.fetchUsers();
   },
 
-  beforeCreate: function () {
-    axios
-    .get("http://localhost:3000/api/users/")
-    .then((response) => {
-        this.users = response.data;
-        console.log(this.users);
-    })
-    .catch((error) => console.log(error));
-  }
+  computed: mapGetters(['allUsers']),
 };
 </script>
 

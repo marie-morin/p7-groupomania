@@ -3,7 +3,7 @@
     <div class="top-content">
       <Header />
       <div class="content">
-        <SignForm :settings="settings" :schema="schema" :user="user" />
+        <SignForm :settings="settings" :user="user" />
       </div>
     </div>
     <Footer />
@@ -30,22 +30,12 @@ export default {
         password: "",
         bio: "",
       },
-
       settings: {
-        title: "Inscrivez-vous",
-        question: "Déjà un compte",
-        option: "Connectez-vous",
         destination: "login",
         urlPost: "http://localhost:3000/api/users/signup",
-      },
-
-      schema: {
-        email: { elt: "input", type: "text", label: "Email" },
-        firstname: { elt: "input", type: "text", label: "Prénom" },
-        lastname: { elt: "input", type: "text", label: "Nom" },
-        password: { elt: "input", type: "password", label: "Mot de passe" },
-        bio: { elt: "textarea", label: "Biographie" },
-      },
+        question: "Déjà un compte",
+        option: "Connectez-vous",
+      }
     };
   },
 };

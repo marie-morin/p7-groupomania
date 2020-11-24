@@ -73,7 +73,6 @@ router.beforeEach((to, from, next) => {
       next();
     }
   } else {
-    console.log("pass");
     const option = {
       method: "POST",
       data: localStorage.getItem("jwt"),
@@ -91,8 +90,7 @@ router.beforeEach((to, from, next) => {
             next();
           }
         } else {
-          store.commit("saveUser", response.data);
-          store.commit("loginIn", true);
+          store.commit("setUser", response.data);
           if (requiresAuth) {
             next();
           } else {

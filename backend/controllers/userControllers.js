@@ -8,13 +8,13 @@ const bcrypt = require("bcrypt");
 // Constantes
 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%?]{6,}$/;
-const regex = /^[a-zA-Z0-9-.,!?()"]+$/;
+const regex = /^[a-zA-Z0-9\s-_.,!?()"]+$/;
 
 // Signup
 exports.signup = (req, res, next) => {
   console.log("----------- signup");
 
-  const data = JSON.parse(req.body.data);
+  const data = req.body.data;
 
   if (
     !data.email ||
@@ -52,7 +52,8 @@ exports.signup = (req, res, next) => {
 exports.login = (req, res, next) => {
   console.log("------------------ login");
 
-  const data = JSON.parse(req.body.data);
+  const data = req.body.data;
+  console.log("data : ", data);
 
   if (
     !data.email ||
@@ -136,7 +137,7 @@ exports.getOneUser = (req, res) => {
 exports.modifyUser = (req, res, next) => {
   console.log("------------ modifyUser");
   console.log("req.body.data : ", req.body.data);
-  const data = JSON.parse(req.body.data);
+  const data = req.body.data;
 
   if (
     !data.email ||
