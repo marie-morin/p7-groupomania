@@ -1,7 +1,7 @@
 <template>
   <div class="form-section">
     <div class="form-container">
-      <form @submit.prevent="checkForm" class="form">
+      <form @submit.prevent="updateUser" class="form">
 
         <label for="email">Adresse email</label> 
         <input v-model="user.email" type="email" name="email" id="email" required>
@@ -47,13 +47,17 @@ export default {
   },
 
   methods: {
-    ...mapActions(['updateUser']),
+    ...mapActions(['update']),
 
-    checkForm: function() {
-      this.updateUser(this.user);
+    updateUser() {
+      const options = {
+        url: `http://localhost:3000/api/users/${this.user.id}`,
+        mutation: "setUser",
+        data: this.user,
+      }
+      this.update(options);  
     },
-  },
-
+  }
 };
 </script>
 

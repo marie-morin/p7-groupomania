@@ -5,36 +5,36 @@
       <h1 v-if="settings.destination === 'login'">Inscrivez-vous !</h1>
       <h1 v-else>Connectez-vous !</h1>
 
-      <form @submit.prevent="checkForm" class="form">
+      <form @submit.prevent="submitUser" class="form">
 
         <div>
           <label for="email">Adresse email</label> 
-          <input v-model="user.email" type="email" name="email" id="email" required>
+          <input v-model="user.email" type="email" name="email" id="email" placeholder="Mon adresse email..." required>
         </div>
 
         <div v-if="settings.destination === 'login'">
           <label for="firstname">Prénom</label> 
-          <input v-model="user.firstname" type="text" name="firstname" id="firstname" required>
+          <input v-model="user.firstname" type="text" name="firstname" id="firstname" placeholder="Mon prénom..." required>
         </div>
 
         <div v-if="settings.destination === 'login'">
           <label for="lastname">Nom</label> 
-          <input v-model="user.lastname" type="text" name="lastname" id="lastname" required>
+          <input v-model="user.lastname" type="text" name="lastname" id="lastname" placeholder="Mon nom..." required>
         </div>
 
         <div>
           <label for="password">Mot de passe</label> 
-          <input v-model="user.password" type="password" name="password" id="password" required>
+          <input v-model="user.password" type="password" name="password" id="password" placeholder="Mon mot de passe..." required>
         </div>
 
         <div v-if="settings.destination === 'login'">
           <label for="passwordConf">Confirmation mot de passe</label> 
-          <input v-model="user.passwordConf" type="password" name="passwordConf" id="passwordConf" required>
+          <input v-model="user.passwordConf" type="password" name="passwordConf" id="passwordConf" placeholder="La confirmation de mon mot de passe..." required>
         </div>
 
         <div v-if="settings.destination === 'login'">
           <label for="bio">Biographie</label>
-          <textarea v-model="user.bio" name="bio" id="bio" cols="10" rows="10"></textarea>
+          <textarea v-model="user.bio" name="bio" id="bio" cols="10" rows="10"  placeholder="Ma biographie..."></textarea>
         </div>
 
         <div class="form-btn">
@@ -75,7 +75,7 @@ export default {
   methods: {
     ...mapActions(["registerUser"]),
 
-    checkForm: function() {
+    submitUser() {
       let data = {
         user : this.user,
         url: this.settings.urlPost,

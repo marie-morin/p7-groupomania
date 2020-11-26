@@ -1,109 +1,22 @@
-import axios from "axios";
-// import * as userModule from "./userModule";
-
 const state = {
   posts: [],
+  // userPosts: [],
 };
 
 const getters = {
   allPosts: (state) => state.posts,
 };
 
-const actions = {
-  // Concernant les posts
-  async fetchPosts({ commit }) {
-    const TOKEN = localStorage.getItem("jwt");
-    const headers = {
-      Authorization: "Bearer " + TOKEN.replace(/['"']+/g, ""),
-    };
-    const response = await axios.get("http://localhost:3000/api/posts", {
-      headers: headers,
-    });
-    commit("setPosts", response.data);
-  },
-
-  async addPost({ commit }, post) {
-    const TOKEN = localStorage.getItem("jwt");
-    const headers = {
-      Authorization: "Bearer " + TOKEN.replace(/['"']+/g, ""),
-    };
-
-    const response = await axios.post(
-      "http://localhost:3000/api/posts/",
-      { data: post },
-      { headers: headers }
-    );
-    commit("newPost", response.data);
-  },
-
-  async deletePost({ commit }, id) {
-    const TOKEN = localStorage.getItem("jwt");
-    const headers = {
-      Authorization: "Bearer " + TOKEN.replace(/['"']+/g, ""),
-    };
-
-    await axios.delete(`http://localhost:3000/api/posts/${id}`, {
-      headers: headers,
-    });
-    commit("removePost", id);
-  },
-
-  async updatePost({ commit }, { title, content, id }) {
-    const TOKEN = localStorage.getItem("jwt");
-    const headers = {
-      Authorization: "Bearer " + TOKEN.replace(/['"']+/g, ""),
-    };
-    const data = {
-      title,
-      content,
-    };
-
-    const response = await axios.put(
-      `http://localhost:3000/api/posts/${id}`,
-      { data },
-      { headers: headers }
-    );
-    commit("updatePost", response.data);
-  },
-
-  // Concernant les likes des posts
-  async fetchPostLikes({ commit }, postId) {
-    const TOKEN = localStorage.getItem("jwt");
-    const headers = {
-      Authorization: "Bearer " + TOKEN.replace(/['"']+/g, ""),
-    };
-    const response = await axios.get(
-      `http://localhost:3000/api/posts/${postId}/like`,
-      { headers: headers }
-    );
-    commit("setPostLikes", response.data);
-  },
-
-  async ratePost({ commit }, postId) {
-    const TOKEN = localStorage.getItem("jwt");
-    const headers = {
-      Authorization: "Bearer " + TOKEN.replace(/['"']+/g, ""),
-    };
-
-    const response = await axios.post(
-      `http://localhost:3000/api/posts/like`,
-      { data: postId },
-      { headers: headers }
-    );
-
-    // const rate = {
-    //   response,
-    //   postId,
-    //   userId,
-    // };
-    commit("setPostRate", response.data);
-  },
-};
-
 const mutations = {
   setPosts: (state, posts) => {
     posts.forEach((post) => {
       state.posts.push({ comments: [], likes: [], ...post });
+    });
+  },
+
+  setUserPosts: (state, userPosts) => {
+    userPosts.forEach((post) => {
+      state.userPosts.push({ comments: [], likes: [], ...post });
     });
   },
 
@@ -155,6 +68,5 @@ const mutations = {
 export default {
   state,
   getters,
-  actions,
   mutations,
 };

@@ -2,12 +2,12 @@
   <div class="comment-unit">
     <div class="comment-likes">
       <p class="likes">{{ comment.likes.length }}</p>
-      <font-awesome-icon @click="sendLike()" v-bind:class="{ liked: wasLiked }" class="icon up" icon="arrow-up" />
+      <font-awesome-icon @click="like()" v-bind:class="{ liked: wasLiked }" class="icon up" icon="arrow-up" />
     </div>
 
       {{ comment.content }} par {{ comment.User.username }} <br/>
 
-      <input type="text" v-if="editing" v-model="updatedComment" @keyup.enter="submitComment()">
+      <input type="text" v-if="editing" v-model="updatedComment" @keyup.enter="updateComment()">
 
       <button @click="deleteComment(comment.id)">Supprimer le commentaire</button>
       <!-- <button @click="deleteComment(comment.id)" v-if="isAllowed">Supprimer le commentaire</button> -->
@@ -32,7 +32,7 @@ export default {
     }
   },
 
-  data: function() {
+  data() {
     return {
       editing : false,
       updatedComment: "",
@@ -44,39 +44,61 @@ export default {
     ...mapGetters(['currentUser']),
 
     isAllowed() {
-      return this.currentUser.isAdmin === true || this.comment.userId === this.currentUser.id
+      return this.currentUser.isAdmin == true || this.comment.userId == this.currentUser.id
     },
 
     isCreator() {
-      return this.comment.userId === this.currentUser.id
+      return this.comment.userId == this.currentUser.id
     }
   },
 
+   created() {
+    const likesOptions = {
+      url: `http://localhost:3000/api/comments/${this.comment.id}/like`,
+      mutation: "setCommentLikes",
+    };
+    this.fetch(likesOptions);    
+  },
+
+
   methods: {
-    ...mapActions(['deleteComment', 'updateComment', 'fetchCommentLikes', 'rateComment']),
+    ...mapActions(['delete', 'fetch', 'add', 'update', 'rate']),
+
+    deleteComment(id) {
+      const options = {
+        url: `http://localhost:3000/api/comments/${id}`,
+        mutation: "removeComment",
+        id: id
+      }
+      this.delete(options);
+    },
 
     editComment() {
       this.editing = true;
     },
 
-    submitComment() {
-      const comment = {
-        content: this.updatedComment,
-        id: this.comment.id
-      };
-      this.updateComment(comment),
+    updateComment() {
+      const options = {
+        url: `http://localhost:3000/api/comments/${this.comment.id}`,
+        mutation: "updateComment",
+        data: this.updatedComment,
+      }
+      this.update(options);      
       this.updatedComment = "";
     },
 
-    sendLike() {   
-      this.rateComment(this.comment.id);
+    like() {   
+      const options = {
+        url: `http://localhost:3000/api/comments/like`,
+        mutation: "setCommentRate",
+        id: this.comment.id
+      };
+      this.rate(options);
       this.wasLiked = !this.wasLiked;
     },
   },
-      created() {
-      this.fetchCommentLikes(this.comment.id);
-  },
 };
+ 
 </script>
 
 <style scope lang="scss">

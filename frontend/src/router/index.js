@@ -73,38 +73,52 @@ router.beforeEach((to, from, next) => {
       next();
     }
   } else {
-    const option = {
-      method: "POST",
-      data: localStorage.getItem("jwt"),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    };
-    axios
-      .post("http://localhost:3000/api/users/me", option)
-      .then((response) => {
-        if (!response.data) {
+    const now = Date.now();
+    const jwtCreation = localStorage.getItem("jwtCreation");
+    const sinceRegistration = now - jwtCreation;
+
+    // Soit 24h = 86 400 000ms
+    if (sinceRegistration > 86400000) {
+      localStorage.clear();
+      if (requiresAuth) {
+        next({ name: "Landing" });
+      } else {
+        next();
+      }
+    } else {
+      const option = {
+        method: "POST",
+        data: localStorage.getItem("jwt"),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      };
+      axios
+        .post("http://localhost:3000/api/users/me", option)
+        .then((response) => {
+          if (!response.data) {
+            if (requiresAuth) {
+              next({ name: "Landing" });
+            } else {
+              next();
+            }
+          } else {
+            store.commit("setUser", response.data);
+            if (requiresAuth) {
+              next();
+            } else {
+              next({ name: "Home" });
+            }
+          }
+        })
+        .catch(() => {
           if (requiresAuth) {
             next({ name: "Landing" });
           } else {
             next();
           }
-        } else {
-          store.commit("setUser", response.data);
-          if (requiresAuth) {
-            next();
-          } else {
-            next({ name: "Home" });
-          }
-        }
-      })
-      .catch(() => {
-        if (requiresAuth) {
-          next({ name: "Landing" });
-        } else {
-          next();
-        }
-      });
+        });
+    }
   }
 });
 

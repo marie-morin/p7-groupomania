@@ -25,7 +25,7 @@ export default {
   },
 
   methods: {
-    logout: function() {
+    logout() {
       localStorage.clear();
       store.commit("userLogout");
       this.$router.push("/");

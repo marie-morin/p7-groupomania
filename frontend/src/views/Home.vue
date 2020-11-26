@@ -33,11 +33,15 @@ export default {
 
   computed: mapGetters(["allPosts"]),
 
-  methods: mapActions(["fetchPosts"]),
-
   created() {
-    this.fetchPosts();
+    const options = {
+      url: "http://localhost:3000/api/posts",
+      mutation: "setPosts",
+    };
+    this.fetch(options);
   },
+
+  methods: mapActions(["fetch"])
 };
 </script>
 

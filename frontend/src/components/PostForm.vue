@@ -1,6 +1,6 @@
 <template>
   <div class="postForm">
-    <form @submit.prevent="onSubmit">
+    <form @submit.prevent="addPost">
       <h2>Partager avec vos collègues :</h2>
 
       <input
@@ -35,7 +35,7 @@ import { mapActions } from 'vuex';
 export default {
   name: "PostForm",
 
-  data: function() {
+  data() {
     return {
       newPost: {
         title: "",
@@ -45,10 +45,16 @@ export default {
   },
 
   methods: {
-    ...mapActions(["addPost"]),
+    ...mapActions(["add"]),
 
-    onSubmit() {
-      this.addPost(JSON.stringify(this.newPost));
+    addPost() {
+      const options = {
+        url: "http://localhost:3000/api/posts/",
+        mutation: "newPost",
+        data: this.newPost,
+      }
+      this.add(options);
+
       this.newPost.title = "";
       this.newPost.content = "";
     },

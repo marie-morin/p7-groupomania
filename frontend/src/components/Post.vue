@@ -4,7 +4,7 @@
     <!-- Partie likes du bloc Post -->
     <div class="post-likes">
       <p class="likes">{{ post.likes.length }}</p>
-      <font-awesome-icon @click="sendLike()" v-bind:class="{ liked: wasLiked }" class="icon up" icon="arrow-up" />
+      <font-awesome-icon @click="like()" v-bind:class="{ liked: wasLiked }" class="icon up" icon="arrow-up" />
     </div>
 
     <div class="post-content">
@@ -22,8 +22,8 @@
         <label for="content">Nouveau contenu</label>
         <input type="text" v-model="updatedPost.content" @keyup.enter="submitComment()" name="content">
 
-        <button @click="sendUpdatedPost()">Valider la modification</button>
-        <button @click="edit()">Annuler</button>
+        <button @click="updatePost()">Valider la modification</button>
+        <button @click="editPost()">Annuler</button>
       </div>
 
       <div class="post-comments" @click="displayComment()">
@@ -35,11 +35,11 @@
         <div v-for="comment in post.comments" :key="comment.id">
           <Comment :comment="comment" />
         </div>
-        <input type="text" v-model="newComment" @keyup.enter="onSubmit()" placeholder="Ajouter un commentaire..."/>
+        <input type="text" v-model="newComment" @keyup.enter="addComment()" placeholder="Ajouter un commentaire..."/>
       </div> 
 
       <button @click="deletePost(post.id)" v-if="isAllowed">Supprimer le post</button>
-      <button @click="edit()" v-if="isCreator">Modifier votre post</button>
+      <button @click="editPost()" v-if="isCreator">Modifier votre post</button>
 
     </div>
   </div>
@@ -62,7 +62,7 @@ export default {
     },
   },
 
-  data: function() {
+  data() {
     return {
       showComment: false,
       newComment: "",
@@ -80,45 +80,79 @@ export default {
     ...mapGetters(['currentUser']),
 
     isAllowed() {
-      return this.currentUser.isAdmin === true || this.post.userId === this.currentUser.id
+      return this.currentUser.isAdmin == true || this.post.userId == this.currentUser.id
     },
 
     isCreator() {
-      return this.post.userId === this.currentUser.id
+      return this.post.userId == this.currentUser.id
     }
   },
 
+   created() {
+    const commentOptions = {
+      url: `http://localhost:3000/api/comments/from/${this.post.id}`,
+      mutation: "setComments",
+    };
+    this.fetch(commentOptions);
+
+    const likesOptions = {
+      url: `http://localhost:3000/api/posts/${this.post.id}/like`,
+      mutation: "setPostLikes",
+    };
+    this.fetch(likesOptions);
+  },
+
   methods: {
-    ...mapActions(['deletePost', 'fetchComments', 'addComment', 'deleteComment', 'updatePost', 'ratePost', 'fetchPostLikes']),
+    ...mapActions(['delete', 'fetch', 'add', 'update', 'rate']),
+
+    deletePost(id) {
+      const options = {
+        url: `http://localhost:3000/api/posts/${id}`,
+        mutation: "removePost",
+        id: id
+      }
+      this.delete(options);
+    },
 
     displayComment() { this.showComment = !this.showComment },
 
-    edit() { this.editing = !this.editing },
+    editPost() { this.editing = !this.editing },
 
-    onSubmit() {
+    addComment() {
       const comment = {
         content: this.newComment,
         postId: this.post.id
       };
-      this.addComment(comment);
+      const options = {
+        url: "http://localhost:3000/api/comments/",
+        mutation: "newComment",
+        data: comment
+      }
+      this.add(options);
       this.newComment = "";
     },
 
-    sendUpdatedPost() {
-      this.updatePost(this.updatedPost);
+    updatePost() {
+      const options = {
+        url: `http://localhost:3000/api/posts/${this.updatedPost.id}`,
+        mutation: "updatePost",
+        data: this.updatedPost,
+      }
+      this.update(options);   
       this.editing = false;
     },
 
-    sendLike() {   
-      this.ratePost(this.post.id);
-      this.wasLiked = !this.wasLiked;
-    },
-  },
+    like() {   
+      const options = {
+        url: `http://localhost:3000/api/posts/like`,
+        mutation: "setPostRate",
+        id: this.post.id
+      };
+      this.rate(options);
 
-  created() {
-    this.fetchComments(this.post.id);
-    this.fetchPostLikes(this.post.id);
-  },
+    this.wasLiked = !this.wasLiked;
+    },
+  }
 };
 </script>
 

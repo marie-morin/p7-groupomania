@@ -20,14 +20,15 @@ export default {
   name: "Users",
 
   components: { Header, Footer, UserCard },
-
-  methods: mapActions(["fetchUsers"]),
+  
+  computed: mapGetters(['allUsers']),
 
   created() {
-    this.fetchUsers();
+    const options = { url: "http://localhost:3000/api/users/", mutation: "setUsers" };
+    this.fetch(options);
   },
 
-  computed: mapGetters(['allUsers']),
+  methods: mapActions(["fetch"]),
 };
 </script>
 

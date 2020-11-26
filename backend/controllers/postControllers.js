@@ -17,7 +17,7 @@ exports.addPost = (req, res) => {
   ) {
     res.status(400).json({ message: "Requête erronée." });
   } else {
-    const data = JSON.parse(req.body.data);
+    const data = req.body.data;
     const token = jwt.getUserId(req.headers.authorization);
     const userId = token.userId;
 
@@ -59,12 +59,13 @@ exports.getAllPosts = (req, res) => {
 // Get all posts from one user
 exports.getPostsFrom = (req, res, next) => {
   console.log("--------- getPostsFrom");
+  console.log("req.params : ", req.params);
 
   if (!req.params.id) {
     res.status(400).json({ message: "Requête erronée." });
   } else {
     models.Post.findAll({
-      where: { userId: req.params.user },
+      where: { userId: req.params.id },
       include: [{ model: models.User, attributes: ["username"] }],
       order: [["createdAt", "DESC"]],
     })

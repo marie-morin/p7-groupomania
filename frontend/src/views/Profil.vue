@@ -17,6 +17,10 @@
         </button>
 
         <ProfilForm v-if="isOwner" v-show="showForm" v-on:display-form="displayFrom()"/>
+
+        <div class="post" v-for="post in posts" :key="post.id">
+          <Post :post="post" />
+        </div>
       </div>
     </div>
     <Footer /> 
@@ -29,13 +33,15 @@ import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
 import UserInfos from "@/components/UserInfos.vue";
 import ProfilForm from "@/components/ProfilForm.vue";
+import Post from "@/components/Post.vue";
+
 
 export default {
   name: "Profil",
 
-  components: { Header, Footer, UserInfos, ProfilForm },
+  components: { Header, Footer, UserInfos, ProfilForm, Post },
 
-  data: function() {
+  data() {
     return {
       isOwner: false,
       isAdmin: false,
@@ -43,15 +49,51 @@ export default {
     };
   },
 
-  computed: { ...mapGetters(['currentUser', "guest"])},
+  computed: {  
+    ...mapGetters(['currentUser', 'guest', 'allPosts']),
+
+    posts() {
+      return this.$store.state.postModule.posts.filter((post) => post.userId == this.$route.params.id)
+    }
+  
+  },
+
+  created() {
+    // Chargement de tous les posts
+    const postsOptions = {
+      url: "http://localhost:3000/api/posts",
+      mutation: "setPosts",
+    };
+    this.fetch(postsOptions);
+
+    // Chargement du profil guest
+    const guestOptions = {
+      url: `http://localhost:3000/api/users/${this.$route.params.id}`,
+      mutation: "setGuest",
+    };
+    this.fetch(guestOptions);
+
+    if (this.currentUser.isAdmin == true) {
+      this.isAdmin = true;
+    }
+    if (this.currentUser.id == this.$route.params.id) {
+      this.isOwner = true;
+    }
+  },
 
   methods: {
-    ...mapActions(['deleteUser', 'fetchOneUser']),
+    ...mapActions(['delete', 'fetch', 'token']),
 
-    deleteProfil: function() {
+    deleteProfil() {
       if (window.confirm("Voulez-vous vraiment supprimer votre compte ?")) {
-        this.deleteUser(this.$route.params.id);
+        const options = {
+          url: `http://localhost:3000/api/users/${this.$route.params.id}`,
+          mutation: "removeUser",
+          id: this.$route.params.id
+        }
+        this.delete(options);
       }
+
       if (this.isAdmin) {
         this.$router.push("Home");
       } else {
@@ -60,21 +102,10 @@ export default {
       }
     },
 
-    displayFrom: function() {
+    displayFrom() {
       this.showForm = !this.showForm;
       return this.showForm;
     },
-  },
-
-  created() {
-    this.fetchOneUser(this.$route.params.id);
-
-    if (this.currentUser.isAdmin == true) {
-      this.isAdmin = true;
-    }
-    if (this.currentUser.id == this.$route.params.id) {
-      this.isOwner = true;
-    }
   }
 };
 </script>
