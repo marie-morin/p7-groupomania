@@ -13,10 +13,12 @@
 </template>
 
 <script>
-
 import Button from "@/components/Button";
-export default { name: "Landing", components: { Button } };
 
+export default { 
+  name: "Landing",
+  components: { Button } 
+};
 </script>
 
 <style scope lang="scss">

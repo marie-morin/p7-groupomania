@@ -11,8 +11,6 @@ const multer = require("../middleware/multer-config");
 router.post("/", auth, postCtrl.addPost);
 // Get all posts
 router.get("/", auth, postCtrl.getAllPosts);
-// Get all posts from one user
-router.get("/from/:id", auth, postCtrl.getPostsFrom);
 // Update a post
 router.put("/:id", auth, postCtrl.modifyPost);
 // Delete a post
@@ -31,6 +29,8 @@ router.get("/:id/like", auth, postCtrl.getLikesFromPost);
 // router.get("/:id", postCtrl.getOnePost);
 // // Update a post
 // router.put("/:id", auth, multer, postCtrl.modifyPost);
+// Get all posts from one user
+// router.get("/from/:id", auth, postCtrl.getPostsFrom);
 
 // Exporting Router
 module.exports = router;

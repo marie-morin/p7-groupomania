@@ -4,13 +4,11 @@
       <Header />
       <div class="content">
         <PostForm />
-
         <div class="posts">
           <div class="post" v-for="post in allPosts" :key="post.id">
             <Post :post="post" />
           </div>
         </div>
-
       </div>
     </div>
     <Footer />
@@ -34,10 +32,7 @@ export default {
   computed: mapGetters(["allPosts"]),
 
   created() {
-    const options = {
-      url: "http://localhost:3000/api/posts",
-      mutation: "setPosts",
-    };
+    const options = { url: "http://localhost:3000/api/posts", mutation: "setPosts" };
     this.fetch(options);
   },
 

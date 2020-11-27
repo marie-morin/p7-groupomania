@@ -1,6 +1,5 @@
 const state = {
   posts: [],
-  // userPosts: [],
 };
 
 const getters = {

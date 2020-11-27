@@ -11,7 +11,6 @@
 </template>
 
 <script>
-
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
 import SignForm from "@/components/SignForm.vue";
@@ -23,10 +22,7 @@ export default {
 
   data() {
     return {
-      user: {
-        email: "",
-        password: "",
-      },
+      user: { email: "", password: "" },
       settings: {
         destination: "signup",
         urlPost: "http://localhost:3000/api/users/login",

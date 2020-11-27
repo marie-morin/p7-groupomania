@@ -26,12 +26,12 @@ export default {
   name: "UserInfos",
 
   props: {
-    isOwner: {
-      type: Boolean,
-      requiered: true,
-    },
     user: {
       type: Object,
+      requiered: true,
+    },
+    isOwner: {
+      type: Boolean,
       requiered: true,
     }
   }

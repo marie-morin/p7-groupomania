@@ -29,7 +29,6 @@
 </template>
 
 <script>
-
 import { mapActions } from 'vuex';
 
 export default {
@@ -54,7 +53,6 @@ export default {
         data: this.newPost,
       }
       this.add(options);
-
       this.newPost.title = "";
       this.newPost.content = "";
     },

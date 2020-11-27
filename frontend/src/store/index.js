@@ -29,7 +29,7 @@ const actions = {
   async add({ commit }, item) {
     const response = await axios.post(
       item.url,
-      { data: item.data },
+      { data: JSON.stringify(item.data) },
       {
         headers: {
           Authorization:
@@ -53,7 +53,7 @@ const actions = {
   async rate({ commit }, item) {
     const response = await axios.post(
       item.url,
-      { data: item.id },
+      { data: JSON.stringify(item.id) },
       {
         headers: {
           Authorization:
@@ -73,7 +73,7 @@ const actions = {
   async update({ commit }, item) {
     const response = await axios.put(
       item.url,
-      { data: item.data },
+      { data: JSON.stringify(item.data) },
       {
         headers: {
           Authorization:

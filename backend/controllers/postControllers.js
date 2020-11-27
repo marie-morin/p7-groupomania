@@ -8,16 +8,17 @@ const regex = /^[a-zA-Z0-9\s-_.,!?()"]+$/;
 exports.addPost = (req, res) => {
   console.log("------------- addPost");
 
+  const data = JSON.parse(req.body.data);
   if (
-    !req.body.data.title ||
-    !req.body.data.content ||
+    !data ||
+    !data.title ||
+    !data.content ||
     !req.headers.authorization ||
-    !regex.test(req.body.data.title) ||
-    !regex.test(req.body.data.content)
+    !regex.test(data.title) ||
+    !regex.test(data.content)
   ) {
     res.status(400).json({ message: "Requête erronée." });
   } else {
-    const data = req.body.data;
     const token = jwt.getUserId(req.headers.authorization);
     const userId = token.userId;
 
@@ -56,45 +57,23 @@ exports.getAllPosts = (req, res) => {
     .catch((error) => res.status(500).json(error));
 };
 
-// Get all posts from one user
-exports.getPostsFrom = (req, res, next) => {
-  console.log("--------- getPostsFrom");
-  console.log("req.params : ", req.params);
-
-  if (!req.params.id) {
-    res.status(400).json({ message: "Requête erronée." });
-  } else {
-    models.Post.findAll({
-      where: { userId: req.params.id },
-      include: [{ model: models.User, attributes: ["username"] }],
-      order: [["createdAt", "DESC"]],
-    })
-      .then((posts) => {
-        if (posts.length > 0) {
-          res.status(200).json(posts);
-        } else {
-          res.status(200).json({ message: "Aucun élément à afficher." });
-        }
-      })
-      .catch((error) => res.status(500).json(error));
-  }
-};
-
 // Update a post
 exports.modifyPost = (req, res) => {
   console.log("---------- modifyPost");
 
+  const data = JSON.parse(req.body.data);
+
   if (
-    !req.body.data.title ||
-    !req.body.data.content ||
+    !data ||
+    !data.title ||
+    !data.content ||
     !req.params.id ||
     !req.headers.authorization ||
-    !regex.test(req.body.data.title) ||
-    !regex.test(req.body.data.content)
+    !regex.test(data.title) ||
+    !regex.test(data.content)
   ) {
     res.status(400).json({ message: "Requête erronée." });
   } else {
-    const data = req.body.data;
     const token = jwt.getUserId(req.headers.authorization);
     const userId = token.userId;
     const postId = req.params.id;
@@ -190,14 +169,11 @@ exports.deletePost = (req, res) => {
 exports.like = (req, res, next) => {
   console.log("----------- giveOpinion on post");
 
-  if (
-    !req.body.data ||
-    !req.headers.authorization ||
-    !regex.test(req.body.data)
-  ) {
+  const data = JSON.parse(req.body.data);
+
+  if (!data || !req.headers.authorization || !regex.test(data)) {
     res.status(400).json({ message: "Requête erronée." });
   } else {
-    const data = req.body.data;
     const token = jwt.getUserId(req.headers.authorization);
     const userId = token.userId;
 

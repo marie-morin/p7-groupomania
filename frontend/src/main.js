@@ -11,7 +11,6 @@ import { dom } from "@fortawesome/fontawesome-svg-core";
 library.add(fas);
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 dom.watch();
-
 Vue.config.productionTip = false;
 
 new Vue({

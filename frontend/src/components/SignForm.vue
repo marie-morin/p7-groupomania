@@ -6,7 +6,6 @@
       <h1 v-else>Connectez-vous !</h1>
 
       <form @submit.prevent="submitUser" class="form">
-
         <div>
           <label for="email">Adresse email</label> 
           <input v-model="user.email" type="email" name="email" id="email" placeholder="Mon adresse email..." required>
@@ -40,7 +39,6 @@
         <div class="form-btn">
           <input type="submit" class="form-submit" :value="settings.title" />
         </div>
-
       </form>
     </div>
     <p>
@@ -54,20 +52,19 @@
 </template>
 
 <script>
-
 import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "SignForm",
 
   props: {
-    settings: {
-      type: Object,
-      required: true,
-    },
     user: {
       type: Object,
     },
+    settings: {
+      type: Object,
+      required: true,
+    }
   },
 
   computed: mapGetters(["currentUser"]),
@@ -76,10 +73,7 @@ export default {
     ...mapActions(["registerUser"]),
 
     submitUser() {
-      let data = {
-        user : this.user,
-        url: this.settings.urlPost,
-      }
+      const data = { user : this.user, url: this.settings.urlPost }
       this.registerUser(data);
     },
   },

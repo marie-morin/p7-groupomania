@@ -19,7 +19,6 @@
 </template>
 
 <script>
-
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
@@ -34,8 +33,8 @@ export default {
 
   data() {
     return {
-      editing : false,
       updatedComment: "",
+      editing : false,
       wasLiked: false,
     };
   },
@@ -43,23 +42,15 @@ export default {
   computed: { 
     ...mapGetters(['currentUser']),
 
-    isAllowed() {
-      return this.currentUser.isAdmin == true || this.comment.userId == this.currentUser.id
-    },
+    isAllowed() { return this.currentUser.isAdmin == true || this.comment.userId == this.currentUser.id },
 
-    isCreator() {
-      return this.comment.userId == this.currentUser.id
-    }
+    isCreator() { return this.comment.userId == this.currentUser.id }
   },
 
-   created() {
-    const likesOptions = {
-      url: `http://localhost:3000/api/comments/${this.comment.id}/like`,
-      mutation: "setCommentLikes",
-    };
+  created() {
+    const likesOptions = { url: `http://localhost:3000/api/comments/${this.comment.id}/like`, mutation: "setCommentLikes" };
     this.fetch(likesOptions);    
   },
-
 
   methods: {
     ...mapActions(['delete', 'fetch', 'add', 'update', 'rate']),
@@ -73,9 +64,7 @@ export default {
       this.delete(options);
     },
 
-    editComment() {
-      this.editing = true;
-    },
+    editComment() { this.editing = true },
 
     updateComment() {
       const options = {

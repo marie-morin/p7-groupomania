@@ -2,7 +2,6 @@
   <div class="form-section">
     <div class="form-container">
       <form @submit.prevent="updateUser" class="form">
-
         <label for="email">Adresse email</label> 
         <input v-model="user.email" type="email" name="email" id="email" required>
 
@@ -41,9 +40,7 @@ export default {
   computed: { 
     ...mapGetters(['currentUser']),
 
-    user() {
-      return {...this.currentUser};
-    }
+    user() { return {...this.currentUser}; }
   },
 
   methods: {

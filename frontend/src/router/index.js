@@ -86,15 +86,16 @@ router.beforeEach((to, from, next) => {
         next();
       }
     } else {
-      const option = {
+      const options = {
         method: "POST",
-        data: localStorage.getItem("jwt"),
+        data: JSON.stringify(localStorage.getItem("jwt")),
         headers: {
-          "Content-type": "application/json; charset=UTF-8",
+          Authorization:
+            "Bearer " + localStorage.getItem("jwt").replace(/['"']+/g, ""),
         },
       };
       axios
-        .post("http://localhost:3000/api/users/me", option)
+        .post("http://localhost:3000/api/users/me", options)
         .then((response) => {
           if (!response.data) {
             if (requiresAuth) {

@@ -17,7 +17,7 @@ const actions = {
   async registerUser({ dispatch }, { url, user }) {
     const response = await axios.post(url, {
       method: "POST",
-      data: user,
+      data: JSON.stringify(user),
     });
     localStorage.setItem("jwt", response.data.token);
     localStorage.setItem("jwtCreation", Date.now());
@@ -27,7 +27,7 @@ const actions = {
   async getUserInfos({ commit }, token) {
     const response = await axios.post("http://localhost:3000/api/users/me", {
       method: "POST",
-      data: token,
+      data: JSON.stringify(token),
       headers: {
         Authorization:
           "Bearer " + localStorage.getItem("jwt").replace(/['"']+/g, ""),

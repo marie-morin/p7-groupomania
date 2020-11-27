@@ -1,23 +1,17 @@
-
 <template>
   <div class="profil">
     <div class="top-content">
       <Header />
-
       <div class="content">
-
         <UserInfos v-if="isOwner" :isOwner="isOwner" :user="currentUser"/>
         <UserInfos v-else :isOwner="isOwner" :user="guest"/>
-
         <button v-if="isOwner" @click="displayFrom()">
           Modifier mon profil
         </button>
         <button v-if="isOwner || isAdmin" @click.prevent="deleteProfil">
           Supprimer mon profil
         </button>
-
-        <ProfilForm v-if="isOwner" v-show="showForm" v-on:display-form="displayFrom()"/>
-
+        <ProfilForm v-if="isOwner" v-show="displayForm" v-on:display-form="displayFrom()"/>
         <div class="post" v-for="post in posts" :key="post.id">
           <Post :post="post" />
         </div>
@@ -45,32 +39,23 @@ export default {
     return {
       isOwner: false,
       isAdmin: false,
-      showForm: false,
+      displayForm: false,
     };
   },
 
   computed: {  
     ...mapGetters(['currentUser', 'guest', 'allPosts']),
 
-    posts() {
-      return this.$store.state.postModule.posts.filter((post) => post.userId == this.$route.params.id)
-    }
-  
+    posts() { return this.$store.state.postModule.posts.filter((post) => post.userId == this.$route.params.id) }
   },
 
   created() {
     // Chargement de tous les posts
-    const postsOptions = {
-      url: "http://localhost:3000/api/posts",
-      mutation: "setPosts",
-    };
+    const postsOptions = { url: "http://localhost:3000/api/posts", mutation: "setPosts" };
     this.fetch(postsOptions);
 
     // Chargement du profil guest
-    const guestOptions = {
-      url: `http://localhost:3000/api/users/${this.$route.params.id}`,
-      mutation: "setGuest",
-    };
+    const guestOptions = { url: `http://localhost:3000/api/users/${this.$route.params.id}`, mutation: "setGuest" };
     this.fetch(guestOptions);
 
     if (this.currentUser.isAdmin == true) {
@@ -102,10 +87,7 @@ export default {
       }
     },
 
-    displayFrom() {
-      this.showForm = !this.showForm;
-      return this.showForm;
-    },
+    displayFrom() { return this.displayForm = !this.displayForm; },
   }
 };
 </script>

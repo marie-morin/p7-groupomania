@@ -31,7 +31,7 @@
         <p>{{ post.comments.length }} commentaires</p>
       </div>
 
-      <div v-show="showComment === true" class="comment-container">
+      <div v-show="displayComments === true" class="comment-container">
         <div v-for="comment in post.comments" :key="comment.id">
           <Comment :comment="comment" />
         </div>
@@ -64,41 +64,30 @@ export default {
 
   data() {
     return {
-      showComment: false,
-      newComment: "",
+      displayComments: false,
       editing : false,
+      wasLiked: false,
+      newComment: "",
       updatedPost: {
         title: this.post.title,
         content: this.post.content,
         id: this.post.id
       },
-      wasLiked: false,
     };
   },
 
   computed: { 
     ...mapGetters(['currentUser']),
 
-    isAllowed() {
-      return this.currentUser.isAdmin == true || this.post.userId == this.currentUser.id
-    },
-
-    isCreator() {
-      return this.post.userId == this.currentUser.id
-    }
+    isAllowed() { return this.currentUser.isAdmin == true || this.post.userId == this.currentUser.id },
+    isCreator() { return this.post.userId == this.currentUser.id }
   },
 
-   created() {
-    const commentOptions = {
-      url: `http://localhost:3000/api/comments/from/${this.post.id}`,
-      mutation: "setComments",
-    };
+  created() {
+    const commentOptions = { url: `http://localhost:3000/api/comments/from/${this.post.id}`, mutation: "setComments" };
     this.fetch(commentOptions);
 
-    const likesOptions = {
-      url: `http://localhost:3000/api/posts/${this.post.id}/like`,
-      mutation: "setPostLikes",
-    };
+    const likesOptions = { url: `http://localhost:3000/api/posts/${this.post.id}/like`, mutation: "setPostLikes" };
     this.fetch(likesOptions);
   },
 
@@ -110,19 +99,16 @@ export default {
         url: `http://localhost:3000/api/posts/${id}`,
         mutation: "removePost",
         id: id
-      }
+      };
       this.delete(options);
     },
 
-    displayComment() { this.showComment = !this.showComment },
+    displayComment() { this.displayComments = !this.displayComments },
 
     editPost() { this.editing = !this.editing },
 
     addComment() {
-      const comment = {
-        content: this.newComment,
-        postId: this.post.id
-      };
+      const comment = { content: this.newComment, postId: this.post.id };
       const options = {
         url: "http://localhost:3000/api/comments/",
         mutation: "newComment",
@@ -149,8 +135,7 @@ export default {
         id: this.post.id
       };
       this.rate(options);
-
-    this.wasLiked = !this.wasLiked;
+      this.wasLiked = !this.wasLiked;
     },
   }
 };

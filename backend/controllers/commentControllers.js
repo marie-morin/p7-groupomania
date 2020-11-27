@@ -7,16 +7,18 @@ const regex = /^[A-Za-z\d\s.,;:!?"()/%]*$/;
 exports.addComment = (req, res) => {
   console.log("--------------- addComment");
 
+  const data = JSON.parse(req.body.data);
+
   if (
-    !req.body.data.content ||
-    !req.body.data.postId ||
+    !data ||
+    !data.content ||
+    !data.postId ||
     !req.headers.authorization ||
-    !regex.test(req.body.data.content) ||
-    !regex.test(req.body.data.postId)
+    !regex.test(data.content) ||
+    !regex.test(data.postId)
   ) {
     res.status(400).json({ message: "Requête erronée." });
   } else {
-    const data = req.body.data;
     const token = jwt.getUserId(req.headers.authorization);
     const userId = token.userId;
 
@@ -64,15 +66,15 @@ exports.getCommentsFromPost = (req, res, next) => {
 exports.modifyComment = (req, res) => {
   console.log("---------- modifyComment");
 
+  const data = JSON.parse(req.body.data);
   if (
-    !req.body.data ||
+    !data ||
     !req.params.id ||
     !req.headers.authorization ||
-    !regex.test(req.body.data)
+    !regex.test(data)
   ) {
     res.status(400).json({ message: "Requête erronée." });
   } else {
-    const data = req.body.data;
     const token = jwt.getUserId(req.headers.authorization);
     const userId = token.userId;
     const commentId = req.params.id;
@@ -130,14 +132,11 @@ exports.deleteComment = (req, res) => {
 exports.like = (req, res, next) => {
   console.log("----------- giveOpinion on comment");
 
-  if (
-    !req.body.data ||
-    !req.headers.authorization ||
-    !regex.test(req.body.data)
-  ) {
+  const data = JSON.parse(req.body.data);
+
+  if (!data || !req.headers.authorization || !regex.test(data)) {
     res.status(400).json({ message: "Requête erronée." });
   } else {
-    const data = req.body.data;
     const token = jwt.getUserId(req.headers.authorization);
     const userId = token.userId;
 

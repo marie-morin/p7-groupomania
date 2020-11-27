@@ -23,13 +23,7 @@ export default {
 
   data() {
     return {
-      user: {
-        email: "",
-        firstname: "",
-        lastname: "",
-        password: "",
-        bio: "",
-      },
+      user: { email: "", firstname: "", lastname: "", password: "", bio: "" },
       settings: {
         destination: "login",
         urlPost: "http://localhost:3000/api/users/signup",

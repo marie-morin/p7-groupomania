@@ -14,9 +14,10 @@ const regex = /^[a-zA-Z0-9\s-_.,!?()"]+$/;
 exports.signup = (req, res, next) => {
   console.log("----------- signup");
 
-  const data = req.body.data;
+  const data = JSON.parse(req.body.data);
 
   if (
+    !data ||
     !data.email ||
     !data.password ||
     !data.firstname ||
@@ -52,10 +53,10 @@ exports.signup = (req, res, next) => {
 exports.login = (req, res, next) => {
   console.log("------------------ login");
 
-  const data = req.body.data;
-  console.log("data : ", data);
+  const data = JSON.parse(req.body.data);
 
   if (
+    !data ||
     !data.email ||
     !data.password ||
     !emailRegex.test(data.email) ||
@@ -87,10 +88,12 @@ exports.login = (req, res, next) => {
 exports.me = (req, res, next) => {
   console.log("------------------ me");
 
-  if (!req.body.data || !regex.test(req.body.data)) {
+  const data = JSON.parse(data);
+
+  if (!data || !regex.test(data)) {
     res.status(400).json({ message: "Requête erronée." });
   } else {
-    const token = jwt.getUserId(req.body.data);
+    const token = jwt.getUserId(data);
 
     if (token === "invalid signature") {
       res.status(401).json({ error: "Vous n'êtes pas connecté " });
@@ -136,10 +139,11 @@ exports.getOneUser = (req, res) => {
 // Update user acount
 exports.modifyUser = (req, res, next) => {
   console.log("------------ modifyUser");
-  console.log("req.body.data : ", req.body.data);
-  const data = req.body.data;
+
+  const data = JSON.parse(req.body.data);
 
   if (
+    !data ||
     !data.email ||
     !data.firstname ||
     !data.lastname ||
