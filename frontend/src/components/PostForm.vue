@@ -9,6 +9,7 @@
         id="title"
         placeholder="Titre"
         v-model="newPost.title"
+        required
       />
       <br />
 
@@ -18,6 +19,7 @@
         id="content"
         placeholder="Que voulez-vous partager ?"
         v-model="newPost.content"
+        required
       />
 
       <div class="btn">
@@ -47,6 +49,15 @@ export default {
     ...mapActions(["add"]),
 
     addPost() {
+      if (this.newPost.title == "" || this.newPost.content == "") {
+        const contexte = {
+          intention: "notification",
+          message: "Vtre publication doit contenir un titre et du contenu !",
+        };
+        this.$store.commit("displayPopup", contexte);
+        return;
+      }
+
       const options = {
         url: "http://localhost:3000/api/posts/",
         mutation: "newPost",
@@ -55,6 +66,8 @@ export default {
       this.add(options);
       this.newPost.title = "";
       this.newPost.content = "";
+      const contexte = { message: "Votre publication à été postée !", intention: "notification" };
+      this.$store.commit('displayPopup', contexte);
     },
   },
 };

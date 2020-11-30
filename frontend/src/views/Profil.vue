@@ -67,24 +67,20 @@ export default {
   },
 
   methods: {
-    ...mapActions(['delete', 'fetch', 'token']),
+    ...mapActions(['fetch', 'token']),
 
     deleteProfil() {
-      if (window.confirm("Voulez-vous vraiment supprimer votre compte ?")) {
-        const options = {
+      const confirmContexte = {
+        origin: "profil",
+        intention: "confirmation",
+        message: "Voulez-vous vraiment supprimer votre compte ?",
+        options: {
           url: `http://localhost:3000/api/users/${this.$route.params.id}`,
           mutation: "removeUser",
           id: this.$route.params.id
-        }
-        this.delete(options);
-      }
-
-      if (this.isAdmin) {
-        this.$router.push("Home");
-      } else {
-        localStorage.clear();
-        this.$router.push("Landing");
-      }
+        },
+      };
+      this.$store.commit("displayPopup", confirmContexte);
     },
 
     displayFrom() { return this.displayForm = !this.displayForm; },

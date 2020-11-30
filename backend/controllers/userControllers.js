@@ -88,7 +88,7 @@ exports.login = (req, res, next) => {
 exports.me = (req, res, next) => {
   console.log("------------------ me");
 
-  const data = JSON.parse(data);
+  const data = JSON.parse(req.body.data);
 
   if (!data || !regex.test(data)) {
     res.status(400).json({ message: "Requête erronée." });

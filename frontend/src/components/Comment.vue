@@ -7,13 +7,14 @@
 
       {{ comment.content }} par {{ comment.User.username }} <br/>
 
-      <input type="text" v-if="editing" v-model="updatedComment" @keyup.enter="updateComment()">
+      <div v-if="editing">
+        <input type="text" v-model="updatedComment" @keyup.enter="updateComment()" required>
+        <button @click="editComment()">Annuler</button>
+      </div>
 
-      <button @click="deleteComment(comment.id)">Supprimer le commentaire</button>
-      <!-- <button @click="deleteComment(comment.id)" v-if="isAllowed">Supprimer le commentaire</button> -->
 
-      <button @click="editComment()">Modifier votre commentaire</button>
-      <!-- <button @click="editComment()" v-if="isCreator">Modifier votre commentaire</button> -->
+      <button @click="deleteComment(comment.id)" v-if="isAllowed">Supprimer le commentaire</button>
+      <button @click="editComment()" v-if="isCreator">Modifier votre commentaire</button>
 
   </div>
 </template>
@@ -49,24 +50,44 @@ export default {
 
   created() {
     const likesOptions = { url: `http://localhost:3000/api/comments/${this.comment.id}/like`, mutation: "setCommentLikes" };
-    this.fetch(likesOptions);    
+    this.fetch(likesOptions).then(() => {
+      this.comment.likes.forEach(like => {
+        if (like.UserId === this.currentUser.id) {
+          return this.wasLiked = true;
+        }
+      });
+    });    
   },
 
   methods: {
-    ...mapActions(['delete', 'fetch', 'add', 'update', 'rate']),
+    ...mapActions(['fetch', 'add', 'update', 'rate']),
 
     deleteComment(id) {
-      const options = {
-        url: `http://localhost:3000/api/comments/${id}`,
-        mutation: "removeComment",
-        id: id
-      }
-      this.delete(options);
+      const confirmContexte = {
+        origin: "comment",
+        intention: "confirmation",
+        message: "Etes-vous sur de vouloir supprimer votre commentaire ?",
+        options: {
+          url: `http://localhost:3000/api/comments/${id}`,
+          mutation: "removeComment",
+          id: id
+        },
+      };
+      this.$store.commit("displayPopup", confirmContexte);
     },
 
-    editComment() { this.editing = true },
+    editComment() { this.editing = !this.editing },
 
     updateComment() {
+      if (this.updatedComment == "") {
+        const contexte = {
+          intention: "notification",
+          message: "Votre commentaire est vide !",
+        };
+        this.$store.commit("displayPopup", contexte);
+        return;
+      }
+
       const options = {
         url: `http://localhost:3000/api/comments/${this.comment.id}`,
         mutation: "updateComment",
@@ -74,16 +95,28 @@ export default {
       }
       this.update(options);      
       this.updatedComment = "";
+
+      const contexte = { message: "Votre commentaire à été modifié !", intention: "notification" };
+      this.$store.commit('displayPopup', contexte);
     },
 
     like() {   
       const options = {
         url: `http://localhost:3000/api/comments/like`,
-        mutation: "setCommentRate",
-        id: this.comment.id
+        mutation: "rateComment",
+        id: this.comment.id,
+        user: this.currentUser.id
       };
       this.rate(options);
       this.wasLiked = !this.wasLiked;
+
+      let contexte;
+      if (this.wasLiked) {
+        contexte = { message: "Vous avez liker un commentaire !", intention: "notification" };
+      } else {
+        contexte = { message: "Vous avez retiré votre like !", intention: "notification" };
+      }
+      this.$store.commit('displayPopup', contexte);
     },
   },
 };

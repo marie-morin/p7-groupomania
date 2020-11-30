@@ -47,6 +47,15 @@ export default {
     ...mapActions(['update']),
 
     updateUser() {
+      if (this.user.email == "" || this.user.firstname == "" || this.user.lastname == "") {
+        const contexte = {
+          intention: "notification",
+          message: "Vous devez renseigner une adresse mail; un nom et un prénom !",
+        };
+        this.$store.commit("displayPopup", contexte);
+        return;
+      }
+
       const options = {
         url: `http://localhost:3000/api/users/${this.user.id}`,
         mutation: "setUser",

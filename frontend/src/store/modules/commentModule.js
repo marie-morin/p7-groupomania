@@ -8,6 +8,7 @@ const mutations = {
       comments.forEach((comment) => {
         posts.forEach((post) => {
           if (post.id === comment.postId) {
+            post.comments = [];
             post.comments.push({ likes: [], ...comment });
           }
         });
@@ -19,7 +20,7 @@ const mutations = {
     const posts = postModule.default.state.posts;
     posts.forEach((post) => {
       if (post.id === comment.postId) {
-        post.comments.push(comment);
+        post.comments.push({ likes: [], ...comment });
       }
     });
   },
@@ -52,6 +53,7 @@ const mutations = {
         posts.forEach((post) => {
           post.comments.forEach((comment) => {
             if (comment.id === like.commentId) {
+              comment.likes = [];
               comment.likes.push(like);
             }
           });
@@ -60,20 +62,14 @@ const mutations = {
     }
   },
 
-  setCommentRate: (state, rate) => {
+  rateComment: (state, rate) => {
     const posts = postModule.default.state.posts;
-    // console.log("rate : ", rate);
-    // console.log("rate.postId : ", rate.postId);
-    // console.log("rate.userId : ", rate.userId);
-
     posts.forEach((post) => {
       post.comments.forEach((comment) => {
-        if (comment.id === rate.commentId) {
-          // console.log("post.id : ", post.id);
-          if (rate.response.data.like) {
+        if (comment.id === rate.itemId) {
+          if (rate.response.status == 201) {
             comment.likes.push(rate);
           } else {
-            // console.log("unlike");
             comment.likes = comment.likes.filter(
               (like) => like.userId !== rate.userId
             );

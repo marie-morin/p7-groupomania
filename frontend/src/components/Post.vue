@@ -17,10 +17,10 @@
 
       <div v-if="editing">
         <label for="title">Nouveau titre</label>
-        <input type="text" v-model="updatedPost.title" @keyup.enter="submitComment()" name="title"><br>
+        <input type="text" v-model="updatedPost.title" @keyup.enter="updatePost()" name="title" required><br>
 
         <label for="content">Nouveau contenu</label>
-        <input type="text" v-model="updatedPost.content" @keyup.enter="submitComment()" name="content">
+        <input type="text" v-model="updatedPost.content" @keyup.enter="updatePost()" name="content" required>
 
         <button @click="updatePost()">Valider la modification</button>
         <button @click="editPost()">Annuler</button>
@@ -35,7 +35,7 @@
         <div v-for="comment in post.comments" :key="comment.id">
           <Comment :comment="comment" />
         </div>
-        <input type="text" v-model="newComment" @keyup.enter="addComment()" placeholder="Ajouter un commentaire..."/>
+        <input type="text" v-model="newComment" @keyup.enter="addComment()" placeholder="Ajouter un commentaire..." required/>
       </div> 
 
       <button @click="deletePost(post.id)" v-if="isAllowed">Supprimer le post</button>
@@ -77,7 +77,7 @@ export default {
   },
 
   computed: { 
-    ...mapGetters(['currentUser']),
+    ...mapGetters(['currentUser', 'allPosts', 'popup']),
 
     isAllowed() { return this.currentUser.isAdmin == true || this.post.userId == this.currentUser.id },
     isCreator() { return this.post.userId == this.currentUser.id }
@@ -88,19 +88,30 @@ export default {
     this.fetch(commentOptions);
 
     const likesOptions = { url: `http://localhost:3000/api/posts/${this.post.id}/like`, mutation: "setPostLikes" };
-    this.fetch(likesOptions);
+    this.fetch(likesOptions).then(() => {
+      this.post.likes.forEach(like => {
+        if (like.UserId === this.currentUser.id) {
+          return this.wasLiked = true;
+        }
+      })
+    });
   },
 
   methods: {
-    ...mapActions(['delete', 'fetch', 'add', 'update', 'rate']),
+    ...mapActions(['fetch', 'add', 'update','rate']),
 
-    deletePost(id) {
-      const options = {
-        url: `http://localhost:3000/api/posts/${id}`,
-        mutation: "removePost",
-        id: id
+    deletePost(id)  {
+      const confirmContexte = {
+        origin: "post",
+        intention: "confirmation",
+        message: "Etes-vous sur de vouloir supprimer votre publication ?",
+        options: {
+          url: `http://localhost:3000/api/posts/${id}`,
+          mutation: "removePost",
+          id: id,
+        },
       };
-      this.delete(options);
+      this.$store.commit("displayPopup", confirmContexte);
     },
 
     displayComment() { this.displayComments = !this.displayComments },
@@ -108,6 +119,15 @@ export default {
     editPost() { this.editing = !this.editing },
 
     addComment() {
+      if (this.newComment == "") {
+        const contexte = {
+          intention: "notification",
+          message: "Votre commentaire est vide !",
+        };
+        this.$store.commit("displayPopup", contexte);
+        return;
+      }
+
       const comment = { content: this.newComment, postId: this.post.id };
       const options = {
         url: "http://localhost:3000/api/comments/",
@@ -116,9 +136,22 @@ export default {
       }
       this.add(options);
       this.newComment = "";
+      
+      const contexte = { message: "Votre commentaire à été posé !", intention: "notification" };
+      this.$store.commit('displayPopup', contexte);
     },
 
     updatePost() {
+      if (this.updatedPost.title == "" || this.updatedPost.content == "") {
+        const contexte = {
+          intention: "notification",
+          message: "Vtre publication doit contenir un titre et du contenu !",
+        };
+        this.$store.commit("displayPopup", contexte);
+        return;
+      }
+      console.log("pass");
+
       const options = {
         url: `http://localhost:3000/api/posts/${this.updatedPost.id}`,
         mutation: "updatePost",
@@ -126,16 +159,28 @@ export default {
       }
       this.update(options);   
       this.editing = false;
+
+      const contexte = { message: "Votre publication à été modifié !", intention: "notification" };
+      this.$store.commit('displayPopup', contexte);
     },
 
     like() {   
       const options = {
         url: `http://localhost:3000/api/posts/like`,
-        mutation: "setPostRate",
-        id: this.post.id
+        mutation: "ratePost",
+        id: this.post.id,
+        user: this.currentUser.id
       };
       this.rate(options);
       this.wasLiked = !this.wasLiked;
+
+      let contexte;
+      if (this.wasLiked) {
+        contexte = { message: "Vous avez liker un post !", intention: "notification" };
+      } else {
+        contexte = { message: "Vous avez retiré votre like !", intention: "notification" };
+      }
+      this.$store.commit('displayPopup', contexte);
     },
   }
 };

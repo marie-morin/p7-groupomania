@@ -9,10 +9,18 @@ import commentModule from "./modules/commentModule";
 // Load Vuex
 Vue.use(Vuex);
 
-const modules = {
-  userModule,
-  postModule,
-  commentModule,
+const state = {
+  popup: {
+    isDisplayed: false,
+    message: "",
+    intention: "",
+    confirmed: false,
+    options: {},
+  },
+};
+
+const getters = {
+  popup: (state) => state.popup,
 };
 
 const actions = {
@@ -61,13 +69,12 @@ const actions = {
         },
       }
     );
-
-    // const rate = {
-    //   response,
-    //   item.id,
-    //   userId,
-    // };
-    commit(item.mutation, response.data);
+    const rate = {
+      response: response,
+      itemId: item.id,
+      userId: item.user,
+    };
+    commit(item.mutation, rate);
   },
 
   async update({ commit }, item) {
@@ -85,8 +92,33 @@ const actions = {
   },
 };
 
+const mutations = {
+  displayPopup: (state, contexte) => {
+    state.popup.isDisplayed = true;
+    state.popup.message = contexte.message;
+    state.popup.intention = contexte.intention;
+    state.popup.options = contexte.options;
+    state.popup.origin = contexte.origin;
+  },
+  hidePopup: (state) => {
+    state.popup.isDisplayed = false;
+    state.popup.message = "";
+    state.popup.intention = "";
+    state.popup.options = {};
+  },
+};
+
+const modules = {
+  userModule,
+  postModule,
+  commentModule,
+};
+
 // Create store
 export default new Vuex.Store({
-  modules,
+  state,
+  getters,
   actions,
+  mutations,
+  modules,
 });

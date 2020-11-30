@@ -41,16 +41,14 @@ const actions = {
 
 const mutations = {
   setUser: (state, user) => (state.user = user),
-
-  userLogout: (state) => ((state.user = {}), (state.isLoged = false)),
-
+  setGuest: (state, user) => (state.guest = user),
   setUsers: (state, users) => {
-    users.forEach((user) => state.users.push(user));
+    (state.users = []), users.forEach((user) => state.users.push(user));
   },
 
   removeUser: (state) => (state.user = {}),
-
-  setGuest: (state, user) => (state.guest = user),
+  removeUsers: (state) => (state.users = []),
+  removeGuest: (state) => (state.guest = {}),
 };
 
 export default {

@@ -182,9 +182,11 @@ exports.like = (req, res, next) => {
         if (like) {
           if (userId === like.userId) {
             models.PostLikes.destroy({ where: { id: like.id } })
-              .then(() =>
-                res.status(204).json({ message: "Elément supprimé." })
-              )
+              .then(() => {
+                console.log("pass");
+
+                res.status(204).json({ message: "Elément supprimé." });
+              })
               .catch((error) => res.status(501).json(error));
           } else {
             res.status(403).json({ message: "Action non autorisée." });

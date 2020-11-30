@@ -8,21 +8,20 @@ const getters = {
 
 const mutations = {
   setPosts: (state, posts) => {
-    posts.forEach((post) => {
-      state.posts.push({ comments: [], likes: [], ...post });
-    });
+    (state.posts = []),
+      posts.forEach((post) => {
+        state.posts.push({ comments: [], likes: [], ...post });
+      });
   },
 
-  setUserPosts: (state, userPosts) => {
-    userPosts.forEach((post) => {
-      state.userPosts.push({ comments: [], likes: [], ...post });
-    });
+  newPost: (state, post) => {
+    state.posts.unshift({ comments: [], likes: [], ...post });
   },
-
-  newPost: (state, post) => state.posts.unshift(post),
 
   removePost: (state, id) =>
     (state.posts = state.posts.filter((post) => post.id !== id)),
+
+  removePosts: (state) => (state.posts = []),
 
   updatePost: (state, post) => {
     state.posts.forEach((item) => {
@@ -38,6 +37,7 @@ const mutations = {
       likes.forEach((like) => {
         state.posts.forEach((post) => {
           if (post.id === like.postId) {
+            post.likes = [];
             post.likes.push(like);
           }
         });
@@ -45,18 +45,12 @@ const mutations = {
     }
   },
 
-  setPostRate: (state, rate) => {
-    // console.log("rate : ", rate);
-    // console.log("rate.postId : ", rate.postId);
-    // console.log("rate.userId : ", rate.userId);
-
+  ratePost: (state, rate) => {
     state.posts.forEach((post) => {
-      if (post.id === rate.postId) {
-        // console.log("post.id : ", post.id);
-        if (rate.response.data.like) {
+      if (post.id === rate.itemId) {
+        if (rate.response.status == 201) {
           post.likes.push(rate);
         } else {
-          // console.log("unlike");
           post.likes = post.likes.filter((like) => like.userId !== rate.userId);
         }
       }

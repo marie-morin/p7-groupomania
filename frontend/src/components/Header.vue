@@ -27,7 +27,10 @@ export default {
   methods: {
     logout() {
       localStorage.clear();
-      store.commit("userLogout");
+      store.commit("removeUser");
+      store.commit("removeUsers");
+      store.commit("removeGuest");
+      store.commit("removePosts");
       this.$router.push("/");
     },
   },
