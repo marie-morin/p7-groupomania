@@ -18,7 +18,7 @@
           <input type="password" id="newMdp" name="newMdp" v-model="updatedPassword.newMdp" required><br>
 
           <label for="newMdpConf">Confirmation de votre nouveau mot de passe :</label><br>
-          <input type="password" id="newMdpConf" name="newMdpConf" v-model="updatedPassword.newMdpConf" required><br>
+          <input type="password" id="newMdpConf" name="newMdpConf" v-model="updatedPassword.newMdpConf" required ><br>
 
           <div class="form-btn">
             <input type="submit" value="Modifier" />
