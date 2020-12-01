@@ -11,6 +11,7 @@ const routes = [
     name: "Landing",
     component: () => import("../views/Landing.vue"),
     meta: {
+      title: "Bienvenue - Groupomania",
       requiresAuth: false,
     },
   },
@@ -20,6 +21,7 @@ const routes = [
     name: "Signup",
     component: () => import("../views/Signup.vue"),
     meta: {
+      title: "Inscription - Groupomania",
       requiresAuth: false,
     },
   },
@@ -29,6 +31,7 @@ const routes = [
     name: "Login",
     component: () => import("../views/Login.vue"),
     meta: {
+      title: "Connexion - Groupomania",
       requiresAuth: false,
     },
   },
@@ -37,6 +40,7 @@ const routes = [
     name: "Home",
     component: () => import("../views/Home.vue"),
     meta: {
+      title: "Actualités - Groupomania",
       requiresAuth: true,
     },
   },
@@ -45,6 +49,7 @@ const routes = [
     name: "Profil",
     component: () => import("../views/Profil.vue"),
     meta: {
+      title: "Profil - Groupomania",
       requiresAuth: true,
     },
   },
@@ -53,6 +58,7 @@ const routes = [
     name: "Users",
     component: () => import("../views/Users.vue"),
     meta: {
+      title: "Utilisateurs - Groupomania",
       requiresAuth: true,
     },
   },
@@ -64,6 +70,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  document.title = to.meta.title;
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
 
   if (!localStorage.getItem("jwt")) {

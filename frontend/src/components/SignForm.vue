@@ -53,8 +53,8 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%?]{6,}$/;
 // const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-// const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%?]{6,}$/;
 // const regex = /^[a-zA-Z0-9\s-_.,!?()"]+$/;
 
 export default {
@@ -82,36 +82,66 @@ export default {
     ...mapActions(["registerUser"]),
 
     submitUser() {
-      if (this.user.email !== "" || this.user.password !== "") {
+      if (this.settings.destination == "signup") {
+        //login
 
-        if (this.user.password === this.user.passwordConf || this.settings.destination == "signup") {
+        this.passwordConfirmed = true;
+        if (this.user.email == "" || this.user.password == "") {
+          const contexte = {
+            intention: "notification",
+            message: "Vous devez renseigner une adresse mail et un mot de passe !",
+          };
+          this.$store.commit("displayPopup", contexte);
+          return;
+        }
+      } else {
+        //signup
+
+        if (
+          this.user.email == "" ||
+          this.user.password == "" ||
+          this.user.firstname == "" ||
+          this.user.lastname == "" ||
+          this.user.password == "" ||
+          this.user.passwordConf == ""
+        ) {
+          const contexte = {
+            intention: "notification",
+            message: "Vous devez renseigner une adresse email, un nom, un prénom et un mot de passe !",
+          };
+          this.$store.commit("displayPopup", contexte);
+          return;
+        }
+
+        if (!passwordRegex.test(this.user.password)) {
+          const contexte = {
+            intention: "notification",
+            message: `Le mot de passe doit comporter au moins 8 caractères, une majuscule, une minuscule, une lettre et un chiffre. Seuls les caractères suivant sont autorisée : @ $ ! % ?`,
+          };
+          this.$store.commit("displayPopup", contexte);
+          return;
+        }
+
+        if (this.user.password === this.user.passwordConf) {
           this.passwordConfirmed = true;
         } else {
           this.passwordConfirmed = false;
+          const contexte = {
+            intention: "notification",
+            message: "La confirmation du mot de passe doit être identique au mot de passe !",
+          };
+          this.$store.commit("displayPopup", contexte);
+          return;
         }
-  
-        if(this.passwordConfirmed) {
-          const data = { user : this.user, url: this.settings.urlPost }
-          this.registerUser(data);
-        }
-        
-      } else {
-        let contexte = {
-          origin: "login",
-          intention: "notification",
-          message: "Vous devez renseigner un email et un mot de passe !",
-        };
-        this.$store.commit("displayPopup", contexte);
+      }
+
+      if(this.passwordConfirmed) {
+        const data = { user : this.user, url: this.settings.urlPost }
+        this.registerUser(data);
       }
     },
   },
 };
-
-// else if (!emailRegex.test(this.user.email)) {
-//   sendContexte.message = "L'adresse mail doit respecter le format d'email (Ex: mariedupont@gmail.com) !"
-// } else if (!passwordRegex.test(this.user.password)) {
-//   sendContexte.message = `Le mot de passe doit comporter au moins 8 caractères, une majuscule, une minuscule, une lettre et un chiffre. Seuls les caractères suivant sont autorisée : @ $ ! % ?`
-// } else {
 </script>
 
 <style scoped lang="scss">

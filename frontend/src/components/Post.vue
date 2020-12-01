@@ -10,7 +10,7 @@
     <div class="post-content">
       <p class="meta">
         <router-link :to="{ name: 'Profil', params: { id: post.UserId }}">{{ post.User.username }}</router-link>
-        , il y a
+        , {{ wasPublished }}.
       </p>
       <p class="title">{{ post.title }}</p>
       <p class="text">{{ post.content }}</p>
@@ -80,7 +80,20 @@ export default {
     ...mapGetters(['currentUser', 'allPosts', 'popup']),
 
     isAllowed() { return this.currentUser.isAdmin == true || this.post.userId == this.currentUser.id },
-    isCreator() { return this.post.userId == this.currentUser.id }
+
+    isCreator() { return this.post.userId == this.currentUser.id },
+
+    wasPublished() {
+      const creationDate = new Date(this.post.createdAt); 
+      const now = new Date()
+      const timeSinceCreation = (now.getTime() - creationDate.getTime()) / (1000 * 3600 * 24);
+      const daysSinceCreation = Math.round(timeSinceCreation)
+
+      if (daysSinceCreation < 1) {
+        return "aujourd'hui";
+      }
+      return `il y a ${daysSinceCreation} jours`;
+    }
   },
 
   created() {

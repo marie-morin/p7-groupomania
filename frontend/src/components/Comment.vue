@@ -5,7 +5,7 @@
       <font-awesome-icon @click="like()" v-bind:class="{ liked: wasLiked }" class="icon up" icon="arrow-up" />
     </div>
 
-      {{ comment.content }} par {{ comment.User.username }} <br/>
+      {{ comment.content }} par {{ comment.User.username }}, {{ wasPublished }}. <br/>
 
       <div v-if="editing">
         <input type="text" v-model="updatedComment" @keyup.enter="updateComment()" required>
@@ -45,7 +45,19 @@ export default {
 
     isAllowed() { return this.currentUser.isAdmin == true || this.comment.userId == this.currentUser.id },
 
-    isCreator() { return this.comment.userId == this.currentUser.id }
+    isCreator() { return this.comment.userId == this.currentUser.id },
+
+    wasPublished() {
+      const creationDate = new Date(this.comment.createdAt); 
+      const now = new Date()
+      const timeSinceCreation = (now.getTime() - creationDate.getTime()) / (1000 * 3600 * 24);
+      const daysSinceCreation = Math.round(timeSinceCreation)
+
+      if (daysSinceCreation < 1) {
+        return "aujourd'hui";
+      }
+      return `il y a ${daysSinceCreation} jours`;
+    }
   },
 
   created() {

@@ -3,15 +3,32 @@
     <div class="top-content">
       <Header />
       <div class="content">
+
         <UserInfos v-if="isOwner" :isOwner="isOwner" :user="currentUser"/>
         <UserInfos v-else :isOwner="isOwner" :user="guest"/>
-        <button v-if="isOwner" @click="displayFrom()">
-          Modifier mon profil
-        </button>
-        <button v-if="isOwner || isAdmin" @click.prevent="deleteProfil">
-          Supprimer mon profil
-        </button>
-        <ProfilForm v-if="isOwner" v-show="displayForm" v-on:display-form="displayFrom()"/>
+
+        <button v-if="isOwner" @click="displayProfilForm()">Modifier mon profil</button>
+        <button v-if="isOwner" @click="displayPasswordFrom()">Modifier mon mot de passe </button>
+
+        <form v-if="passwordFormDisplayed" action="updatePassword">
+          <label for="initialMdp">Votre mot de passe actuel :</label> <br>
+          <input type="password" id="initialMdp" name="initialMdp" v-model="updatedPassword.initialMdp" required><br>
+
+          <label for="newMdp">Votre nouveau mot de passe :</label><br>
+          <input type="password" id="newMdp" name="newMdp" v-model="updatedPassword.newMdp" required><br>
+
+          <label for="newMdpConf">Confirmation de votre nouveau mot de passe :</label><br>
+          <input type="password" id="newMdpConf" name="newMdpConf" v-model="updatedPassword.newMdpConf" required><br>
+
+          <div class="form-btn">
+            <input type="submit" value="Modifier" />
+            <input type="submit" value="Annuler" @click="displayPasswordFrom()" />
+          </div>
+        </form>
+
+        <button v-if="isOwner || isAdmin" @click.prevent="deleteProfil">Supprimer mon profil</button>
+        <ProfilForm v-if="isOwner" v-show="profilFormDisplayed" v-on:display-form="displayProfilFrom()"/>
+        
         <div class="post" v-for="post in posts" :key="post.id">
           <Post :post="post" />
         </div>
@@ -39,7 +56,14 @@ export default {
     return {
       isOwner: false,
       isAdmin: false,
-      displayForm: false,
+      profilFormDisplayed: false,
+      passwordFormDisplayed: false,
+      updatedPassword: {
+        initialMdp: "",
+        newMdp: "",
+        newMdpConf: "",
+        id: this.$route.params.id,
+      },
     };
   },
 
@@ -70,7 +94,7 @@ export default {
     ...mapActions(['fetch', 'token']),
 
     deleteProfil() {
-      const confirmContexte = {
+      const contexte = {
         origin: "profil",
         intention: "confirmation",
         message: "Voulez-vous vraiment supprimer votre compte ?",
@@ -80,10 +104,26 @@ export default {
           id: this.$route.params.id
         },
       };
-      this.$store.commit("displayPopup", confirmContexte);
+      this.$store.commit("displayPopup", contexte);
     },
 
-    displayFrom() { return this.displayForm = !this.displayForm; },
+    updatePassword() {
+      const contexte = {
+        origin: "profil",
+        intention: "confirmation",
+        message: "Voulez-vous vraiment modifier votre mot de passe ?",
+        options: {
+          url: `http://localhost:3000/api/users/password/${this.$route.params.id}`,
+          mutation: "updatePassword",
+          id: this.$route.params.id
+        },
+      };
+      this.$store.commit("displayPopup", contexte);
+    },
+
+    displayProfilForm() { return this.profilFormDisplayed = !this.profilFormDisplayed; },
+
+    displayPasswordFrom() { return this.passwordFormDisplayed = !this.passwordFormDisplayed; },
   }
 };
 </script>
