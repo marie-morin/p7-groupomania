@@ -189,7 +189,9 @@ exports.updateUser = (req, res, next) => {
 exports.updatePassword = (req, res, next) => {
   console.log("------------ updatePassword");
 
+  console.log("req.body.data : ", req.body.data);
   const data = JSON.parse(req.body.data);
+  console.log("data : ", data);
 
   if (
     !data ||

@@ -17,6 +17,8 @@ router.get("/", auth, userCtrl.getAllUsers);
 router.get("/:id", auth, userCtrl.getOneUser);
 // Update user acount
 router.put("/:id", auth, userCtrl.updateUser);
+// Update user password
+router.put("/:id/password", auth, userCtrl.updatePassword);
 // Delete an acount
 router.delete("/:id", auth, userCtrl.deleteUser);
 

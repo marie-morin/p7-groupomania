@@ -10,7 +10,7 @@
         <button v-if="isOwner" @click="displayProfilForm()">Modifier mon profil</button>
         <button v-if="isOwner" @click="displayPasswordFrom()">Modifier mon mot de passe </button>
 
-        <form v-if="passwordFormDisplayed" action="updatePassword">
+        <form v-if="passwordFormDisplayed">
           <label for="initialMdp">Votre mot de passe actuel :</label> <br>
           <input type="password" id="initialMdp" name="initialMdp" v-model="updatedPassword.initialMdp" required><br>
 
@@ -21,12 +21,12 @@
           <input type="password" id="newMdpConf" name="newMdpConf" v-model="updatedPassword.newMdpConf" required ><br>
 
           <div class="form-btn">
-            <input type="submit" value="Modifier" />
+            <input type="submit" value="Modifier" @click.prevent.stop="updatePassword()"/>
             <input type="submit" value="Annuler" @click="displayPasswordFrom()" />
           </div>
         </form>
 
-        <button v-if="isOwner || isAdmin" @click.prevent="deleteProfil">Supprimer mon profil</button>
+        <button v-if="isOwner || isAdmin" @click.prevent="deleteProfil">Supprimer le profil</button>
         <ProfilForm v-if="isOwner" v-show="profilFormDisplayed" v-on:display-form="displayProfilFrom()"/>
         
         <div class="post" v-for="post in posts" :key="post.id">
@@ -73,6 +73,20 @@ export default {
     posts() { return this.$store.state.postModule.posts.filter((post) => post.userId == this.$route.params.id) }
   },
 
+  watch: {
+    '$route' (to) {
+      const guestOptions = { url: `http://localhost:3000/api/users/${to.params.id}`, mutation: "setGuest" };
+      this.fetch(guestOptions);
+
+      if (this.currentUser.isAdmin == true) {
+        this.isAdmin = true;
+      }
+      if (this.currentUser.id == this.$route.params.id) {
+        this.isOwner = true;
+      }    
+    }
+  },
+
   created() {
     // Chargement de tous les posts
     const postsOptions = { url: "http://localhost:3000/api/posts", mutation: "setPosts" };
@@ -89,13 +103,28 @@ export default {
       this.isOwner = true;
     }
   },
+  
+  // beforeRouteUpdate (to, from, next) {
+
+  //   const guestOptions = { url: `http://localhost:3000/api/users/${to.params.id}`, mutation: "setGuest" };
+  //   this.fetch(guestOptions);
+
+  //   if (this.currentUser.isAdmin == true) {
+  //     this.isAdmin = true;
+  //   }
+  //   if (this.currentUser.id == this.$route.params.id) {
+  //     this.isOwner = true;
+  //   }
+
+  //   next();
+  // },
 
   methods: {
     ...mapActions(['fetch', 'token']),
 
     deleteProfil() {
       const contexte = {
-        origin: "profil",
+        origin: "deleteProfil",
         intention: "confirmation",
         message: "Voulez-vous vraiment supprimer votre compte ?",
         options: {
@@ -108,14 +137,38 @@ export default {
     },
 
     updatePassword() {
+      if (
+        this.updatedPassword == "" ||
+        this.updatedPassword.initialMdp == "" ||
+        this.updatedPassword.newMdp == "" ||
+        this.updatedPassword.newMdpConf == "" ||
+        this.updatedPassword.id == ""
+      ) {
+        const contexte = {
+          intention: "notification",
+          message: "Vous devez renseigner votre mot de passe actuel, votre nouveau mot de passe, et la confirmation de votre nouveau mot de passe !",
+        };
+        this.$store.commit("displayPopup", contexte);
+        return;
+      }
+
+      if ( this.updatedPassword.newMdp !== this.updatedPassword.newMdpConf) {
+        const contexte = {
+          intention: "notification",
+          message: "La confirmation du mot de passe doit être identique au nouveau mot de passe !",
+        };
+        this.$store.commit("displayPopup", contexte);
+        return;
+      }
+      
       const contexte = {
-        origin: "profil",
+        origin: "updatePassword",
         intention: "confirmation",
         message: "Voulez-vous vraiment modifier votre mot de passe ?",
         options: {
-          url: `http://localhost:3000/api/users/password/${this.$route.params.id}`,
-          mutation: "updatePassword",
-          id: this.$route.params.id
+          url: `http://localhost:3000/api/users/${this.$route.params.id}/password`,
+          mutation: "setUser",
+          data: this.updatedPassword,
         },
       };
       this.$store.commit("displayPopup", contexte);

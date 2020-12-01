@@ -3,7 +3,7 @@
         <p v-if="popup.intention == 'notification'">Notification d'action</p>
         <p v-else>Nécessité de confirmation</p>
         <button @click="hidePopup">Fermer</button>
-        <p>Message : {{ popup.message }}</p>
+        <p>{{ popup.message }}</p>
         <button @click="confirm()" v-if="popup.intention == 'confirmation'">Oui</button>
         <button @click="hidePopup()" v-if="popup.intention == 'confirmation'">Annuler</button>
     </div>
@@ -24,41 +24,49 @@ export default {
   },
 
   methods: {
-    ...mapActions(['delete']),
+    ...mapActions(['update', 'delete']),
 
     hidePopup() {
       this.$store.commit('hidePopup');
     },
 
     confirm() {
-      // this.delete(this.popup.options);
-
       const origin = this.popup.origin;
+
       let notifyContexte = {
         message: "",
         intention: "notification"
       };
 
-      if(origin == 'post') {
-        notifyContexte.message =  "Votre post à été supprimé !"; 
-      } else if (origin == 'comment') {
-        notifyContexte.message =  "Votre commentaire à été supprimé !"; 
-      } else if (origin == 'profil') {
-        notifyContexte.message =  "Le compte à été supprimé !"; 
+      if (origin == "updateUser") {
+        this.update(this.popup.options);  
+        notifyContexte.message =  "Le compte à été modifié !";
       }
+      if (origin == "updatePassword") {
+        this.update(this.popup.options);  
+        notifyContexte.message =  "Le mot de passe a été modifié !";
+      }
+      if (origin == "deletePost") {
+        this.delete(this.popup.options);
+        notifyContexte.message =  "Votre post à été supprimé !"; 
+      }
+      if (origin == "deleteComment") {
+        this.delete(this.popup.options);
+        notifyContexte.message =  "Votre commentaire à été supprimé !"; 
+      }
+      if (origin == "deleteProfil") {
+        this.delete(this.popup.options);
+        notifyContexte.message =  "Le compte à été supprimé !";
+        if (this.currentUser.isAdmin) {
+          this.$router.push({ name: 'Home' });
+       } else {
+         localStorage.clear();
+         this.$router.push({ name: 'Landing' });
+       }
+      }
+
       this.$store.commit('displayPopup', notifyContexte);
 
-      // console.log(this.currentUser);
-
-      // if (origin == "profil") {
-      //   if (this.currentUser.isAdmin) {
-      //     console.log("pass");
-      //     this.$router.replace({ path: 'Home' });
-      //  } else {
-      //    localStorage.clear();
-      //    this.$router.replace("Landing");
-      //  }
-      // }
       setTimeout(() => this.$store.commit('hidePopup'), 7000);
     },
   }

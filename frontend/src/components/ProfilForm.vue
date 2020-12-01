@@ -50,18 +50,23 @@ export default {
       if (this.user.email == "" || this.user.firstname == "" || this.user.lastname == "") {
         const contexte = {
           intention: "notification",
-          message: "Vous devez renseigner une adresse mail; un nom et un prénom !",
+          message: "Vous devez renseigner une adresse mail, un nom et un prénom !",
         };
         this.$store.commit("displayPopup", contexte);
         return;
       }
 
-      const options = {
-        url: `http://localhost:3000/api/users/${this.user.id}`,
-        mutation: "setUser",
-        data: this.user,
-      }
-      this.update(options);  
+      const contexte = {
+        origin: "updateUser",
+        intention: "confirmation",
+        message: "Voulez-vous vraiment modifier votre compte ?",
+        options: {
+          url: `http://localhost:3000/api/users/${this.user.id}`,
+          mutation: "setUser",
+          data: this.user,
+        },
+      };
+      this.$store.commit("displayPopup", contexte);
     },
   }
 };

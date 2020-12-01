@@ -114,8 +114,8 @@ export default {
     ...mapActions(['fetch', 'add', 'update','rate']),
 
     deletePost(id)  {
-      const confirmContexte = {
-        origin: "post",
+      const contexte = {
+        origin: "deletePost",
         intention: "confirmation",
         message: "Etes-vous sur de vouloir supprimer votre publication ?",
         options: {
@@ -124,7 +124,7 @@ export default {
           id: id,
         },
       };
-      this.$store.commit("displayPopup", confirmContexte);
+      this.$store.commit("displayPopup", contexte);
     },
 
     displayComment() { this.displayComments = !this.displayComments },

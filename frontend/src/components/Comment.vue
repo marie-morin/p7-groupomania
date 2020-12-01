@@ -75,8 +75,8 @@ export default {
     ...mapActions(['fetch', 'add', 'update', 'rate']),
 
     deleteComment(id) {
-      const confirmContexte = {
-        origin: "comment",
+      const contexte = {
+        origin: "deleteComment",
         intention: "confirmation",
         message: "Etes-vous sur de vouloir supprimer votre commentaire ?",
         options: {
@@ -85,7 +85,7 @@ export default {
           id: id
         },
       };
-      this.$store.commit("displayPopup", confirmContexte);
+      this.$store.commit("displayPopup", contexte);
     },
 
     editComment() { this.editing = !this.editing },
