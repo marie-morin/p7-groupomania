@@ -21,8 +21,6 @@ const mutations = {
   removePost: (state, id) =>
     (state.posts = state.posts.filter((post) => post.id !== id)),
 
-  removePosts: (state) => (state.posts = []),
-
   updatePost: (state, post) => {
     state.posts.forEach((item) => {
       if (item.id === post.id) {
@@ -56,6 +54,8 @@ const mutations = {
       }
     });
   },
+
+  removePosts: (state) => (state.posts = []),
 };
 
 export default {

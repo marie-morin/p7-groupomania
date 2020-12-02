@@ -100,6 +100,7 @@ const mutations = {
     state.popup.options = contexte.options;
     state.popup.origin = contexte.origin;
   },
+
   hidePopup: (state) => {
     state.popup.isDisplayed = false;
     state.popup.message = "";
