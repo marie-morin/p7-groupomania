@@ -37,7 +37,7 @@
         </div>
 
         <div class="form-btn">
-          <input type="submit" class="form-submit" :value="settings.title" />
+          <Button>{{ settings.title }}</Button>
         </div>
       </form>
     </div>
@@ -53,12 +53,15 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import Button from "@/components/Button";
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%?]{6,}$/;
 // const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 // const regex = /^[a-zA-Z0-9\s-_.,!?()"]+$/;
 
 export default {
   name: "SignForm",
+
+  components: { Button },
 
   props: {
     user: {

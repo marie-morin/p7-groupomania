@@ -5,8 +5,8 @@
         <h1>Bienvenue sur votre réseau interne Groupomania</h1>
       </div>
       <div class="redirection">
-        <Button url="/signup" text="S'inscrire" class="btn" />
-        <Button url="/login" text="Se connecter" class="btn" />
+        <Button :to="signup">S'inscrire</Button>
+        <Button :to="login">Se connecter</Button>
       </div>
     </div>
   </div>
@@ -17,7 +17,15 @@ import Button from "@/components/Button";
 
 export default { 
   name: "Landing",
-  components: { Button } 
+
+  components: { Button },
+
+  data() {
+    return {
+      login: "/login",
+      signup: "/signup",
+    }
+  }
 };
 </script>
 

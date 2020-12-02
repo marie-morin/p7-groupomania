@@ -23,7 +23,7 @@
       />
 
       <div class="btn">
-        <input type="submit" class="submit" />
+        <Button>Publier</Button>
       </div>
 
     </form>
@@ -32,9 +32,12 @@
 
 <script>
 import { mapActions } from 'vuex';
+import Button from "@/components/Button";
 
 export default {
   name: "PostForm",
+
+  components: { Button },
 
   data() {
     return {

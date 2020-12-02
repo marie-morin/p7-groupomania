@@ -29,6 +29,7 @@ export default {
         urlPost: "http://localhost:3000/api/users/signup",
         question: "Déjà un compte",
         option: "Connectez-vous",
+        title: "S'inscrire",
       }
     };
   },

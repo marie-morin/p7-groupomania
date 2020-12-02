@@ -7,8 +7,9 @@
         <UserInfos v-if="isOwner" :isOwner="isOwner" :user="currentUser"/>
         <UserInfos v-else :isOwner="isOwner" :user="guest"/>
 
-        <button v-if="isOwner" @click="displayProfilForm()">Modifier mon profil</button>
-        <button v-if="isOwner" @click="displayPasswordFrom()">Modifier mon mot de passe </button>
+        <Button v-if="isOwner" :onClick="displayProfilForm" >Modifier mon profil</Button>
+        <Button v-if="isOwner" :onClick="displayPasswordFrom" >Modifier mon mot de passe</Button>
+        <Button v-if="isOwner || isAdmin" :onClick="deleteProfil" >Supprimer le profil</Button>
 
         <form v-if="passwordFormDisplayed">
           <label for="initialMdp">Votre mot de passe actuel :</label> <br>
@@ -21,17 +22,17 @@
           <input type="password" id="newMdpConf" name="newMdpConf" v-model="updatedPassword.newMdpConf" required ><br>
 
           <div class="form-btn">
-            <input type="submit" value="Modifier" @click.prevent.stop="updatePassword()"/>
-            <input type="submit" value="Annuler" @click="displayPasswordFrom()" />
+            <Button :onClick="updatePassword">Modifier</Button>
+            <Button :onClick="displayPasswordFrom">Annuler</Button>
           </div>
         </form>
 
-        <button v-if="isOwner || isAdmin" @click.prevent="deleteProfil">Supprimer le profil</button>
-        <ProfilForm v-if="isOwner" v-show="profilFormDisplayed" v-on:display-form="displayProfilFrom()"/>
+        <ProfilForm v-if="isOwner" v-show="profilFormDisplayed" v-on:display-form="displayProfilForm()"/>
         
         <div class="post" v-for="post in posts" :key="post.id">
           <Post :post="post" />
         </div>
+
       </div>
     </div>
     <Footer /> 
@@ -45,12 +46,14 @@ import Footer from "@/components/Footer.vue";
 import UserInfos from "@/components/UserInfos.vue";
 import ProfilForm from "@/components/ProfilForm.vue";
 import Post from "@/components/Post.vue";
+import Button from "@/components/Button";
+
 
 
 export default {
   name: "Profil",
 
-  components: { Header, Footer, UserInfos, ProfilForm, Post },
+  components: { Header, Footer, UserInfos, ProfilForm, Post, Button },
 
   data() {
     return {
@@ -104,21 +107,6 @@ export default {
     }
   },
   
-  // beforeRouteUpdate (to, from, next) {
-
-  //   const guestOptions = { url: `http://localhost:3000/api/users/${to.params.id}`, mutation: "setGuest" };
-  //   this.fetch(guestOptions);
-
-  //   if (this.currentUser.isAdmin == true) {
-  //     this.isAdmin = true;
-  //   }
-  //   if (this.currentUser.id == this.$route.params.id) {
-  //     this.isOwner = true;
-  //   }
-
-  //   next();
-  // },
-
   methods: {
     ...mapActions(['fetch', 'token']),
 

@@ -1,12 +1,48 @@
 <template>
-  <a class="global-btn" :href="url">{{ text }}</a>
+<div>
+  <component v-if="!onClick" :is="type" :href="href" :to="to" class="global-btn">
+    <slot/>
+  </component>
+
+  <button v-else @click.prevent.stop="onClick" class="global-btn">
+    <slot/>
+  </button>
+</div>
 </template>
 
 <script>
-export default {
-  name: "Button",
-  props: ["url", "text"],
-};
+  export default {
+    name: "Button",
+
+    props: {
+      href: {
+        type: String,
+        default: null
+      },
+      to: {
+        type: String,
+        default: null
+      },
+      onClick: {
+        type: Function,
+        default: null
+      }
+    },
+
+    computed: {
+      type() {
+        if (this.href) {
+          return 'a'
+        } 
+        if (this.to) {
+          return 'router-link'
+        } 
+        else {
+          return 'button'
+        }
+      }
+    }
+  }
 </script>
 
 <style scoped lang="scss">

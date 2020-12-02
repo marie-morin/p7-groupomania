@@ -28,6 +28,7 @@ export default {
         urlPost: "http://localhost:3000/api/users/login",
         question: "Pas encore de compte",
         option: "Inscrivez-vous",
+        title: "Se connecter",
       }
     };
   },

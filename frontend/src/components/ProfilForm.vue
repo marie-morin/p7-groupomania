@@ -15,16 +15,11 @@
         <textarea v-model="user.bio" name="bio" id="bio" cols="10" rows="10"></textarea>
 
         <div class="form-btn">
-          <input type="submit" class="form-submit" value="Enregistrer" />
+          <Button>Enregistrer</Button>
         </div>
 
         <div class="form-btn">
-          <input
-            type="submit"
-            class="form-submit"
-            value="Annuler"
-            @click.prevent.stop="$emit('display-form')"
-          />
+          <input type="submit" class="form-submit" value="Annuler" @click.prevent.stop="$emit('display-form')" />
         </div>
       </form>
     </div>
@@ -33,9 +28,14 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import Button from "@/components/Button";
+
 
 export default {
   name: "ProfilForm",
+
+  components: { Button },
+
 
   computed: { 
     ...mapGetters(['currentUser']),
