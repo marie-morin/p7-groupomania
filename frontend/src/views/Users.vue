@@ -26,7 +26,7 @@ export default {
   computed: mapGetters(['allUsers']),
 
   created() {
-    const options = { url: "http://localhost:3000/api/users/", mutation: "setUsers" };
+    const options = { url: process.env.VUE_APP_LOCALHOST_URL + "users/", mutation: "setUsers" };
     this.fetch(options);
   },
 

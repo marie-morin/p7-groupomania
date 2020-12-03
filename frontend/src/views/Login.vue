@@ -25,7 +25,7 @@ export default {
       user: { email: "", password: "" },
       settings: {
         destination: "signup",
-        urlPost: "http://localhost:3000/api/users/login",
+        urlPost: process.env.VUE_APP_LOCALHOST_URL + "users/login",
         question: "Pas encore de compte",
         option: "Inscrivez-vous",
         title: "Se connecter",

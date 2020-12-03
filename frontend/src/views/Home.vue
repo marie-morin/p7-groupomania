@@ -32,7 +32,7 @@ export default {
   computed: mapGetters(["allPosts"]),
 
   created() {
-    const options = { url: "http://localhost:3000/api/posts", mutation: "setPosts" };
+    const options = { url: process.env.VUE_APP_LOCALHOST_URL + "posts", mutation: "setPosts" };
     this.fetch(options);
   },
 

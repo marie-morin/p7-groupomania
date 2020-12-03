@@ -8,7 +8,7 @@ const bcrypt = require("bcrypt");
 // Constantes
 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%?]{6,}$/;
-const regex = /^[a-zA-Z0-9\s-_.,!?()"]+$/;
+const regex = /^[A-Za-z\d\s.,;:!?"()/%-_']*$/;
 
 // Signup
 exports.signup = (req, res, next) => {

@@ -78,7 +78,7 @@ export default {
 
   watch: {
     '$route' (to) {
-      const guestOptions = { url: `http://localhost:3000/api/users/${to.params.id}`, mutation: "setGuest" };
+      const guestOptions = { url: process.env.VUE_APP_LOCALHOST_URL + `users/${to.params.id}`, mutation: "setGuest" };
       this.fetch(guestOptions);
 
       if (this.currentUser.isAdmin == true) {
@@ -92,11 +92,11 @@ export default {
 
   created() {
     // Chargement de tous les posts
-    const postsOptions = { url: "http://localhost:3000/api/posts", mutation: "setPosts" };
+    const postsOptions = { url: process.env.VUE_APP_LOCALHOST_URL + "posts", mutation: "setPosts" };
     this.fetch(postsOptions);
 
     // Chargement du profil guest
-    const guestOptions = { url: `http://localhost:3000/api/users/${this.$route.params.id}`, mutation: "setGuest" };
+    const guestOptions = { url: process.env.VUE_APP_LOCALHOST_URL + `users/${this.$route.params.id}`, mutation: "setGuest" };
     this.fetch(guestOptions);
 
     if (this.currentUser.isAdmin == true) {
@@ -116,7 +116,7 @@ export default {
         intention: "confirmation",
         message: "Voulez-vous vraiment supprimer votre compte ?",
         options: {
-          url: `http://localhost:3000/api/users/${this.$route.params.id}`,
+          url: process.env.VUE_APP_LOCALHOST_URL + `users/${this.$route.params.id}`,
           mutation: "removeUser",
           id: this.$route.params.id
         },
@@ -154,7 +154,7 @@ export default {
         intention: "confirmation",
         message: "Voulez-vous vraiment modifier votre mot de passe ?",
         options: {
-          url: `http://localhost:3000/api/users/${this.$route.params.id}/password`,
+          url: process.env.VUE_APP_LOCALHOST_URL + `users/${this.$route.params.id}/password`,
           mutation: "setUser",
           data: this.updatedPassword,
         },

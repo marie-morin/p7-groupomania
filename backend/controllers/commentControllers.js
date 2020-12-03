@@ -1,7 +1,7 @@
 //Import
 const models = require("../models");
 const jwt = require("../utils/jwtValidator");
-const regex = /^[A-Za-z\d\s.,;:!?"()/%]*$/;
+const regex = /^[A-Za-z\d\s.,;:!?"()/%-_']*$/;
 
 // Create a comment
 exports.addComment = (req, res) => {

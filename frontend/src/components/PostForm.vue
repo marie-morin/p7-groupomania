@@ -62,7 +62,7 @@ export default {
       }
 
       const options = {
-        url: "http://localhost:3000/api/posts/",
+        url: process.env.VUE_APP_LOCALHOST_URL + "posts/",
         mutation: "newPost",
         data: this.newPost,
       }

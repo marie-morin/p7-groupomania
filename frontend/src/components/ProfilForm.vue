@@ -61,7 +61,7 @@ export default {
         intention: "confirmation",
         message: "Voulez-vous vraiment modifier votre compte ?",
         options: {
-          url: `http://localhost:3000/api/users/${this.user.id}`,
+          url: process.env.VUE_APP_LOCALHOST_URL + `users/${this.user.id}`,
           mutation: "setUser",
           data: this.user,
         },

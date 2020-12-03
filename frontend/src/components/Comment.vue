@@ -61,7 +61,7 @@ export default {
   },
 
   created() {
-    const likesOptions = { url: `http://localhost:3000/api/comments/${this.comment.id}/like`, mutation: "setCommentLikes" };
+    const likesOptions = { url: process.env.VUE_APP_LOCALHOST_URL + `comments/${this.comment.id}/like`, mutation: "setCommentLikes" };
     this.fetch(likesOptions).then(() => {
       this.comment.likes.forEach(like => {
         if (like.UserId === this.currentUser.id) {
@@ -80,7 +80,7 @@ export default {
         intention: "confirmation",
         message: "Etes-vous sur de vouloir supprimer votre commentaire ?",
         options: {
-          url: `http://localhost:3000/api/comments/${id}`,
+          url: process.env.VUE_APP_LOCALHOST_URL + `comments/${id}`,
           mutation: "removeComment",
           id: id
         },
@@ -101,7 +101,7 @@ export default {
       }
 
       const options = {
-        url: `http://localhost:3000/api/comments/${this.comment.id}`,
+        url: process.env.VUE_APP_LOCALHOST_URL+ `comments/${this.comment.id}`,
         mutation: "updateComment",
         data: this.updatedComment,
       }
@@ -114,7 +114,7 @@ export default {
 
     like() {   
       const options = {
-        url: `http://localhost:3000/api/comments/like`,
+        url: process.env.VUE_APP_LOCALHOST_URL + `comments/like`,
         mutation: "rateComment",
         id: this.comment.id,
         user: this.currentUser.id

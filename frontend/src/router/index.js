@@ -102,7 +102,7 @@ router.beforeEach((to, from, next) => {
         },
       };
       axios
-        .post("http://localhost:3000/api/users/me", options)
+        .post(process.env.VUE_APP_LOCALHOST_URL + "users/me", options)
         .then((response) => {
           if (!response.data) {
             if (requiresAuth) {

@@ -48,7 +48,9 @@
 <script>
 
 import { mapGetters, mapActions } from 'vuex';
-import Comment from "@/components/Comment.vue"
+import Comment from "@/components/Comment.vue";
+
+
 
 export default {
   name: "Post",
@@ -97,10 +99,10 @@ export default {
   },
 
   created() {
-    const commentOptions = { url: `http://localhost:3000/api/comments/from/${this.post.id}`, mutation: "setComments" };
+    const commentOptions = { url: process.env.VUE_APP_LOCALHOST_URL + `comments/from/${this.post.id}`, mutation: "setComments" };
     this.fetch(commentOptions);
 
-    const likesOptions = { url: `http://localhost:3000/api/posts/${this.post.id}/like`, mutation: "setPostLikes" };
+    const likesOptions = { url: process.env.VUE_APP_LOCALHOST_URL + `posts/${this.post.id}/like`, mutation: "setPostLikes" };
     this.fetch(likesOptions).then(() => {
       this.post.likes.forEach(like => {
         if (like.UserId === this.currentUser.id) {
@@ -119,7 +121,7 @@ export default {
         intention: "confirmation",
         message: "Etes-vous sur de vouloir supprimer votre publication ?",
         options: {
-          url: `http://localhost:3000/api/posts/${id}`,
+          url: process.env.VUE_APP_LOCALHOST_URL + `posts/${id}`,
           mutation: "removePost",
           id: id,
         },
@@ -143,7 +145,7 @@ export default {
 
       const comment = { content: this.newComment, postId: this.post.id };
       const options = {
-        url: "http://localhost:3000/api/comments/",
+        url: process.env.VUE_APP_LOCALHOST_URL + "comments/",
         mutation: "newComment",
         data: comment
       }
@@ -166,7 +168,7 @@ export default {
       console.log("pass");
 
       const options = {
-        url: `http://localhost:3000/api/posts/${this.updatedPost.id}`,
+        url: process.env.VUE_APP_LOCALHOST_URL + `posts/${this.updatedPost.id}`,
         mutation: "updatePost",
         data: this.updatedPost,
       }
@@ -179,7 +181,7 @@ export default {
 
     like() {   
       const options = {
-        url: `http://localhost:3000/api/posts/like`,
+        url: process.env.VUE_APP_LOCALHOST_URL + `posts/like`,
         mutation: "ratePost",
         id: this.post.id,
         user: this.currentUser.id

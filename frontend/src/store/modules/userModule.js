@@ -61,14 +61,17 @@ const actions = {
   },
 
   async getUserInfos({ commit, state }, token) {
-    const response = await axios.post("http://localhost:3000/api/users/me", {
-      method: "POST",
-      data: JSON.stringify(token),
-      headers: {
-        Authorization:
-          "Bearer " + localStorage.getItem("jwt").replace(/['"']+/g, ""),
-      },
-    });
+    const response = await axios.post(
+      process.env.VUE_APP_LOCALHOST_URL + "users/me",
+      {
+        method: "POST",
+        data: JSON.stringify(token),
+        headers: {
+          Authorization:
+            "Bearer " + localStorage.getItem("jwt").replace(/['"']+/g, ""),
+        },
+      }
+    );
 
     commit("setUser", response.data);
     router.push("Home");
