@@ -69,8 +69,9 @@ export default {
       this.add(options);
       this.newPost.title = "";
       this.newPost.content = "";
-      const contexte = { message: "Votre publication à été postée !", intention: "notification" };
-      this.$store.commit('displayPopup', contexte);
+
+      // const contexte = { message: "Votre publication à été postée !", intention: "notification" };
+      // this.$store.commit('displayPopup', contexte);
     },
   },
 };

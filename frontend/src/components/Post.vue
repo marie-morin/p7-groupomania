@@ -150,8 +150,8 @@ export default {
       this.add(options);
       this.newComment = "";
       
-      const contexte = { message: "Votre commentaire à été posé !", intention: "notification" };
-      this.$store.commit('displayPopup', contexte);
+      // const contexte = { message: "Votre commentaire à été posé !", intention: "notification" };
+      // this.$store.commit('displayPopup', contexte);
     },
 
     updatePost() {
@@ -173,8 +173,8 @@ export default {
       this.update(options);   
       this.editing = false;
 
-      const contexte = { message: "Votre publication à été modifié !", intention: "notification" };
-      this.$store.commit('displayPopup', contexte);
+      // const contexte = { message: "Votre publication à été modifié !", intention: "notification" };
+      // this.$store.commit('displayPopup', contexte);
     },
 
     like() {   
@@ -187,13 +187,13 @@ export default {
       this.rate(options);
       this.wasLiked = !this.wasLiked;
 
-      let contexte;
-      if (this.wasLiked) {
-        contexte = { message: "Vous avez liker un post !", intention: "notification" };
-      } else {
-        contexte = { message: "Vous avez retiré votre like !", intention: "notification" };
-      }
-      this.$store.commit('displayPopup', contexte);
+      // let contexte;
+      // if (this.wasLiked) {
+      //   contexte = { message: "Vous avez liker un post !", intention: "notification" };
+      // } else {
+      //   contexte = { message: "Vous avez retiré votre like !", intention: "notification" };
+      // }
+      // this.$store.commit('displayPopup', contexte);
     },
   }
 };

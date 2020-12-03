@@ -108,8 +108,8 @@ export default {
       this.update(options);      
       this.updatedComment = "";
 
-      const contexte = { message: "Votre commentaire à été modifié !", intention: "notification" };
-      this.$store.commit('displayPopup', contexte);
+      // const contexte = { message: "Votre commentaire à été modifié !", intention: "notification" };
+      // this.$store.commit('displayPopup', contexte);
     },
 
     like() {   
@@ -122,13 +122,13 @@ export default {
       this.rate(options);
       this.wasLiked = !this.wasLiked;
 
-      let contexte;
-      if (this.wasLiked) {
-        contexte = { message: "Vous avez liker un commentaire !", intention: "notification" };
-      } else {
-        contexte = { message: "Vous avez retiré votre like !", intention: "notification" };
-      }
-      this.$store.commit('displayPopup', contexte);
+      // let contexte;
+      // if (this.wasLiked) {
+      //   contexte = { message: "Vous avez liker un commentaire !", intention: "notification" };
+      // } else {
+      //   contexte = { message: "Vous avez retiré votre like !", intention: "notification" };
+      // }
+      // this.$store.commit('displayPopup', contexte);
     },
   },
 };
