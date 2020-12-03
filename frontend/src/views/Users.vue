@@ -3,6 +3,7 @@
     <div class="top-content">
       <Header />
       <div class="content">
+        <Search :items="allUsers" />
         <UserCard v-for="user in allUsers" :key="user.id" :user="user"/>
       </div>
     </div>
@@ -15,11 +16,12 @@ import { mapGetters, mapActions } from "vuex";
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
 import UserCard from "@/components/UserCard.vue";
+import Search from "@/components/Search.vue";
 
 export default {
   name: "Users",
 
-  components: { Header, Footer, UserCard },
+  components: { Header, Footer, UserCard, Search },
   
   computed: mapGetters(['allUsers']),
 
