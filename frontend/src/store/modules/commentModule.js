@@ -8,7 +8,7 @@ const mutations = {
       comments.forEach((comment) => {
         posts.forEach((post) => {
           if (post.id === comment.postId) {
-            post.comments = [];
+            // post.comments = [];
             post.comments.push({ likes: [], ...comment });
           }
         });
@@ -53,7 +53,7 @@ const mutations = {
         posts.forEach((post) => {
           post.comments.forEach((comment) => {
             if (comment.id === like.commentId) {
-              comment.likes = [];
+              // comment.likes = [];
               comment.likes.push(like);
             }
           });

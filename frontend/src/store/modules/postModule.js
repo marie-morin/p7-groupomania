@@ -35,7 +35,7 @@ const mutations = {
       likes.forEach((like) => {
         state.posts.forEach((post) => {
           if (post.id === like.postId) {
-            post.likes = [];
+            // post.likes = [];
             post.likes.push(like);
           }
         });

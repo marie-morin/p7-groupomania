@@ -29,11 +29,11 @@ export default {
 <style lang="scss">
 #app {
   position: relative;
-  @include flexbox(space-between, column, center);
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: $groupomania-police;
+  // @include flexbox(space-between, column, center);
+  // font-family: Avenir, Helvetica, Arial, sans-serif;
+  // -webkit-font-smoothing: antialiased;
+  // -moz-osx-font-smoothing: grayscale;
+  // text-align: center;
+  // color: $groupomania-police;
 }
 </style>
