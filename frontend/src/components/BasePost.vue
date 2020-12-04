@@ -1,61 +1,10 @@
-<template>
-  <div class="post-unit">
-
-    <!-- Partie likes du bloc Post -->
-    <div class="post-likes">
-      <p class="likes">{{ post.likes.length }}</p>
-      <font-awesome-icon @click="like()" v-bind:class="{ liked: wasLiked }" class="icon up" icon="arrow-up" />
-    </div>
-
-    <div class="post-content">
-      <p class="meta">
-        <router-link :to="{ name: 'Profil', params: { id: post.UserId }}">{{ post.User.username }}</router-link>
-        , {{ wasPublished }}.
-      </p>
-      <p class="title">{{ post.title }}</p>
-      <p class="text">{{ post.content }}</p>
-
-      <div v-if="editing">
-        <label for="title">Nouveau titre</label>
-        <input type="text" v-model="updatedPost.title" @keyup.enter="updatePost()" name="title" required><br>
-
-        <label for="content">Nouveau contenu</label>
-        <input type="text" v-model="updatedPost.content" @keyup.enter="updatePost()" name="content" required>
-
-        <button @click="updatePost()">Valider la modification</button>
-        <button @click="editPost()">Annuler</button>
-      </div>
-
-      <div class="post-comments" @click="displayComment()">
-        <font-awesome-icon class="icon comment" icon="comment" />
-        <p>{{ post.comments.length }} commentaires</p>
-      </div>
-
-      <div v-show="displayComments === true" class="comment-container">
-        <div v-for="comment in post.comments" :key="comment.id">
-          <Comment :comment="comment" />
-        </div>
-        <input type="text" v-model="newComment" @keyup.enter="addComment()" placeholder="Ajouter un commentaire..." required/>
-      </div> 
-
-      <button @click="deletePost(post.id)" v-if="isAllowed">Supprimer le post</button>
-      <button @click="editPost()" v-if="isCreator">Modifier votre post</button>
-
-    </div>
-  </div>
-</template>
-
 <script>
-
 import { mapGetters, mapActions } from 'vuex';
-import Comment from "@/components/Comment.vue";
-
-
-
+import BaseComment from "@/components/BaseComment.vue";
 export default {
-  name: "Post",
+  name: "BasePost",
 
-  components: { Comment },
+  components: { BaseComment },
 
   props: {
     post: {
@@ -151,9 +100,6 @@ export default {
       }
       this.add(options);
       this.newComment = "";
-      
-      // const contexte = { message: "Votre commentaire à été posé !", intention: "notification" };
-      // this.$store.commit('displayPopup', contexte);
     },
 
     updatePost() {
@@ -174,9 +120,6 @@ export default {
       }
       this.update(options);   
       this.editing = false;
-
-      // const contexte = { message: "Votre publication à été modifié !", intention: "notification" };
-      // this.$store.commit('displayPopup', contexte);
     },
 
     like() {   
@@ -188,18 +131,103 @@ export default {
       };
       this.rate(options);
       this.wasLiked = !this.wasLiked;
-
-      // let contexte;
-      // if (this.wasLiked) {
-      //   contexte = { message: "Vous avez liker un post !", intention: "notification" };
-      // } else {
-      //   contexte = { message: "Vous avez retiré votre like !", intention: "notification" };
-      // }
-      // this.$store.commit('displayPopup', contexte);
     },
   }
 };
 </script>
+
+
+<template>
+  <div class="post-unit">
+
+    <div class="post-likes">
+      <p class="likes">{{ post.likes.length }}</p>
+
+      <font-awesome-icon
+        icon="arrow-up"
+        @click="like()"
+        :class="{ liked: wasLiked }"
+        class="icon up"
+      />
+    </div>
+
+    <div class="post-content">
+      <p class="meta">
+        <router-link :to="{ name: 'Profil', params: { id: post.UserId }}">{{ post.User.username }}</router-link>, {{ wasPublished }}.
+      </p>
+      <p class="title">{{ post.title }}</p>
+      <p class="text">{{ post.content }}</p>
+
+      <div v-if="editing">
+        <label for="title">Nouveau titre</label>
+        <input
+          type="text"
+          name="title"
+          required
+          v-model="updatedPost.title"
+          @keyup.enter="updatePost()"
+        />
+        <br>
+
+        <label for="content">Nouveau contenu</label>
+        <input
+          type="text"
+          name="content"
+          required
+          v-model="updatedPost.content"
+          @keyup.enter="updatePost()"
+        />
+
+        <button @click="updatePost()">Valider la modification</button>
+        <button @click="editPost()">Annuler</button>
+      </div>
+
+      <div class="post-comments" @click="displayComment()">
+        <font-awesome-icon
+          icon="comment"
+          class="icon comment"
+        />
+        <p>{{ post.comments.length }} commentaires</p>
+      </div>
+
+      <div
+        v-show="displayComments === true"
+        class="comment-container"
+      >
+        <div
+          v-for="comment in post.comments"
+          :key="comment.id"
+        >
+          <BaseComment :comment="comment" />
+        </div>
+
+        <input
+          type="text"
+          placeholder="Ajouter un commentaire..."
+          required
+          v-model="newComment"
+          @keyup.enter="addComment()"
+        />
+      </div> 
+
+      <button
+        v-if="isAllowed"
+        @click="deletePost(post.id)"
+      >
+        Supprimer le post
+      </button>
+
+      <button
+        v-if="isCreator"
+        @click="editPost()"
+      >
+        Modifier votre post
+      </button>
+
+    </div>
+  </div>
+</template>
+
 
 <style scope lang="scss">
 .post {

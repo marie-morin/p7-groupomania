@@ -1,29 +1,8 @@
-<template>
-  <div class="comment-unit">
-    <div class="comment-likes">
-      <p class="likes">{{ comment.likes.length }}</p>
-      <font-awesome-icon @click="like()" v-bind:class="{ liked: wasLiked }" class="icon up" icon="arrow-up" />
-    </div>
-
-      {{ comment.content }} par {{ comment.User.username }}, {{ wasPublished }}. <br/>
-
-      <div v-if="editing">
-        <input type="text" v-model="updatedComment" @keyup.enter="updateComment()" required>
-        <button @click="editComment()">Annuler</button>
-      </div>
-
-
-      <button @click="deleteComment(comment.id)" v-if="isAllowed">Supprimer le commentaire</button>
-      <button @click="editComment()" v-if="isCreator">Modifier votre commentaire</button>
-
-  </div>
-</template>
-
 <script>
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
-  name: "Comment",
+  name: "BaseComment",
 
   props: {
     comment: {
@@ -134,6 +113,49 @@ export default {
 };
  
 </script>
+
+
+<template>
+  <div class="comment-unit">
+    <div class="comment-likes">
+      <p class="likes">{{ comment.likes.length }}</p>
+      <font-awesome-icon
+        :class="{ liked: wasLiked }"
+        @click="like()"
+        icon="arrow-up"
+        class="icon up"
+      />
+    </div>
+
+      {{ comment.content }} par {{ comment.User.username }}, {{ wasPublished }}. <br/>
+
+      <div v-if="editing">
+        <input
+          type="text"
+          required
+          v-model="updatedComment"
+          @keyup.enter="updateComment()"
+        >
+        <button @click="editComment()">Annuler</button>
+      </div>
+
+
+      <button
+        @click="deleteComment(comment.id)"
+        v-if="isAllowed"
+      >
+        Supprimer le commentaire
+      </button>
+      <button
+        @click="editComment()"
+        v-if="isCreator"
+      >
+        Modifier votre commentaire
+      </button>
+
+  </div>
+</template>
+
 
 <style scope lang="scss">
 .comment-unit {

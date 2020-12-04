@@ -1,33 +1,11 @@
-<template>
-  <div class="home">
-    <div class="top-content">
-      <Header />
-      <div class="content">
-        <PostForm />
-        <div class="posts">
-          <div class="post" v-for="post in allPosts" :key="post.id">
-            <Post :post="post" />
-          </div>
-        </div>
-      </div>
-    </div>
-    <Footer />
-  </div>
-</template>
-
 <script>
-
 import { mapGetters, mapActions } from "vuex";
-import Header from "@/components/Header.vue";
-import Footer from "@/components/Footer.vue";
-import PostForm from "@/components/PostForm.vue";
-import Post from "@/components/Post.vue";
-
-
+import FormPostCreation from "@/components/FormPostCreation.vue";
+import BasePost from "@/components/BasePost.vue";
 export default {
   name: "Home",
 
-  components: { Header, Footer, PostForm, Post },
+  components: { FormPostCreation, BasePost },
 
   computed: mapGetters(["allPosts"]),
 
@@ -39,6 +17,23 @@ export default {
   methods: mapActions(["fetch"])
 };
 </script>
+
+
+<template>
+  <div class="home">
+    <FormPostCreation />
+    <div class="posts">
+      <div 
+        v-for="post in allPosts" 
+        :key="post.id"
+        class="post"
+      >
+        <BasePost :post="post" />
+      </div>
+    </div>    
+  </div>
+</template>
+
 
 <style scope lang="scss">
 .home {

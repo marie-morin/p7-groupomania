@@ -1,24 +1,9 @@
-<template>
-  <div class="login">
-    <div class="top-content">
-      <Header />
-      <div class="content">
-        <SignForm :settings="settings" :user="user"/>
-      </div>
-    </div>
-    <Footer />
-  </div>
-</template>
-
 <script>
-import Header from "@/components/Header.vue";
-import Footer from "@/components/Footer.vue";
-import SignForm from "@/components/SignForm.vue";
-
+import FormRegister from "@/components/FormRegister.vue";
 export default {
   name: "Login",
 
-  components: { Header, Footer, SignForm },
+  components: { FormRegister },
 
   data() {
     return {
@@ -34,6 +19,17 @@ export default {
   },
 };
 </script>
+
+
+<template>
+  <div class="login">
+    <FormRegister 
+      :user="user"
+      :settings="settings"
+    />
+  </div>
+</template>
+
 
 <style scoped lang="scss">
 .login {

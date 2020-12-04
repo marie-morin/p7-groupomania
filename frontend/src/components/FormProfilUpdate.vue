@@ -1,40 +1,10 @@
-<template>
-  <div class="form-section">
-    <div class="form-container">
-      <form @submit.prevent="updateUser" class="form">
-        <label for="email">Adresse email</label> 
-        <input v-model="user.email" type="email" name="email" id="email" required>
-
-        <label for="firstname">Prénom</label> 
-        <input v-model="user.firstname" type="text" name="firstname" id="firstname" required>
-
-        <label for="lastname">Nom</label> 
-        <input v-model="user.lastname" type="text" name="lastname" id="lastname" required>
-
-        <label for="bio">Biographie</label>
-        <textarea v-model="user.bio" name="bio" id="bio" cols="10" rows="10"></textarea>
-
-        <div class="form-btn">
-          <Button>Enregistrer</Button>
-        </div>
-
-        <div class="form-btn">
-          <input type="submit" class="form-submit" value="Annuler" @click.prevent.stop="$emit('display-form')" />
-        </div>
-      </form>
-    </div>
-  </div>
-</template>
-
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import Button from "@/components/Button";
-
-
+import BaseButton from "@/components/BaseButton";
 export default {
-  name: "ProfilForm",
+  name: "FormProfilUpdate",
 
-  components: { Button },
+  components: { BaseButton },
 
 
   computed: { 
@@ -71,6 +41,65 @@ export default {
   }
 };
 </script>
+
+<template>
+  <div class="form-section">
+    <div class="form-container">
+      <form @submit.prevent="updateUser" class="form">
+
+        <label for="email">Adresse email</label> 
+        <input
+          type="email"
+          id="email"
+          name="email"
+          required
+          v-model="user.email"
+        >
+
+        <label for="firstname">Prénom</label> 
+        <input
+          type="text"
+          id="firstname"
+          name="firstname"
+          required
+          v-model="user.firstname"
+        >
+
+        <label for="lastname">Nom</label> 
+        <input
+          type="text"
+          id="lastname"
+          name="lastname"
+          required
+          v-model="user.lastname"
+        >
+
+        <label for="bio">Biographie</label>
+        <textarea
+          id="bio"
+          name="bio"
+          cols="10"
+          rows="10"
+          v-model="user.bio"
+        >
+        </textarea>
+
+        <div class="form-btn">
+          <BaseButton>Enregistrer</BaseButton>
+        </div>
+
+        <div class="form-btn">
+          <input
+            type="submit"
+            value="Annuler"
+            @click.prevent.stop="$emit('display-form')"
+            class="form-submit"
+          />
+        </div>
+      </form>
+    </div>
+  </div>
+</template>
 
 <style scoped lang="scss">
 .form {

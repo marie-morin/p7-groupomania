@@ -1,18 +1,6 @@
-<template>
-<div>
-  <component v-if="!onClick" :is="type" :href="href" :to="to" class="global-btn">
-    <slot/>
-  </component>
-
-  <button v-else @click.prevent.stop="onClick" class="global-btn">
-    <slot/>
-  </button>
-</div>
-</template>
-
 <script>
   export default {
-    name: "Button",
+    name: "BaseButton",
 
     props: {
       href: {
@@ -44,6 +32,30 @@
     }
   }
 </script>
+
+
+<template>
+<div>
+  <component
+    :is="type"
+    v-if="!onClick"
+    :href="href"
+    :to="to"
+    class="global-btn"
+  >
+    <slot/>
+  </component>
+
+  <button
+    v-else
+    @click.prevent.stop="onClick"
+    class="global-btn"
+  >
+    <slot/>
+  </button>
+</div>
+</template>
+
 
 <style scoped lang="scss">
 .global-btn {

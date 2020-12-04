@@ -1,24 +1,9 @@
-<template>
-  <div class="landing">
-    <div class="content">
-      <div class="bienvenue">
-        <h1>Bienvenue sur votre réseau interne Groupomania</h1>
-      </div>
-      <div class="redirection">
-        <Button :to="signup">S'inscrire</Button>
-        <Button :to="login">Se connecter</Button>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script>
-import Button from "@/components/Button";
-
+import BaseButton from "@/components/BaseButton";
 export default { 
   name: "Landing",
 
-  components: { Button },
+  components: { BaseButton },
 
   data() {
     return {
@@ -28,6 +13,22 @@ export default {
   }
 };
 </script>
+
+
+<template>
+  <div class="landing">
+
+      <div class="bienvenue">
+        <h1>Bienvenue sur votre réseau interne Groupomania</h1>
+      </div>
+      <div class="redirection">
+        <BaseButton :to="signup">S'inscrire</BaseButton>
+        <BaseButton :to="login">Se connecter</BaseButton>
+      </div>
+    
+  </div>
+</template>
+
 
 <style scope lang="scss">
 .landing {

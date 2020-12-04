@@ -1,25 +1,9 @@
-<template>
-  <div class="header">
-    <div class="inner">
-      <img src="../../public/images/icon-white.png" alt="Logo" class="logo" />
-      <div id="nav">
-        <router-link v-if="currentUser.id" to="/home">Accueil</router-link>
-        <router-link v-if="currentUser.id" to="/users">Utilisateurs</router-link>
-        <router-link v-if="currentUser.id" :to="{ name: 'Profil', params: { id: currentUser.id }}">Profil</router-link>
-        <a v-if="currentUser.id" href="#" @click.prevent="logout">Déconnexion</a>
-        <p v-if="currentUser.id">Bonjour <span>{{ currentUser.firstname }}</span></p>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script>
 import { mapGetters } from 'vuex';
 import store from "../store";
-
 export default {
-  name: "Header",
-
+  name: "TheHeader",
+  
   computed: { 
     ...mapGetters(['currentUser']),
   },
@@ -38,6 +22,49 @@ export default {
   },
 };
 </script>
+
+
+<template>
+  <div class="header">
+    <div class="inner">
+      <img src="../../public/images/icon-white.png" alt="Logo" class="logo" />
+      <div id="nav">
+        <router-link
+          v-if="currentUser.id"
+          to="/home"
+        >
+          Accueil
+        </router-link>
+
+        <router-link
+          v-if="currentUser.id"
+          to="/users"
+        >
+          Utilisateurs
+        </router-link>
+
+        <router-link
+          v-if="currentUser.id"
+          :to="{ name: 'Profil', params: { id: currentUser.id }}"
+        >
+          Profil
+        </router-link>
+
+        <a
+          v-if="currentUser.id"
+          href="#" @click.prevent="logout"
+        >
+          Déconnexion
+        </a>
+        <p v-if="currentUser.id">
+          Bonjour 
+          <span>{{ currentUser.firstname }}</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</template>
+
 
 <style scoped lang="scss">
 .header {

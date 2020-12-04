@@ -1,14 +1,6 @@
-<template>
-  <div class="infos-container">
-    <router-link :to="{ name: 'Profil', params: { id: user.id }}">{{ user.firstname }} {{ user.lastname }}</router-link>
-  </div>
-</template>
-
 <script>
-
 export default {
-  name: "UserCard",
-
+  name: "BaseCardUser",
   props: {
     user: {
       type: Object,
@@ -17,6 +9,17 @@ export default {
   },  
 };
 </script>
+
+<template>
+  <div class="infos-container">
+    <router-link :to="{ name: 'Profil', params: { id: user.id }}">
+      {{ user.firstname }} {{ user.lastname }}
+    </router-link>
+  </div>
+</template>
+
+
+
 
 <style scope lang="scss">
 

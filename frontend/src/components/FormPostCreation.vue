@@ -1,43 +1,10 @@
-<template>
-  <div class="postForm">
-    <form @submit.prevent="addPost">
-      <h2>Partager avec vos collègues :</h2>
-
-      <input
-        type="text"
-        name="title"
-        id="title"
-        placeholder="Titre"
-        v-model="newPost.title"
-        required
-      />
-      <br />
-
-      <input
-        type="text"
-        name="content"
-        id="content"
-        placeholder="Que voulez-vous partager ?"
-        v-model="newPost.content"
-        required
-      />
-
-      <div class="btn">
-        <Button>Publier</Button>
-      </div>
-
-    </form>
-  </div>
-</template>
-
 <script>
 import { mapActions } from 'vuex';
-import Button from "@/components/Button";
-
+import BaseButton from "@/components/BaseButton";
 export default {
-  name: "PostForm",
+  name: "FormPostCreation",
 
-  components: { Button },
+  components: { BaseButton },
 
   data() {
     return {
@@ -69,13 +36,43 @@ export default {
       this.add(options);
       this.newPost.title = "";
       this.newPost.content = "";
-
-      // const contexte = { message: "Votre publication à été postée !", intention: "notification" };
-      // this.$store.commit('displayPopup', contexte);
     },
   },
 };
 </script>
+
+
+<template>
+  <div class="postForm">
+    <form @submit.prevent="addPost">
+      <h2>Partager avec vos collègues :</h2>
+
+      <input
+        type="text"
+        id="title"
+        name="title"
+        placeholder="Titre"
+        required
+        v-model="newPost.title"
+      />
+      <br />
+
+      <input
+        type="text"
+        id="content"
+        name="content"
+        placeholder="Que voulez-vous partager ?"
+        required
+        v-model="newPost.content"
+      />
+
+      <div class="btn">
+        <BaseButton>Publier</BaseButton>
+      </div>
+
+    </form>
+  </div>
+</template>
 
 <style scope lang="scss">
 .postForm {

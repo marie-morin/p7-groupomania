@@ -1,59 +1,13 @@
-<template>
-  <div class="profil">
-    <div class="top-content">
-      <Header />
-      <div class="content">
-
-        <UserInfos v-if="isOwner" :isOwner="isOwner" :user="currentUser"/>
-        <UserInfos v-else :isOwner="isOwner" :user="guest"/>
-
-        <Button v-if="isOwner" :onClick="displayProfilForm" >Modifier mon profil</Button>
-        <Button v-if="isOwner" :onClick="displayPasswordFrom" >Modifier mon mot de passe</Button>
-        <Button v-if="isOwner || isAdmin" :onClick="deleteProfil" >Supprimer le profil</Button>
-
-        <form v-if="passwordFormDisplayed">
-          <label for="initialMdp">Votre mot de passe actuel :</label> <br>
-          <input type="password" id="initialMdp" name="initialMdp" v-model="updatedPassword.initialMdp" required><br>
-
-          <label for="newMdp">Votre nouveau mot de passe :</label><br>
-          <input type="password" id="newMdp" name="newMdp" v-model="updatedPassword.newMdp" required><br>
-
-          <label for="newMdpConf">Confirmation de votre nouveau mot de passe :</label><br>
-          <input type="password" id="newMdpConf" name="newMdpConf" v-model="updatedPassword.newMdpConf" required ><br>
-
-          <div class="form-btn">
-            <Button :onClick="updatePassword">Modifier</Button>
-            <Button :onClick="displayPasswordFrom">Annuler</Button>
-          </div>
-        </form>
-
-        <ProfilForm v-if="isOwner" v-show="profilFormDisplayed" v-on:display-form="displayProfilForm()"/>
-        
-        <div class="post" v-for="post in posts" :key="post.id">
-          <Post :post="post" />
-        </div>
-
-      </div>
-    </div>
-    <Footer /> 
-  </div>
-</template>
-
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import Header from "@/components/Header.vue";
-import Footer from "@/components/Footer.vue";
-import UserInfos from "@/components/UserInfos.vue";
-import ProfilForm from "@/components/ProfilForm.vue";
-import Post from "@/components/Post.vue";
-import Button from "@/components/Button";
-
-
-
+import InfosUser from "@/components/InfosUser.vue";
+import FormProfilUpdate from "@/components/FormProfilUpdate.vue";
+import BasePost from "@/components/BasePost.vue";
+import BaseButton from "@/components/BaseButton";
 export default {
   name: "Profil",
 
-  components: { Header, Footer, UserInfos, ProfilForm, Post, Button },
+  components: { InfosUser, FormProfilUpdate, BasePost, BaseButton },
 
   data() {
     return {
@@ -168,6 +122,95 @@ export default {
   }
 };
 </script>
+
+
+<template>
+  <div class="profil">
+        <InfosUser 
+          v-if="isOwner"
+          :is-owner="isOwner"
+          :user="currentUser"
+        />
+        <InfosUser
+          v-else
+          :is-owner="isOwner"
+          :user="guest"
+        />
+
+        <BaseButton
+          v-if="isOwner"
+          :onClick="displayProfilForm"
+        >
+          Modifier mon profil
+        </BaseButton>
+
+        <BaseButton
+          v-if="isOwner"
+          :onClick="displayPasswordFrom"
+        >
+          Modifier mon mot de passe
+        </BaseButton>
+
+        <BaseButton
+          v-if="isOwner || isAdmin"
+          :onClick="deleteProfil"
+        >
+            Supprimer le profil
+        </BaseButton>
+
+        <form v-if="passwordFormDisplayed">
+          <label for="initialMdp">Votre mot de passe actuel :</label> <br>
+          <input
+            type="password"
+            id="initialMdp"
+            name="initialMdp"
+            required
+            v-model="updatedPassword.initialMdp"
+          >
+          <br>
+
+          <label for="newMdp">Votre nouveau mot de passe :</label><br>
+          <input
+            type="password"
+            id="newMdp"
+            name="newMdp"
+            required
+            v-model="updatedPassword.newMdp"
+          >
+          <br>
+
+          <label for="newMdpConf">Confirmation de votre nouveau mot de passe :</label><br>
+          <input
+            type="password"
+            id="newMdpConf"
+            name="newMdpConf"
+            required
+            v-model="updatedPassword.newMdpConf"
+          >
+          <br>
+
+          <div class="form-btn">
+            <BaseButton :onClick="updatePassword">Modifier</BaseButton>
+            <BaseButton :onClick="displayPasswordFrom">Annuler</BaseButton>
+          </div>
+        </form>
+
+        <FormProfilUpdate
+          v-if="isOwner"
+          v-show="profilFormDisplayed"
+          @display-form="displayProfilForm()"
+        />
+        
+        <div
+          v-for="post in posts"
+          :key="post.id"
+          class="post"
+        >
+          <BasePost :post="post" />
+        </div>    
+  </div>
+</template>
+
 
 <style scope lang="scss">
 .profil {

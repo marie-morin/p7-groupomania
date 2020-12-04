@@ -1,67 +1,13 @@
-<template>
-  <div class="form-section">
-    <div class="form-container">
-      
-      <h1 v-if="settings.destination === 'login'">Inscrivez-vous !</h1>
-      <h1 v-else>Connectez-vous !</h1>
-
-      <form @submit.prevent="submitUser" class="form">
-        <div>
-          <label for="email">Adresse email</label> 
-          <input v-model="user.email" type="email" name="email" id="email" placeholder="Mon adresse email..." required>
-        </div>
-
-        <div v-if="settings.destination === 'login'">
-          <label for="firstname">Prénom</label> 
-          <input v-model="user.firstname" type="text" name="firstname" id="firstname" placeholder="Mon prénom..." required>
-        </div>
-
-        <div v-if="settings.destination === 'login'">
-          <label for="lastname">Nom</label> 
-          <input v-model="user.lastname" type="text" name="lastname" id="lastname" placeholder="Mon nom..." required>
-        </div>
-
-        <div>
-          <label for="password">Mot de passe</label> 
-          <input v-model="user.password" type="password" name="password" id="password" placeholder="Mon mot de passe..." required>
-        </div>
-
-        <div v-if="settings.destination === 'login'">
-          <label for="passwordConf">Confirmation mot de passe</label> 
-          <input v-model="user.passwordConf" type="password" name="passwordConf" id="passwordConf" placeholder="La confirmation de mon mot de passe..." required>
-        </div>
-
-        <div v-if="settings.destination === 'login'">
-          <label for="bio">Biographie</label>
-          <textarea v-model="user.bio" name="bio" id="bio" cols="10" rows="10"  placeholder="Ma biographie..."></textarea>
-        </div>
-
-        <div class="form-btn">
-          <Button>{{ settings.title }}</Button>
-        </div>
-      </form>
-    </div>
-    <p>
-      {{ settings.question }} ?
-      <router-link :to="'/' + settings.destination" class="option">{{
-        settings.option
-      }}</router-link>
-      !
-    </p>
-  </div>
-</template>
-
 <script>
 import { mapGetters, mapActions } from "vuex";
-import Button from "@/components/Button";
+import BaseButton from "@/components/BaseButton";
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%?]{6,}$/;
 // const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 // const regex = /^[a-zA-Z0-9\s-_.,!?()"]+$/;
-
 export default {
-  name: "SignForm",
+  name: "FormRegister",
 
-  components: { Button },
+  components: { BaseButton },
 
   props: {
     user: {
@@ -146,6 +92,104 @@ export default {
   },
 };
 </script>
+
+
+<template>
+  <div class="form-section">
+    <div class="form-container">
+      
+      <h1 v-if="settings.destination === 'login'">Inscrivez-vous !</h1>
+      <h1 v-else>Connectez-vous !</h1>
+
+      <form @submit.prevent="submitUser" class="form">
+        <div>
+          <label for="email">Adresse email</label> 
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Mon adresse email..."
+            required
+            v-model="user.email"
+          >
+        </div>
+
+        <div v-if="settings.destination === 'login'">
+          <label for="firstname">Prénom</label> 
+          <input
+            type="text"
+            id="firstname"
+            name="firstname"
+            placeholder="Mon prénom..."
+            required
+            v-model="user.firstname"
+          >
+        </div>
+
+        <div v-if="settings.destination === 'login'">
+          <label for="lastname">Nom</label> 
+          <input
+            type="text"
+            id="lastname"
+            name="lastname"
+            placeholder="Mon nom..."
+            required
+            v-model="user.lastname"
+          >
+        </div>
+
+        <div>
+          <label for="password">Mot de passe</label> 
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Mon mot de passe..."
+            required
+            v-model="user.password"
+          >
+        </div>
+
+        <div v-if="settings.destination === 'login'">
+          <label for="passwordConf">Confirmation mot de passe</label> 
+          <input
+            type="password"
+            id="passwordConf"
+            name="passwordConf"
+            placeholder="La confirmation de mon mot de passe..."
+            required
+            v-model="user.passwordConf"
+          >
+        </div>
+
+        <div v-if="settings.destination === 'login'">
+          <label for="bio">Biographie</label>
+          <textarea
+            id="bio"
+            name="bio"
+            placeholder="Ma biographie..."
+            cols="10"
+            rows="10"
+            v-model="user.bio"
+          ></textarea>
+        </div>
+
+        <div class="form-btn">
+          <BaseButton>{{ settings.title }}</BaseButton>
+        </div>
+      </form>
+    </div>
+    <p>
+      {{ settings.question }} ?
+      <router-link
+        :to="'/' + settings.destination"
+        class="option">{{ settings.option }}
+      </router-link>
+      !
+    </p>
+  </div>
+</template>
+
 
 <style scoped lang="scss">
 .form {

@@ -1,28 +1,12 @@
-<template>
-  <div class="home">
-    <div class="top-content">
-      <Header />
-      <div class="content">
-        <Search :items="allUsers" />
-        <UserCard v-for="user in allUsers" :key="user.id" :user="user"/>
-      </div>
-    </div>
-    <Footer />
-  </div>
-</template>
-
 <script>
 import { mapGetters, mapActions } from "vuex";
-import Header from "@/components/Header.vue";
-import Footer from "@/components/Footer.vue";
-import UserCard from "@/components/UserCard.vue";
-import Search from "@/components/Search.vue";
-
+import BaseCardUser from "@/components/BaseCardUser.vue";
+import BaseSearch from "@/components/BaseSearch.vue";
 export default {
   name: "Users",
 
-  components: { Header, Footer, UserCard, Search },
-  
+  components: { BaseCardUser, BaseSearch },
+
   computed: mapGetters(['allUsers']),
 
   created() {
@@ -33,6 +17,19 @@ export default {
   methods: mapActions(["fetch"]),
 };
 </script>
+
+
+<template>
+  <div class="home">
+    <BaseSearch :items="allUsers" />
+    <BaseCardUser
+      v-for="user in allUsers"
+      :key="user.id"
+      :user="user"
+    />
+  </div>
+</template>
+
 
 <style scope lang="scss">
 .home {

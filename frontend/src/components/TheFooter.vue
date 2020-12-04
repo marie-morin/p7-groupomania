@@ -1,3 +1,10 @@
+<script>
+export default { 
+  name: "TheFooter"
+};
+</script>
+
+
 <template>
   <div class="footer">
     <div class="inner">
@@ -6,11 +13,6 @@
   </div>
 </template>
 
-<script>
-export default { 
-  name: "Footer"
-};
-</script>
 
 <style scoped lang="scss">
 .footer {

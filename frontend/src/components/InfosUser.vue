@@ -1,3 +1,20 @@
+<script>
+export default {
+  name: "InfosUser",
+  props: {
+    user: {
+      type: Object,
+      requiered: true,
+    },
+    isOwner: {
+      type: Boolean,
+      requiered: true,
+    }
+  }
+};
+</script>
+
+
 <template>
   <div class="page-content">
     <div class="infos-container">
@@ -20,23 +37,6 @@
   </div>
 </template>
 
-
-<script>
-export default {
-  name: "UserInfos",
-
-  props: {
-    user: {
-      type: Object,
-      requiered: true,
-    },
-    isOwner: {
-      type: Boolean,
-      requiered: true,
-    }
-  }
-};
-</script>
 
 <style scope lang="scss">
 h1 {

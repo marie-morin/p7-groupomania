@@ -1,26 +1,8 @@
-<template>
-  <div class="signup">
-    <div class="top-content">
-      <Header />
-      <div class="content">
-        <SignForm :settings="settings" :user="user" />
-      </div>
-    </div>
-    <Footer />
-  </div>
-</template>
-
 <script>
-
-import Header from "@/components/Header.vue";
-import Footer from "@/components/Footer.vue";
-import SignForm from "@/components/SignForm.vue";
-
+import FormRegister from "@/components/FormRegister.vue";
 export default {
   name: "Signup",
-
-  components: { Header, Footer, SignForm },
-
+  components: { FormRegister },
   data() {
     return {
       user: { email: "", firstname: "", lastname: "", password: "", passwordConf: "", bio: "" },
@@ -35,6 +17,17 @@ export default {
   },
 };
 </script>
+
+
+<template>
+  <div class="signup">
+    <FormRegister 
+      :settings="settings"
+      :user="user"
+    />
+  </div>
+</template>
+
 
 <style scoped lang="scss">
 .signup {
