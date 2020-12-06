@@ -1,10 +1,12 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import BaseComment from "@/components/BaseComment.vue";
+import BaseLike from "@/components/BaseLike.vue";
+
 export default {
   name: "BasePost",
 
-  components: { BaseComment },
+  components: { BaseComment, BaseLike },
 
   props: {
     post: {
@@ -17,7 +19,6 @@ export default {
     return {
       displayComments: false,
       editing : false,
-      wasLiked: false,
       newComment: "",
       updatedPost: {
         title: this.post.title,
@@ -50,19 +51,10 @@ export default {
   created() {
     const commentOptions = { url: process.env.VUE_APP_LOCALHOST_URL + `comments/from/${this.post.id}`, mutation: "setComments" };
     this.fetch(commentOptions);
-
-    const likesOptions = { url: process.env.VUE_APP_LOCALHOST_URL + `posts/${this.post.id}/like`, mutation: "setPostLikes" };
-    this.fetch(likesOptions).then(() => {
-      this.post.likes.forEach(like => {
-        if (like.UserId === this.currentUser.id) {
-          return this.wasLiked = true;
-        }
-      })
-    });
   },
 
   methods: {
-    ...mapActions(['fetch', 'add', 'update','rate']),
+    ...mapActions(['fetch', 'add', 'update']),
 
     deletePost(id)  {
       const contexte = {
@@ -121,17 +113,6 @@ export default {
       this.update(options);   
       this.editing = false;
     },
-
-    like() {   
-      const options = {
-        url: process.env.VUE_APP_LOCALHOST_URL + `posts/like`,
-        mutation: "ratePost",
-        id: this.post.id,
-        user: this.currentUser.id
-      };
-      this.rate(options);
-      this.wasLiked = !this.wasLiked;
-    },
   }
 };
 </script>
@@ -139,17 +120,11 @@ export default {
 
 <template>
   <div class="post-unit">
-
-    <div class="post-likes">
-      <p class="likes">{{ post.likes.length }}</p>
-
-      <font-awesome-icon
-        icon="arrow-up"
-        @click="like()"
-        :class="{ liked: wasLiked }"
-        class="icon up"
-      />
-    </div>
+    <BaseLike
+      :item="post"
+      url-endpoint="posts"
+      mutation="ratePost"
+    />
 
     <div class="post-content">
       <p class="meta">
@@ -244,15 +219,6 @@ export default {
     text-align: left;
   }
 
-  &-likes {
-    width: 40px;
-    min-height: 100%;
-    margin: 0;
-    padding: 0;
-    background-color: $groupomania-back-grey;
-    @include flexbox(center, column, center);
-  }
-
   &-content {
     width: 100%;
     padding: 5px;
@@ -265,31 +231,6 @@ export default {
     p {
       margin: 0 0 0 5px;
     }
-  }
-
-  .icon {
-    color: $groupomania-police;
-    font-size: 20px;
-    margin: 0;
-    &.up {
-      &:hover {
-        color: green;
-      }
-    }
-    &.down {
-      &:hover {
-        color: red;
-      }
-    }
-    &.comment {
-      color: $groupomania-light-grey;
-    }
-  }
-
-  .likes {
-    margin: 5px 0;
-    font-weight: bold;
-    color: $groupomania-police;
   }
 
   .meta {
@@ -309,9 +250,5 @@ export default {
     font-size: 20px;
     margin: 5px 0;
   }
-}
-
-.liked {
-  background-color: green;
 }
 </style>

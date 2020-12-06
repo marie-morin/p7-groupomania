@@ -31,26 +31,21 @@ export default {
           this.update(this.popup.options);  
           notifyContexte.message =  "Le compte à été modifié !";
           break;
-
         case 'updatePassword':
           this.update(this.popup.options);  
           notifyContexte.message =  "Le mot de passe a été modifié !";
           break;
-
         case 'deletePost':
           this.delete(this.popup.options);
           notifyContexte.message =  "Votre post à été supprimé !";
           break;
-
         case 'deleteComment':
           this.delete(this.popup.options);
           notifyContexte.message =  "Votre commentaire à été supprimé !";  
           break;
-
         case 'deleteProfil':
           this.delete(this.popup.options);
           notifyContexte.message =  "Le compte à été supprimé !";
-
           if (this.currentUser.isAdmin) {
             this.$router.push({ name: 'Home' });
           } else {
@@ -58,7 +53,6 @@ export default {
             this.$router.push({ name: 'Landing' });
           }
           break;
-
         default:
           console.log(`Error`);
       }
@@ -76,9 +70,7 @@ export default {
     <p v-if="popup.intention == 'notification'">
       Notification d'action
     </p>
-    <p v-else>
-      Nécessité de confirmation
-    </p>
+    <p v-else>Nécessité de confirmation</p>
 
     <button @click="hidePopup">
       Fermer
@@ -86,17 +78,11 @@ export default {
 
     <p>{{ popup.message }}</p>
 
-    <button
-      v-if="popup.intention == 'confirmation'"
-      @click="confirm()"
-    >
+    <button v-if="popup.intention == 'confirmation'" @click="confirm()">
       Oui
     </button>
 
-    <button
-      v-if="popup.intention == 'confirmation'"
-      @click="hidePopup()"
-    >
+    <button v-if="popup.intention == 'confirmation'" @click="hidePopup()" >
       Annuler
     </button>
   </div>

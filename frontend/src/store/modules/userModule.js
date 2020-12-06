@@ -14,21 +14,6 @@ const getters = {
 };
 
 const actions = {
-  // async registerUser({ dispatch }, { url, user }) {
-  //   try {
-  //     const response = await axios.post(url, {
-  //       method: "POST",
-  //       data: JSON.stringify(user),
-  //     });
-  //     console.log("response.status : ", response.status);
-  //     localStorage.setItem("jwt", response.data.token);
-  //     localStorage.setItem("jwtCreation", Date.now());
-  //     dispatch("getUserInfos", response.data.token);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // },
-
   registerUser({ dispatch, commit }, { url, user }) {
     axios
       .post(url, {

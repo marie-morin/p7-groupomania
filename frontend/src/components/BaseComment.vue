@@ -1,8 +1,11 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import BaseLike from "@/components/BaseLike.vue";
 
 export default {
   name: "BaseComment",
+
+  components: { BaseLike },
 
   props: {
     comment: {
@@ -15,7 +18,6 @@ export default {
     return {
       updatedComment: "",
       editing : false,
-      wasLiked: false,
     };
   },
 
@@ -39,19 +41,9 @@ export default {
     }
   },
 
-  created() {
-    const likesOptions = { url: process.env.VUE_APP_LOCALHOST_URL + `comments/${this.comment.id}/like`, mutation: "setCommentLikes" };
-    this.fetch(likesOptions).then(() => {
-      this.comment.likes.forEach(like => {
-        if (like.UserId === this.currentUser.id) {
-          return this.wasLiked = true;
-        }
-      });
-    });    
-  },
 
   methods: {
-    ...mapActions(['fetch', 'add', 'update', 'rate']),
+    ...mapActions(['fetch', 'add', 'update']),
 
     deleteComment(id) {
       const contexte = {
@@ -86,28 +78,6 @@ export default {
       }
       this.update(options);      
       this.updatedComment = "";
-
-      // const contexte = { message: "Votre commentaire à été modifié !", intention: "notification" };
-      // this.$store.commit('displayPopup', contexte);
-    },
-
-    like() {   
-      const options = {
-        url: process.env.VUE_APP_LOCALHOST_URL + `comments/like`,
-        mutation: "rateComment",
-        id: this.comment.id,
-        user: this.currentUser.id
-      };
-      this.rate(options);
-      this.wasLiked = !this.wasLiked;
-
-      // let contexte;
-      // if (this.wasLiked) {
-      //   contexte = { message: "Vous avez liker un commentaire !", intention: "notification" };
-      // } else {
-      //   contexte = { message: "Vous avez retiré votre like !", intention: "notification" };
-      // }
-      // this.$store.commit('displayPopup', contexte);
     },
   },
 };
@@ -117,15 +87,12 @@ export default {
 
 <template>
   <div class="comment-unit">
-    <div class="comment-likes">
-      <p class="likes">{{ comment.likes.length }}</p>
-      <font-awesome-icon
-        :class="{ liked: wasLiked }"
-        @click="like()"
-        icon="arrow-up"
-        class="icon up"
-      />
-    </div>
+
+    <BaseLike
+      :item="comment"
+      url-endpoint="comments"
+      mutation="rateComment"
+    />
 
       {{ comment.content }} par {{ comment.User.username }}, {{ wasPublished }}. <br/>
 
@@ -158,38 +125,38 @@ export default {
 
 
 <style scope lang="scss">
-.comment-unit {
-  border: 1px solid black;
-  margin: 10px 0 10px 10px;
-  background-color: darkgray;
-}
+// .comment-unit {
+//   border: 1px solid black;
+//   margin: 10px 0 10px 10px;
+//   background-color: darkgray;
+// }
 
-.comment-likes {
-  width: 40px;
-    min-height: 100%;
-    margin: 0;
-    padding: 0;
-    background-color: $groupomania-back-grey;
-    @include flexbox(center, column, center);
-}
+// .comment-likes {
+//   width: 40px;
+//     min-height: 100%;
+//     margin: 0;
+//     padding: 0;
+//     background-color: $groupomania-back-grey;
+//     @include flexbox(center, column, center);
+// }
 
- .likes {
-    margin: 5px 0;
-    font-weight: bold;
-    color: $groupomania-police;
-  }
+//  .likes {
+//     margin: 5px 0;
+//     font-weight: bold;
+//     color: $groupomania-police;
+//   }
 
-  .liked {
-  background-color: green;
-}
+//   .liked {
+//   background-color: green;
+// }
 
-.icon {
-  color: $groupomania-police;
-  font-size: 20px;
-  margin: 0;
+// .icon {
+//   color: $groupomania-police;
+//   font-size: 20px;
+//   margin: 0;
 
-  &:hover {
-    color: green;
-  }
-}
+//   &:hover {
+//     color: green;
+//   }
+// }
 </style>
