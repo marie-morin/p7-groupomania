@@ -60,14 +60,7 @@ export default {
       console.log("id : ", id);
 
       console.log("this.post.imageUrl : ", this.post.imageUrl);
-
-      // cloudinary.uploader.destroy('zombie', function(result) { console.log(result) });
-
-      // result = Cloudinary::Uploader.destroy(public_id, options = {})
-
-
-
-
+      
       // const contexte = {
       //   origin: "deletePost",
       //   intention: "confirmation",
@@ -131,6 +124,7 @@ export default {
 
 <template>
   <div class="post-unit">
+    
     <BaseLike
       :item="post"
       url-endpoint="posts"
