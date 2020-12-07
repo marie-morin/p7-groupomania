@@ -37,10 +37,10 @@ export default {
   @include flexbox(space-between, column, center);
   color: black;
 }
-.top-content {
-  width: 100vw;
-  height: 100%;
-}
+// .top-content {
+//   width: 100vw;
+//   height: 100%;
+// }
 .content {
   width: 100vw;
   min-height: 80vh;

@@ -4,6 +4,7 @@ import InfosUser from "@/components/InfosUser.vue";
 import FormProfilUpdate from "@/components/FormProfilUpdate.vue";
 import BasePost from "@/components/BasePost.vue";
 import BaseButton from "@/components/BaseButton";
+
 export default {
   name: "Profil",
 
@@ -15,6 +16,7 @@ export default {
       isAdmin: false,
       profilFormDisplayed: false,
       passwordFormDisplayed: false,
+      
       updatedPassword: {
         initialMdp: "",
         newMdp: "",
@@ -45,6 +47,7 @@ export default {
   },
 
   created() {
+
     // Chargement de tous les posts
     const postsOptions = { url: process.env.VUE_APP_LOCALHOST_URL + "posts", mutation: "setPosts" };
     this.fetch(postsOptions);

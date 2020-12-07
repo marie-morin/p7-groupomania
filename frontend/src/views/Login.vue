@@ -36,10 +36,10 @@ export default {
   min-height: 100vh;
   @include flexbox(space-between, column, center);
 }
-.top-content {
-  width: 100vw;
-  height: 100%;
-}
+// .top-content {
+//   width: 100vw;
+//   height: 100%;
+// }
 .content {
   width: 100vw;
   min-height: 80vh;

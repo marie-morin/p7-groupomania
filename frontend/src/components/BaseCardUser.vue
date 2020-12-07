@@ -27,12 +27,12 @@ p {
   margin-top: 5px;
 }
 .infos {
-  width: 100%;
+  // width: 100%;
   margin: 0 auto;
   background-color: $groupomania-back-grey;
 
   &-container {
-    width: 40%;
+    // width: 40%;
     margin: 20px auto;
     padding: 10px;
     background-color: $groupomania-back-grey;

@@ -31,6 +31,10 @@ export default {
           this.update(this.popup.options);  
           notifyContexte.message =  "Le compte à été modifié !";
           break;
+        case 'updateProfilPicture':
+          this.update(this.popup.options);  
+          notifyContexte.message =  "Le compte à été modifié !";
+          break;
         case 'updatePassword':
           this.update(this.popup.options);  
           notifyContexte.message =  "Le mot de passe a été modifié !";

@@ -57,17 +57,28 @@ export default {
     ...mapActions(['fetch', 'add', 'update']),
 
     deletePost(id)  {
-      const contexte = {
-        origin: "deletePost",
-        intention: "confirmation",
-        message: "Etes-vous sur de vouloir supprimer votre publication ?",
-        options: {
-          url: process.env.VUE_APP_LOCALHOST_URL + `posts/${id}`,
-          mutation: "removePost",
-          id: id,
-        },
-      };
-      this.$store.commit("displayPopup", contexte);
+      console.log("id : ", id);
+
+      console.log("this.post.imageUrl : ", this.post.imageUrl);
+
+      // cloudinary.uploader.destroy('zombie', function(result) { console.log(result) });
+
+      // result = Cloudinary::Uploader.destroy(public_id, options = {})
+
+
+
+
+      // const contexte = {
+      //   origin: "deletePost",
+      //   intention: "confirmation",
+      //   message: "Etes-vous sur de vouloir supprimer votre publication ?",
+      //   options: {
+      //     url: process.env.VUE_APP_LOCALHOST_URL + `posts/${id}`,
+      //     mutation: "removePost",
+      //     id: id,
+      //   },
+      // };
+      // this.$store.commit("displayPopup", contexte);
     },
 
     displayComment() { this.displayComments = !this.displayComments },
@@ -215,7 +226,7 @@ export default {
 .post {
 
   &-unit{
-    width: 100%;
+    // width: 100%;
     height: 100%;
     padding: 0;
     @include flexbox(flex-start, row, stretch);
@@ -227,7 +238,7 @@ export default {
   }
 
   &-content {
-    width: 100%;
+    // width: 100%;
     padding: 5px;
   }
 

@@ -79,7 +79,7 @@ export default {
 .post {
 
   &-likes {
-    width: 40px;
+    // width: 40px;
     min-height: 100%;
     margin: 0;
     padding: 0;

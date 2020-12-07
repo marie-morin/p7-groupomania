@@ -1,16 +1,26 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import BaseButton from "@/components/BaseButton";
+
+
 export default {
   name: "FormProfilUpdate",
 
   components: { BaseButton },
 
+  data() {
+    return {
+      isOwner: false,
+      isAdmin: false,
+      profilFormDisplayed: false,
+      passwordFormDisplayed: false,
+    };
+  },
 
   computed: { 
     ...mapGetters(['currentUser']),
 
-    user() { return {...this.currentUser}; }
+    user() { return { ...this.currentUser } }
   },
 
   methods: {
@@ -25,7 +35,7 @@ export default {
         this.$store.commit("displayPopup", contexte);
         return;
       }
-
+      
       const contexte = {
         origin: "updateUser",
         intention: "confirmation",

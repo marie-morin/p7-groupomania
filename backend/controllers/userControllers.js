@@ -138,7 +138,7 @@ exports.getOneUser = (req, res) => {
 
 // Update user acount
 exports.updateUser = (req, res, next) => {
-  console.log("------------ modifyUser");
+  console.log("------------ updateUser");
 
   const data = JSON.parse(req.body.data);
 
@@ -168,6 +168,45 @@ exports.updateUser = (req, res, next) => {
               firstname: data.firstname,
               lastname: data.lastname,
               username: newUsername,
+              updatedAt: new Date(),
+            },
+            { where: { id: user.id } }
+          )
+            .then(() => {
+              models.User.findOne({ where: { id: userId } })
+                .then((user) => res.status(200).json(user))
+                .catch((error) => res.status(404).json(error));
+            })
+            .catch((error) => res.status(501).json(error));
+        } else {
+          res.status(403).json({ message: "Action non autorisée." });
+        }
+      })
+      .catch((error) => res.status(500).json(error));
+  }
+};
+
+// Update user profil picture
+exports.updateProfilPicture = (req, res, next) => {
+  console.log("------------ updateProfilPicture");
+
+  console.log("req.body.data : ", req.body.data);
+  console.log("req.body.data PARSE: ", JSON.parse(req.body.data));
+
+  const data = JSON.parse(req.body.data);
+
+  if (!data || !req.headers.authorization) {
+    res.status(400).json({ message: "Requête erronée." });
+  } else {
+    const token = jwt.getUserId(req.headers.authorization);
+    const userId = token.userId;
+
+    models.User.findOne({ where: { id: userId } })
+      .then((user) => {
+        if (user.id === userId) {
+          models.User.update(
+            {
+              imageUrl: data,
               updatedAt: new Date(),
             },
             { where: { id: user.id } }
