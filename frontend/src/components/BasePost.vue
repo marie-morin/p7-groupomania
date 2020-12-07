@@ -131,6 +131,11 @@ export default {
         <router-link :to="{ name: 'Profil', params: { id: post.UserId }}">{{ post.User.username }}</router-link>, {{ wasPublished }}.
       </p>
       <p class="title">{{ post.title }}</p>
+
+      <div v-if="post.imageUrl" class="image">
+        <img :src="post.imageUrl" :alt="post.title" class="image">
+      </div>
+      
       <p class="text">{{ post.content }}</p>
 
       <div v-if="editing">
@@ -199,7 +204,9 @@ export default {
         Modifier votre post
       </button>
 
+      
     </div>
+
   </div>
 </template>
 
@@ -250,5 +257,10 @@ export default {
     font-size: 20px;
     margin: 5px 0;
   }
+}
+
+.image{
+  max-width: 200px;
+  height: 200px;
 }
 </style>

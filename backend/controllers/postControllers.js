@@ -8,11 +8,14 @@ const regex = /^[A-Za-z\d\s.,;:!?"()/%-_']*$/;
 exports.addPost = (req, res) => {
   console.log("------------- addPost");
 
+  console.log("req.body.data : ", req.body.data);
+
   const data = JSON.parse(req.body.data);
   if (
     !data ||
     !data.title ||
     !data.content ||
+    !data.imageUrl ||
     !req.headers.authorization ||
     !regex.test(data.title) ||
     !regex.test(data.content)
@@ -25,6 +28,7 @@ exports.addPost = (req, res) => {
     models.Post.create({
       content: data.content,
       title: data.title,
+      imageUrl: data.imageUrl,
       UserId: userId,
     })
       .then((post) => {
