@@ -49,53 +49,6 @@ export default {
   methods: {
     ...mapActions(["add"]),
 
-    selectFile(event) {
-      this.imagePreview = URL.createObjectURL(event.target.files[0]);
-
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        this.file = e.target.result;
-      }
-      reader.readAsDataURL(event.target.files[0]);
-    },
-
-    upload() {
-      this.formData = new FormData();
-      this.formData.append("upload_preset", process.env.VUE_APP_CLOUDINARY_PRESET);
-      this.formData.append("file", this.file);
-
-      let requestObj = {
-        url: process.env.VUE_APP_CLOUDINARY_UPLOAD_URL,
-        method: "POST",
-        data: this.formData,
-        onUploadProgress: function(progressEvent) {
-          this.uploadProgress = Math.round(
-            (progressEvent.loaded * 100.0) / progressEvent.total
-          );
-        }.bind(this)
-      };
-      this.showProgressBar = true;
-
-      axios(requestObj)
-        .then(response => {
-          if (response.data.secure_url) {
-            this.newPost.imageUrl = response.data.secure_url;
-            this.addPost();
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        })
-        .finally(() => {
-          setTimeout(
-            function() {
-              this.showProgressBar = false;
-            }.bind(this),
-            1000
-          );
-        });
-    },
-
     addPost() {
       if (this.newPost.title == "" || this.newPost.content == "") {
         const contexte = {
@@ -150,18 +103,9 @@ export default {
         v-model="newPost.content"
       />
 
-      <input
-        type="file"
-        id="file-input"
-        accept="image/png, image/jpg, image/jpeg, image/gif"
-        @change="selectFile($event)"
-      />
+      
 
-      <section v-show="imagePreview">
-        <img :src="imagePreview" class="image"/>
-      </section>
-
-      <button type="submit">Upload</button>
+      <button type="submit">Publier</button>
 
       <!-- <div class="btn">
         <BaseButton>Publier</BaseButton>
