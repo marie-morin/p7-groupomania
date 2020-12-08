@@ -1,13 +1,13 @@
 <script>
 import { mapActions } from 'vuex';
-import axios from "axios";
-import ProgressBar from "vuejs-progress-bar";
+// import axios from "axios";
+// import ProgressBar from "vuejs-progress-bar";
 import BaseButton from "@/components/BaseButton";
 
 export default {
   name: "InfosUser",
 
-  components: { ProgressBar, BaseButton },
+  components: { BaseButton },
 
   props: {
     user: {
@@ -20,37 +20,37 @@ export default {
     }
   },
 
-  data() {
-    const progressBarOptions = {
-      text: {
-        shadowColor: "black",
-        fontSize: 14,
-        fontFamily: "Helvetica",
-        dynamicPosition: true
-      },
-      progress: {
-        color: "#E8C401",
-        backgroundColor: "#000000"
-      },
-      layout: {
-        height: 35,
-        width: 140,
-        type: "line",
-        progressPadding: 0,
-        verticalTextAlign: 63
-      }
-    };
+  // data() {
+  //   // const progressBarOptions = {
+  //   //   text: {
+  //   //     shadowColor: "black",
+  //   //     fontSize: 14,
+  //   //     fontFamily: "Helvetica",
+  //   //     dynamicPosition: true
+  //   //   },
+  //   //   progress: {
+  //   //     color: "#E8C401",
+  //   //     backgroundColor: "#000000"
+  //   //   },
+  //   //   layout: {
+  //   //     height: 35,
+  //   //     width: 140,
+  //   //     type: "line",
+  //   //     progressPadding: 0,
+  //   //     verticalTextAlign: 63
+  //   //   }
+  //   // };
 
-    return {
-      imageUrl: null,
-      file: null,
-      imagePreview: null,
-      formData: null,
-      uploadProgress: 0,
-      showProgressBar: false,
-      progressBarOptions: progressBarOptions,
-    };
-  },
+  //   return {
+  //     imageUrl: null,
+  //     file: null,
+  //     imagePreview: null,
+  //     formData: null,
+  //     uploadProgress: 0,
+  //     showProgressBar: false,
+  //     progressBarOptions: progressBarOptions,
+  //   };
+  // },
 
   created() {
     console.log("this.user : ", this.user);
@@ -59,53 +59,53 @@ export default {
   methods: {
     ...mapActions(['update']),
 
-    selectFile(event) {
-      this.imagePreview = URL.createObjectURL(event.target.files[0]);
+    // selectFile(event) {
+    //   this.imagePreview = URL.createObjectURL(event.target.files[0]);
 
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        this.file = e.target.result;
-      }
-      reader.readAsDataURL(event.target.files[0]);
-    },
+    //   const reader = new FileReader();
+    //   reader.onload = (e) => {
+    //     this.file = e.target.result;
+    //   }
+    //   reader.readAsDataURL(event.target.files[0]);
+    // },
 
-    upload() {
-      this.formData = new FormData();
-      this.formData.append("upload_preset", process.env.VUE_APP_CLOUDINARY_PRESET);
-      this.formData.append("file", this.file);
+    // upload() {
+    //   this.formData = new FormData();
+    //   this.formData.append("upload_preset", process.env.VUE_APP_CLOUDINARY_PRESET);
+    //   this.formData.append("file", this.file);
 
-      let requestObj = {
-        url: process.env.VUE_APP_CLOUDINARY_UPLOAD_URL,
-        method: "POST",
-        data: this.formData,
-        onUploadProgress: function(progressEvent) {
-          this.uploadProgress = Math.round(
-            (progressEvent.loaded * 100.0) / progressEvent.total
-          );
-        }.bind(this)
-      };
-      this.showProgressBar = true;
+    //   let requestObj = {
+    //     url: process.env.VUE_APP_CLOUDINARY_UPLOAD_URL,
+    //     method: "POST",
+    //     data: this.formData,
+    //     onUploadProgress: function(progressEvent) {
+    //       this.uploadProgress = Math.round(
+    //         (progressEvent.loaded * 100.0) / progressEvent.total
+    //       );
+    //     }.bind(this)
+    //   };
+    //   this.showProgressBar = true;
 
-      axios(requestObj)
-        .then(response => {
-          if (response.data.secure_url) {
-            this.imageUrl = response.data.secure_url;
-            this.updateProfilPicture();
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        })
-        .finally(() => {
-          setTimeout(
-            function() {
-              this.showProgressBar = false;
-              this.imagePreview = null;
-            }.bind(this),
-            1000
-          );
-        });
-    },
+    //   axios(requestObj)
+    //     .then(response => {
+    //       if (response.data.secure_url) {
+    //         this.imageUrl = response.data.secure_url;
+    //         this.updateProfilPicture();
+    //       }
+    //     })
+    //     .catch(error => {
+    //       console.log(error);
+    //     })
+    //     .finally(() => {
+    //       setTimeout(
+    //         function() {
+    //           this.showProgressBar = false;
+    //           this.imagePreview = null;
+    //         }.bind(this),
+    //         1000
+    //       );
+    //     });
+    // },
 
     updateProfilPicture() {
       if (this.imageUrl == null) {
@@ -160,13 +160,13 @@ export default {
             @change="selectFile($event)"
           />
 
-          <section v-show="imagePreview">
+          <!-- <section v-show="imagePreview">
             <img :src="imagePreview" class="image"/>
-          </section>
+          </section> -->
 
-          <div v-show="showProgressBar">
+          <!-- <div v-show="showProgressBar">
             <progress-bar :options="progressBarOptions" :value="uploadProgress" />
-          </div>
+          </div> -->
 
           <div class="form-btn">
             <BaseButton>Enregistrer</BaseButton>

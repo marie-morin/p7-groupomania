@@ -1,46 +1,21 @@
 <script>
 import { mapActions } from 'vuex';
-import axios from "axios";
-import ProgressBar from "vuejs-progress-bar";
 import BaseButton from "@/components/BaseButton";
+import axios from "axios";
 
 export default {
   name: "FormPostCreation",
 
-  components: { ProgressBar, BaseButton },
+  components: { BaseButton },
 
   data() {
-    const progressBarOptions = {
-      text: {
-        shadowColor: "black",
-        fontSize: 14,
-        fontFamily: "Helvetica",
-        dynamicPosition: true
-      },
-      progress: {
-        color: "#E8C401",
-        backgroundColor: "#000000"
-      },
-      layout: {
-        height: 35,
-        width: 140,
-        type: "line",
-        progressPadding: 0,
-        verticalTextAlign: 63
-      }
-    };
-
     return {
       file: null,
       imagePreview: null,
-      formData: null,
-      uploadProgress: 0,
-      showProgressBar: false,
-      progressBarOptions: progressBarOptions,
+      progress: 0,
       newPost: {
         title: "",
         content: "",
-        imageUrl: null,
       },
     };
   },
@@ -49,72 +24,83 @@ export default {
     ...mapActions(["add"]),
 
     selectFile(event) {
-      this.imagePreview = URL.createObjectURL(event.target.files[0]);
+      const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
+      this.file = event.target.files[0] || event.dataTransfer.files;
 
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        this.file = e.target.result;
+      // if(!allowedTypes.includes(this.file.type) || this.file.size > 1000000) {
+      if(!allowedTypes.includes(this.file.type)) {
+        const contexte = {
+          intention: "notification",
+          message: "Vous devez selectionner des images (.jpeg, .jpg ou .png) ou des gif (.gif) de moins de 1 Mo !",
+        };
+        this.$store.commit("displayPopup", contexte);
+        this.file = null;
+        return;
+
+      } 
+      else {
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.imagePreview = reader.result;
+        }
+        reader.readAsDataURL(event.target.files[0]);
       }
-      reader.readAsDataURL(event.target.files[0]);
-    },
-
-    upload() {
-      this.formData = new FormData();
-      this.formData.append("upload_preset", process.env.VUE_APP_CLOUDINARY_PRESET);
-      this.formData.append("file", this.file);
-
-      let requestObj = {
-        url: process.env.VUE_APP_CLOUDINARY_UPLOAD_URL,
-        method: "POST",
-        data: this.formData,
-        onUploadProgress: function(progressEvent) {
-          this.uploadProgress = Math.round(
-            (progressEvent.loaded * 100.0) / progressEvent.total
-          );
-        }.bind(this)
-      };
-      this.showProgressBar = true;
-
-      axios(requestObj)
-        .then(response => {
-          if (response.data.secure_url) {
-            this.newPost.imageUrl = response.data.secure_url;
-            this.addPost();
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        })
-        .finally(() => {
-          setTimeout(
-            function() {
-              this.showProgressBar = false;
-            }.bind(this),
-            1000
-          );
-        });
     },
 
     addPost() {
-      if (this.newPost.title == "" || this.newPost.content == "") {
+      let formData = new FormData();
+
+      formData.append('file', this.file);
+      formData.append('content', JSON.stringify(this.newPost));
+
+      if (this.newPost.title == "" || this.newPost.content == "" || formData.get("file") == "null" || formData.get("content") == "null") {
         const contexte = {
           intention: "notification",
-          message: "Vtre publication doit contenir un titre et du contenu !",
+          message: "Vtre publication doit contenir un titre, du contenu et une image !",
         };
         this.$store.commit("displayPopup", contexte);
         return;
-      }
 
-      const options = {
-        url: process.env.VUE_APP_LOCALHOST_URL + "posts/",
-        mutation: "newPost",
-        data: this.newPost,
-      }
+      } else {
+        axios.post( 
+          'http://localhost:3000/api/posts/',
+          formData,
+          { 
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Authorization: "Bearer " + localStorage.getItem("jwt").replace(/['"']+/g, "")
+            }
+          },
+          { onUploadProgress: ProgressEvent => {
+              let progress =
+                Math.round((ProgressEvent.loaded / ProgressEvent.total) * 100)
+                +"%";
+              this.progress = progress;
+            } }
+        )
+          .then((response) => {
+            console.log(response);
 
-      this.add(options);
-      this.newPost.title = "";
-      this.newPost.content = "";
-      this.newPost.file = "";
+            this.$store.commit("newPost", response.data);
+  
+            this.newPost.title = "";
+            this.newPost.content = "";
+            this.file = null,
+            this.imagePreview = "";
+
+            this.$refs.inputFile.value = ''
+
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+      // const options = {
+      //   url: process.env.VUE_APP_LOCALHOST_URL + "posts/",
+      //   mutation: "newPost",
+      //   data: this.newPost,
+      // }
+      // this.add(options);
     },
   },
 };
@@ -123,9 +109,10 @@ export default {
 
 <template>
   <div class="postForm">
-    <form @submit.prevent="upload">
-      <div v-show="showProgressBar">
-        <progress-bar :options="progressBarOptions" :value="uploadProgress" />
+    <form enctype="multipart/form-data" @submit.prevent="addPost">
+      
+      <div class="progess-bar" :style="{'width': progress}">
+        {{progress}}
       </div>
 
       <h2>Partager avec vos collègues :</h2>
@@ -152,6 +139,7 @@ export default {
       <input
         type="file"
         id="file-input"
+        ref="inputFile"
         accept="image/png, image/jpg, image/jpeg, image/gif"
         @change="selectFile($event)"
       />
@@ -159,7 +147,7 @@ export default {
       <section v-show="imagePreview">
         <img :src="imagePreview" class="image"/>
       </section>
-
+      
       <div class="btn">
         <BaseButton>Publier</BaseButton>
       </div>

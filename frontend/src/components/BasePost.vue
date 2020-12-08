@@ -49,6 +49,7 @@ export default {
   },
 
   created() {
+    // console.log("image : ", this.post.imageUrl);
     const commentOptions = { url: process.env.VUE_APP_LOCALHOST_URL + `comments/from/${this.post.id}`, mutation: "setComments" };
     this.fetch(commentOptions);
   },
@@ -56,22 +57,18 @@ export default {
   methods: {
     ...mapActions(['fetch', 'add', 'update']),
 
-    deletePost(id)  {
-      console.log("id : ", id);
-
-      console.log("this.post.imageUrl : ", this.post.imageUrl);
-      
-      // const contexte = {
-      //   origin: "deletePost",
-      //   intention: "confirmation",
-      //   message: "Etes-vous sur de vouloir supprimer votre publication ?",
-      //   options: {
-      //     url: process.env.VUE_APP_LOCALHOST_URL + `posts/${id}`,
-      //     mutation: "removePost",
-      //     id: id,
-      //   },
-      // };
-      // this.$store.commit("displayPopup", contexte);
+    deletePost(id)  {      
+      const contexte = {
+        origin: "deletePost",
+        intention: "confirmation",
+        message: "Etes-vous sur de vouloir supprimer votre publication ?",
+        options: {
+          url: process.env.VUE_APP_LOCALHOST_URL + `posts/${id}`,
+          mutation: "removePost",
+          id: id,
+        },
+      };
+      this.$store.commit("displayPopup", contexte);
     },
 
     displayComment() { this.displayComments = !this.displayComments },

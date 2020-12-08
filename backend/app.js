@@ -52,6 +52,7 @@ app.use(hpp()); // HPP middleware to protect against HTTP parameter pollution at
 app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/comments", commentRoutes);
+app.use("/images", express.static(path.join(__dirname, "images")));
 
 // Exporting module
 module.exports = app;

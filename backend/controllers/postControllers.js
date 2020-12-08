@@ -6,16 +6,29 @@ const regex = /^[A-Za-z\d\s.,;:!?"()/%-_']*$/;
 
 //Création d'un message
 exports.addPost = (req, res) => {
+  console.log("-------------");
+  console.log("-------------");
+  console.log("-------------");
   console.log("------------- addPost");
 
-  console.log("req.body.data : ", req.body.data);
+  console.log("req.body.content : ", JSON.parse(req.body.content)); // {}
+  console.log("req.file : ", req.file); // undefined
 
-  const data = JSON.parse(req.body.data);
+  console.log("req.protocol : ", req.protocol); // http
+  console.log("req.get(host) : ", req.get("host")); // localhost:3000
+  console.log("req.file.filename : ", req.file.filename); // localhost:3000
+  console.log(
+    "nom : ",
+    `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
+  ); // localhost:3000
+
+  const data = JSON.parse(req.body.content);
+  const image = req.file;
   if (
     !data ||
     !data.title ||
     !data.content ||
-    !data.imageUrl ||
+    !image ||
     !req.headers.authorization ||
     !regex.test(data.title) ||
     !regex.test(data.content)
@@ -28,7 +41,9 @@ exports.addPost = (req, res) => {
     models.Post.create({
       content: data.content,
       title: data.title,
-      imageUrl: data.imageUrl,
+      imageUrl: `${req.protocol}://${req.get("host")}/images/${
+        req.file.filename
+      }`,
       UserId: userId,
     })
       .then((post) => {
@@ -111,7 +126,7 @@ exports.deletePost = (req, res) => {
   console.log("--------- deletePost");
 
   if (!req.params.id || !req.headers.authorization) {
-    res.status(400).json({ message: "Requête erronée." });
+    res.status(400).json({ message: "Requête incomplète." });
   } else {
     const token = jwt.getUserId(req.headers.authorization);
     const userId = token.userId;
@@ -120,56 +135,34 @@ exports.deletePost = (req, res) => {
     models.Post.findOne({ where: { id: req.params.id } })
       .then((post) => {
         if (post.userId == userId || isAdmin) {
-          models.Post.destroy({ where: { id: post.id } })
-            .then(() => res.status(204).json({ message: "Elément supprimé." }))
-            .catch((error) => res.status(501).json(error));
+          if (post.imageUrl) {
+            const filename = post.imageUrl.split("/images/")[1];
+            console.log(filename);
+            fs.unlink(`images/${filename}`, () => {
+              models.Post.destroy({
+                where: { id: req.params.id },
+              })
+                .then(() =>
+                  res.status(200).json({ message: "Le post a été supprimé !" })
+                )
+                .catch((err) => res.status(500).json(err));
+            });
+          } else {
+            models.Post.destroy({ where: { id: req.params.id } })
+              .then(() =>
+                res.status(200).json({ message: "Elément supprimé." })
+              )
+              .catch((err) => res.status(500).json(err));
+          }
         } else {
           res.status(403).json({ message: "Action non autorisée." });
         }
       })
-      .catch((error) => res.status(500).json(error));
+      .catch((err) => res.status(500).json(err));
   }
 };
-// exports.deletePost = (req, res) => {
-//   console.log("--------- deletePost");
-
-//   if (!req.params.id || !req.headers.authorization) {
-//     res.status(400).json({ message: "Requête incomplète." });
-//   } else {
-//     const token = jwt.getUserId(req.headers.authorization);
-//     const userId = token.userId;
-//     const isAdmin = token.isAdmin;
-
-//     models.Post.findOne({ where: { id: req.params.id } })
-//       .then((post) => {
-//         if (post.userId == userId || isAdmin) {
-//           // if (post.imageUrl) {
-//           //   const filename = post.imageUrl.split("/images/")[1];
-//           //   console.log(filename);
-//           //   fs.unlink(`images/${filename}`, () => {
-//           //     models.Post.destroy({
-//           //       where: { id: req.params.id },
-//           //     })
-//           //       .then(() =>
-//           //         res.status(200).json({ message: "Le post a été supprimé !" })
-//           //       )
-//           //       .catch((err) => res.status(500).json(err));
-//           //   });
-//           // } else {
-//           models.Post.destroy({ where: { id: req.params.id } })
-//             .then(() => res.status(200).json({ message: "Elément supprimé." }))
-//             .catch((err) => res.status(500).json(err));
-//           // }
-//         } else {
-//           res.status(403).json({ message: "Action non autorisée." });
-//         }
-//       })
-//       .catch((err) => res.status(500).json(err));
-//   }
-// };
 
 // Like a post
-
 exports.like = (req, res, next) => {
   console.log("----------- giveOpinion on post");
 
