@@ -56,7 +56,7 @@ export default {
       if (this.newPost.title == "" || this.newPost.content == "" || formData.get("file") == "null" || formData.get("content") == "null") {
         const contexte = {
           intention: "notification",
-          message: "Vtre publication doit contenir un titre, du contenu et une image !",
+          message: "Votre publication doit contenir un titre, du contenu et une image !",
         };
         this.$store.commit("displayPopup", contexte);
         return;

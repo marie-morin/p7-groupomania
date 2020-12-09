@@ -2,6 +2,7 @@
 import { mapGetters, mapActions } from 'vuex';
 import BaseComment from "@/components/BaseComment.vue";
 import BaseLike from "@/components/BaseLike.vue";
+import axios from "axios";
 
 export default {
   name: "BasePost",
@@ -20,9 +21,12 @@ export default {
       displayComments: false,
       editing : false,
       newComment: "",
+      imagePreview: null,
+      file: null,
       updatedPost: {
         title: this.post.title,
         content: this.post.content,
+        imageUrl: this.post.imageUrl,
         id: this.post.id
       },
     };
@@ -49,7 +53,7 @@ export default {
   },
 
   created() {
-    // console.log("image : ", this.post.imageUrl);
+    // console.log("this.post : ", this.post);
     const commentOptions = { url: process.env.VUE_APP_LOCALHOST_URL + `comments/from/${this.post.id}`, mutation: "setComments" };
     this.fetch(commentOptions);
   },
@@ -95,6 +99,30 @@ export default {
       this.newComment = "";
     },
 
+    selectFile(event) {
+      const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
+      this.file = event.target.files[0] || event.dataTransfer.files;
+
+      // if(!allowedTypes.includes(this.file.type) || this.file.size > 1000000) {
+      if(!allowedTypes.includes(this.file.type)) {
+        const contexte = {
+          intention: "notification",
+          message: "Vous devez selectionner des images (.jpeg, .jpg ou .png) ou des gif (.gif) de moins de 1 Mo !",
+        };
+        this.$store.commit("displayPopup", contexte);
+        this.file = null;
+        return;
+
+      } 
+      else {
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.imagePreview = reader.result;
+        }
+        reader.readAsDataURL(event.target.files[0]);
+      }
+    },
+
     updatePost() {
       if (this.updatedPost.title == "" || this.updatedPost.content == "") {
         const contexte = {
@@ -104,14 +132,55 @@ export default {
         this.$store.commit("displayPopup", contexte);
         return;
       }
-      console.log("pass");
+      // console.log("pass");
 
-      const options = {
-        url: process.env.VUE_APP_LOCALHOST_URL + `posts/${this.updatedPost.id}`,
-        mutation: "updatePost",
-        data: this.updatedPost,
+      if (this.file != null) {
+        console.log("il y a un file");
+
+        let formData = new FormData();
+        formData.append('file', this.file);
+        formData.append('content', JSON.stringify(this.updatedPost));
+
+        axios.put( 
+          process.env.VUE_APP_LOCALHOST_URL + `posts/${this.updatedPost.id}`,
+          formData,
+          { 
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Authorization: "Bearer " + localStorage.getItem("jwt").replace(/['"']+/g, "")
+            }
+          },
+          { onUploadProgress: ProgressEvent => {
+              let progress =
+                Math.round((ProgressEvent.loaded / ProgressEvent.total) * 100)
+                +"%";
+              this.progress = progress;
+            } }
+        )
+          .then((response) => {
+            // console.log(response.data);
+
+            this.$store.commit("updatePost", response.data);
+  
+            this.updatedPost.title = "";
+            this.updatedPost.content = "";
+            this.file = null,
+            this.imagePreview = "";
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+
+      } else {
+        // console.log("il y a pas de file");
+        const options = {
+          url: process.env.VUE_APP_LOCALHOST_URL + `posts/${this.updatedPost.id}`,
+          mutation: "updatePost",
+          data: this.updatedPost,
+        }
+        this.update(options);   
       }
-      this.update(options);   
+
       this.editing = false;
     },
   }
@@ -159,6 +228,19 @@ export default {
           v-model="updatedPost.content"
           @keyup.enter="updatePost()"
         />
+
+        <label for="file-input">Nouvelle image</label>
+        <input
+          type="file"
+          id="file-input"
+          ref="inputFile"
+          accept="image/png, image/jpg, image/jpeg, image/gif"
+          @change="selectFile($event)"
+        />
+
+        <section v-show="imagePreview">
+          <img :src="imagePreview" class="image"/>
+        </section>
 
         <button @click="updatePost()">Valider la modification</button>
         <button @click="editPost()">Annuler</button>

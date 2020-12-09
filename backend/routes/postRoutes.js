@@ -9,12 +9,10 @@ const multer = require("../middleware/multer-config");
 
 // Create a post
 router.post("/", auth, multer, postCtrl.addPost);
-// router.post("/", auth, postCtrl.addPost);
 // Get all posts
 router.get("/", auth, postCtrl.getAllPosts);
 // Update a post
-router.put("/:id", auth, postCtrl.modifyPost);
-// router.put("/:id", auth, multer, postCtrl.modifyPost);
+router.put("/:id", auth, multer, postCtrl.modifyPost);
 // Delete a post
 router.delete("/:id", auth, postCtrl.deletePost);
 // Like a post

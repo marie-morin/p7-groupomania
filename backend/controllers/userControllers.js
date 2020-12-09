@@ -1,6 +1,7 @@
 // Import
 const models = require("../models");
 const jwt = require("../utils/jwtValidator");
+const fs = require("fs");
 
 // Security imports
 const bcrypt = require("bcrypt");
@@ -188,14 +189,24 @@ exports.updateUser = (req, res, next) => {
 
 // Update user profil picture
 exports.updateProfilPicture = (req, res, next) => {
+  console.log("------------ ");
+  console.log("------------ ");
+  console.log("------------ ");
+  console.log("------------ ");
   console.log("------------ updateProfilPicture");
 
-  console.log("req.body.data : ", req.body.data);
-  console.log("req.body.data PARSE: ", JSON.parse(req.body.data));
+  console.log("req.file : ", req.file); // undefined
+  console.log("req.file.filename : ", req.file.filename); // localhost:3000
+  console.log("req.protocol : ", req.protocol); // http
+  console.log("req.get(host) : ", req.get("host")); // localhost:3000
+  console.log(
+    "nom : ",
+    `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
+  ); // localhost:3000
 
-  const data = JSON.parse(req.body.data);
+  const image = req.file;
 
-  if (!data || !req.headers.authorization) {
+  if (!image || !req.headers.authorization) {
     res.status(400).json({ message: "Requête erronée." });
   } else {
     const token = jwt.getUserId(req.headers.authorization);
@@ -204,9 +215,17 @@ exports.updateProfilPicture = (req, res, next) => {
     models.User.findOne({ where: { id: userId } })
       .then((user) => {
         if (user.id === userId) {
+          const filename = user.imageUrl.split("/images/")[1];
+          console.log(filename);
+          fs.unlink(`images/${filename}`, (err) => {
+            if (err) throw err;
+            console.log(`images/${filename} was deleted`);
+          });
           models.User.update(
             {
-              imageUrl: data,
+              imageUrl: `${req.protocol}://${req.get("host")}/images/${
+                req.file.filename
+              }`,
               updatedAt: new Date(),
             },
             { where: { id: user.id } }
@@ -301,9 +320,23 @@ exports.deleteUser = (req, res, next) => {
     models.User.findOne({ where: { id: req.params.id } })
       .then((user) => {
         if (user.id == userId || isAdmin) {
-          models.User.destroy({ where: { id: user.id } })
-            .then(() => res.status(204).json({ message: "Elément supprimé." }))
-            .catch((error) => res.status(501).json(error));
+          if (user.imageUrl) {
+            const filename = user.imageUrl.split("/images/")[1];
+            console.log(filename);
+            fs.unlink(`images/${filename}`, () => {
+              models.User.destroy({ where: { id: user.id } })
+                .then(() =>
+                  res.status(204).json({ message: "Elément supprimé." })
+                )
+                .catch((error) => res.status(501).json(error));
+            });
+          } else {
+            models.User.destroy({ where: { id: user.id } })
+              .then(() =>
+                res.status(204).json({ message: "Elément supprimé." })
+              )
+              .catch((error) => res.status(501).json(error));
+          }
         } else {
           res.status(403).json({ message: "Action non autorisée." });
         }

@@ -1,7 +1,6 @@
 <script>
 import { mapActions } from 'vuex';
-// import axios from "axios";
-// import ProgressBar from "vuejs-progress-bar";
+import axios from "axios";
 import BaseButton from "@/components/BaseButton";
 
 export default {
@@ -20,114 +19,87 @@ export default {
     }
   },
 
-  // data() {
-  //   // const progressBarOptions = {
-  //   //   text: {
-  //   //     shadowColor: "black",
-  //   //     fontSize: 14,
-  //   //     fontFamily: "Helvetica",
-  //   //     dynamicPosition: true
-  //   //   },
-  //   //   progress: {
-  //   //     color: "#E8C401",
-  //   //     backgroundColor: "#000000"
-  //   //   },
-  //   //   layout: {
-  //   //     height: 35,
-  //   //     width: 140,
-  //   //     type: "line",
-  //   //     progressPadding: 0,
-  //   //     verticalTextAlign: 63
-  //   //   }
-  //   // };
-
-  //   return {
-  //     imageUrl: null,
-  //     file: null,
-  //     imagePreview: null,
-  //     formData: null,
-  //     uploadProgress: 0,
-  //     showProgressBar: false,
-  //     progressBarOptions: progressBarOptions,
-  //   };
-  // },
-
-  created() {
-    console.log("this.user : ", this.user);
+  data() {
+    return {
+      file: null,
+      imagePreview: null,
+      progress: 0,
+    };
   },
 
   methods: {
     ...mapActions(['update']),
 
-    // selectFile(event) {
-    //   this.imagePreview = URL.createObjectURL(event.target.files[0]);
+    selectFile(event) {
+      const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
+      this.file = event.target.files[0] || event.dataTransfer.files;
 
-    //   const reader = new FileReader();
-    //   reader.onload = (e) => {
-    //     this.file = e.target.result;
-    //   }
-    //   reader.readAsDataURL(event.target.files[0]);
-    // },
+      // if(!allowedTypes.includes(this.file.type) || this.file.size > 1000000) {
+      if(!allowedTypes.includes(this.file.type)) {
+        const contexte = {
+          intention: "notification",
+          message: "Vous devez selectionner des images (.jpeg, .jpg ou .png) ou des gif (.gif) de moins de 1 Mo !",
+        };
+        this.$store.commit("displayPopup", contexte);
+        this.file = null;
+        return;
 
-    // upload() {
-    //   this.formData = new FormData();
-    //   this.formData.append("upload_preset", process.env.VUE_APP_CLOUDINARY_PRESET);
-    //   this.formData.append("file", this.file);
+      } 
+      else {
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.imagePreview = reader.result;
+        }
+        reader.readAsDataURL(event.target.files[0]);
+      }
+    },
 
-    //   let requestObj = {
-    //     url: process.env.VUE_APP_CLOUDINARY_UPLOAD_URL,
-    //     method: "POST",
-    //     data: this.formData,
-    //     onUploadProgress: function(progressEvent) {
-    //       this.uploadProgress = Math.round(
-    //         (progressEvent.loaded * 100.0) / progressEvent.total
-    //       );
-    //     }.bind(this)
-    //   };
-    //   this.showProgressBar = true;
+    addPicture() {
+      let formData = new FormData();
 
-    //   axios(requestObj)
-    //     .then(response => {
-    //       if (response.data.secure_url) {
-    //         this.imageUrl = response.data.secure_url;
-    //         this.updateProfilPicture();
-    //       }
-    //     })
-    //     .catch(error => {
-    //       console.log(error);
-    //     })
-    //     .finally(() => {
-    //       setTimeout(
-    //         function() {
-    //           this.showProgressBar = false;
-    //           this.imagePreview = null;
-    //         }.bind(this),
-    //         1000
-    //       );
-    //     });
-    // },
+      formData.append('file', this.file);
 
-    updateProfilPicture() {
-      if (this.imageUrl == null) {
+      if (formData.get("file") == "null") {
         const contexte = {
           intention: "notification",
           message: "Vous devez selectionner une image !",
         };
         this.$store.commit("displayPopup", contexte);
         return;
+
+      } else {
+        console.log(process.env.VUE_APP_LOCALHOST_URL + `users/${this.user.id}/picture`);
+        axios.put( 
+          process.env.VUE_APP_LOCALHOST_URL + `users/${this.user.id}/picture`,
+          formData,
+          { 
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Authorization: "Bearer " + localStorage.getItem("jwt").replace(/['"']+/g, "")
+            }
+          },
+          { onUploadProgress: ProgressEvent => {
+              let progress =
+                Math.round((ProgressEvent.loaded / ProgressEvent.total) * 100)
+                +"%";
+              this.progress = progress;
+            } }
+        )
+          .then((response) => {
+            console.log(response);
+
+            this.$store.commit("setUser", response.data);
+  
+            this.file = null,
+            this.imagePreview = "";
+
+            this.$refs.inputFile.value = ''
+
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       }
-      
-      const contexte = {
-        origin: "updateProfilPicture",
-        intention: "confirmation",
-        message: "Voulez-vous vraiment modifier votre compte ?",
-        options: {
-          url: process.env.VUE_APP_LOCALHOST_URL + `users/${this.user.id}/picture`,
-          mutation: "setUser",
-          data: this.imageUrl,
-        },
-      };
-      this.$store.commit("displayPopup", contexte);
     },
   }
 
@@ -152,17 +124,18 @@ export default {
       </section>
 
       <section>
-        <form @submit.prevent="upload">
+        <form @submit.prevent="addPicture">
           <input
             type="file"
             id="file-input"
+            ref="inputFile"
             accept="image/png, image/jpg, image/jpeg, image/gif"
             @change="selectFile($event)"
           />
 
-          <!-- <section v-show="imagePreview">
+          <section v-show="imagePreview">
             <img :src="imagePreview" class="image"/>
-          </section> -->
+          </section>
 
           <!-- <div v-show="showProgressBar">
             <progress-bar :options="progressBarOptions" :value="uploadProgress" />

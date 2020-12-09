@@ -78,9 +78,23 @@ exports.getAllPosts = (req, res) => {
 
 // Update a post
 exports.modifyPost = (req, res) => {
+  console.log("-------------");
+  console.log("-------------");
+  console.log("-------------");
   console.log("---------- modifyPost");
 
-  const data = JSON.parse(req.body.data);
+  const data = req.file
+    ? {
+        ...JSON.parse(req.body.content),
+        imageUrl: `${req.protocol}://${req.get("host")}/images/${
+          req.file.filename
+        }`,
+      }
+    : {
+        ...JSON.parse(req.body.data),
+      };
+
+  console.log("data : ", data);
 
   if (
     !data ||
@@ -100,8 +114,21 @@ exports.modifyPost = (req, res) => {
     models.Post.findOne({ where: { id: postId } })
       .then((post) => {
         if (post.userId == userId) {
+          if (req.file) {
+            const filename = post.imageUrl.split("/images/")[1];
+            console.log(filename);
+            fs.unlink(`images/${filename}`, (err) => {
+              if (err) throw err;
+              console.log(`images/${filename} was deleted`);
+            });
+          }
           models.Post.update(
-            { content: data.content, title: data.title, updatedAt: new Date() },
+            {
+              content: data.content,
+              title: data.title,
+              imageUrl: data.imageUrl,
+              updatedAt: new Date(),
+            },
             { where: { id: post.id } }
           )
             .then(() => {

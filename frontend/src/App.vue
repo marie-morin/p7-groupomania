@@ -3,6 +3,7 @@ import { mapGetters } from 'vuex';
 import TheHeader from "@/components/TheHeader.vue";
 import TheFooter from "@/components/TheFooter.vue";
 import ThePopup from '@/components/ThePopup.vue';
+
 export default {
   name: "App",
   components: { TheHeader, TheFooter, ThePopup },

@@ -8,7 +8,6 @@ const multer = require("../middleware/multer-config");
 
 // Sign up
 router.post("/signup", userCtrl.signup);
-// router.post("/signup", multer, userCtrl.signup);
 // Login
 router.post("/login", userCtrl.login);
 // Get current user info
@@ -20,8 +19,7 @@ router.get("/:id", auth, userCtrl.getOneUser);
 // Update user acount
 router.put("/:id", auth, userCtrl.updateUser);
 // Update user picture
-router.put("/:id/picture", auth, userCtrl.updateProfilPicture);
-// router.put("/:id/picture", auth, multer, userCtrl.updateProfilPicture);
+router.put("/:id/picture", auth, multer, userCtrl.updateProfilPicture);
 // Update user password
 router.put("/:id/password", auth, userCtrl.updatePassword);
 // Delete an acount
