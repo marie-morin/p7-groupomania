@@ -7,7 +7,9 @@ const regex = /^[A-Za-z\d\s.,;:!?"()/%-_']*$/;
 exports.addComment = (req, res) => {
   console.log("--------------- addComment");
 
-  const data = JSON.parse(req.body.data);
+  console.log("req.body : ", req.body);
+
+  const data = req.body;
 
   if (
     !data ||
@@ -66,7 +68,11 @@ exports.getCommentsFromPost = (req, res, next) => {
 exports.modifyComment = (req, res) => {
   console.log("---------- modifyComment");
 
-  const data = JSON.parse(req.body.data);
+  console.log("req : ", req);
+  console.log("req.body : ", req.body);
+  console.log("req.content : ", req.content);
+
+  const data = JSON.parse(req.body);
   if (
     !data ||
     !req.params.id ||

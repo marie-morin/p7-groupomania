@@ -1,14 +1,13 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
-import BaseComment from "@/components/BaseComment.vue";
 import FormImageUpload from "@/components/FormImageUpload.vue";
+import SectionComments from "@/components/SectionComments.vue";
 import BaseLike from "@/components/BaseLike.vue";
-// import axios from "axios";
 
 export default {
   name: "BasePost",
 
-  components: { BaseComment, BaseLike, FormImageUpload },
+  components: { BaseLike, FormImageUpload, SectionComments },
 
   props: {
     post: {
@@ -19,9 +18,7 @@ export default {
 
   data() {
     return {
-      displayComments: false,
       editing: false,
-      newComment: "",
       file: null,
       updatedPost: {
         title: this.post.title,
@@ -59,14 +56,6 @@ export default {
     },
   },
 
-  created() {
-    const commentOptions = {
-      url: process.env.VUE_APP_LOCALHOST_URL + `comments/from/${this.post.id}`,
-      mutation: "setComments",
-    };
-    this.fetch(commentOptions);
-  },
-
   methods: {
     ...mapActions(["fetch", "add", "update"]),
 
@@ -84,32 +73,8 @@ export default {
       this.$store.commit("displayPopup", contexte);
     },
 
-    displayComment() {
-      this.displayComments = !this.displayComments;
-    },
-
     editPost() {
       this.editing = !this.editing;
-    },
-
-    addComment() {
-      if (this.newComment == "") {
-        const contexte = {
-          intention: "notification",
-          message: "Votre commentaire est vide !",
-        };
-        this.$store.commit("displayPopup", contexte);
-        return;
-      }
-
-      const comment = { content: this.newComment, postId: this.post.id };
-      const options = {
-        url: process.env.VUE_APP_LOCALHOST_URL + "comments/",
-        mutation: "newComment",
-        data: comment,
-      };
-      this.add(options);
-      this.newComment = "";
     },
 
     setFile(image) {
@@ -144,7 +109,7 @@ export default {
       const options = {
         url: process.env.VUE_APP_LOCALHOST_URL + `posts/${this.updatedPost.id}`,
         mutation: "updatePost",
-        formData,
+        data: formData,
       };
       this.update(options);
       this.editing = false;
@@ -155,7 +120,12 @@ export default {
 
 <template>
   <div class="post-unit">
-    <BaseLike :item="post" url-endpoint="posts" mutation="ratePost" />
+    <BaseLike
+      :item="post"
+      url-endpoint="posts"
+      rateMutation="ratePost"
+      setMutation="setPostLikes"
+    />
 
     <div class="post-content">
       <p class="meta">
@@ -194,24 +164,7 @@ export default {
         </form>
       </div>
 
-      <div class="post-comments" @click="displayComment()">
-        <font-awesome-icon icon="comment" class="icon comment" />
-        <p>{{ post.comments.length }} commentaires</p>
-      </div>
-
-      <div v-show="displayComments === true" class="comment-container">
-        <div v-for="comment in post.comments" :key="comment.id">
-          <BaseComment :comment="comment" />
-        </div>
-
-        <input
-          type="text"
-          placeholder="Ajouter un commentaire..."
-          required
-          v-model="newComment"
-          @keyup.enter="addComment()"
-        />
-      </div>
+      <SectionComments :post="post" />
 
       <button v-if="isAllowed" @click="deletePost(post.id)">
         Supprimer le post

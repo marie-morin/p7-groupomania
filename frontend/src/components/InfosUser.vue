@@ -54,7 +54,7 @@ export default {
           url:
             process.env.VUE_APP_LOCALHOST_URL + `users/${this.user.id}/picture`,
           mutation: "setUser",
-          formData,
+          data: formData,
         };
         this.update(options);
       }

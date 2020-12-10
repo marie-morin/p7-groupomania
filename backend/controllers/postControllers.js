@@ -117,7 +117,6 @@ exports.modifyPost = (req, res) => {
           }
           models.Post.update(
             {
-              content: data.content,
               title: data.title,
               imageUrl: data.imageUrl,
               updatedAt: new Date(),

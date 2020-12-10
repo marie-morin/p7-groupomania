@@ -25,7 +25,6 @@ const mutations = {
     state.posts.forEach((item) => {
       if (item.id === post.id) {
         item.title = post.title;
-        item.content = post.content;
         item.imageUrl = post.imageUrl;
       }
     });

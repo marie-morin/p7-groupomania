@@ -13,7 +13,11 @@ export default {
       type: String,
       required: true,
     },
-    mutation: {
+    rateMutation: {
+      type: String,
+      required: true,
+    },
+    setMutation: {
       type: String,
       required: true,
     },
@@ -34,9 +38,8 @@ export default {
       url:
         process.env.VUE_APP_LOCALHOST_URL +
         `${this.urlEndpoint}/${this.item.id}/like`,
-      mutation: "setPostLikes",
+      mutation: this.setMutation,
     };
-
     this.fetch(likesOptions).then(() => {
       this.item.likes.forEach((like) => {
         if (like.UserId === this.currentUser.id) {
@@ -52,7 +55,7 @@ export default {
     like() {
       const options = {
         url: process.env.VUE_APP_LOCALHOST_URL + `${this.urlEndpoint}/like`,
-        mutation: this.mutation,
+        mutation: this.rateMutation,
         id: this.item.id,
         user: this.currentUser.id,
       };

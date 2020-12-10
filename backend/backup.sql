@@ -24,7 +24,6 @@ CREATE TABLE `Comments` (
   `id` int(11) NOT NULL,
   `postId` int(11) NOT NULL,
   `userId` int(11) NOT NULL,
-  `content` varchar(255) NOT NULL,
   `likes` int(11) DEFAULT NULL,
   `dislikes` int(11) DEFAULT NULL,
   `usersLiked` varchar(255) DEFAULT NULL,
@@ -43,7 +42,6 @@ CREATE TABLE `Posts` (
   `id` int(11) NOT NULL,
   `userId` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
-  `content` varchar(255) NOT NULL,
   `likes` int(11) DEFAULT NULL,
   `dislikes` int(11) DEFAULT NULL,
   `usersLiked` varchar(255) DEFAULT NULL,
@@ -56,7 +54,7 @@ CREATE TABLE `Posts` (
 -- Déchargement des données de la table `Posts`
 --
 
-INSERT INTO `Posts` (`id`, `userId`, `title`, `content`, `likes`, `dislikes`, `usersLiked`, `usersDisliked`, `createdAt`, `updatedAt`) VALUES
+INSERT INTO `Posts` (`id`, `userId`, `title`, `likes`, `dislikes`, `usersLiked`, `usersDisliked`, `createdAt`, `updatedAt`) VALUES
 (3, 25, 'Je suis un super Titre', 'Je suis un contenu qui essai de passer', NULL, NULL, NULL, NULL, '2020-10-16 09:09:31', '2020-10-16 09:09:31'),
 (4, 25, 'Je suis contente', 'J\'ai réussi un truc', NULL, NULL, NULL, NULL, '2020-10-16 09:13:16', '2020-10-16 09:13:16'),
 (5, 25, 'Je fais un test', 'Je verifier que l\'affichage de mon champ est correct', NULL, NULL, NULL, NULL, '2020-10-16 09:14:48', '2020-10-16 09:14:48'),

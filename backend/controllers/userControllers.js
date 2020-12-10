@@ -141,7 +141,7 @@ exports.getOneUser = (req, res) => {
 exports.updateUser = (req, res, next) => {
   console.log("------------ updateUser");
 
-  const data = JSON.parse(req.body.data);
+  const data = req.body;
 
   if (
     !data ||
@@ -247,8 +247,9 @@ exports.updateProfilPicture = (req, res, next) => {
 exports.updatePassword = (req, res, next) => {
   console.log("------------ updatePassword");
 
+  console.log("req.body : ", req.body);
   console.log("req.body.data : ", req.body.data);
-  const data = JSON.parse(req.body.data);
+  const data = req.body;
   console.log("data : ", data);
 
   if (

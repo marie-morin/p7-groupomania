@@ -42,7 +42,7 @@ export default {
         const options = {
           url: process.env.VUE_APP_LOCALHOST_URL + "posts/",
           mutation: "newPost",
-          formData,
+          data: formData,
         };
         this.add(options);
         this.newPostTitle = "";

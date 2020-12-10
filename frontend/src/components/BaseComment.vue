@@ -94,7 +94,12 @@ export default {
 
 <template>
   <div class="comment-unit">
-    <BaseLike :item="comment" url-endpoint="comments" mutation="rateComment" />
+    <BaseLike
+      :item="comment"
+      url-endpoint="comments"
+      rateMutation="rateComment"
+      setMutation="setCommentLikes"
+    />
 
     {{ comment.content }} par {{ comment.User.username }}, {{ wasPublished }}.
     <br />
