@@ -11,36 +11,24 @@ exports.addPost = (req, res) => {
   console.log("-------------");
   console.log("------------- addPost");
 
-  console.log("req.body.content : ", JSON.parse(req.body.content)); // {}
-  console.log("req.file : ", req.file); // undefined
+  // console.log("req.body : ", req.body); // undefined
+  console.log("req.body.title : ", JSON.parse(req.body.title)); // undefined
+  // console.log("req.file : ", req.file); // undefined
 
-  console.log("req.protocol : ", req.protocol); // http
-  console.log("req.get(host) : ", req.get("host")); // localhost:3000
-  console.log("req.file.filename : ", req.file.filename); // localhost:3000
-  console.log(
-    "nom : ",
-    `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
-  ); // localhost:3000
-
-  const data = JSON.parse(req.body.content);
+  const data = JSON.parse(req.body.title);
+  // const data = JSON.parse(req.body.title);
+  // console.log("data : ", data);
   const image = req.file;
-  if (
-    !data ||
-    !data.title ||
-    !data.content ||
-    !image ||
-    !req.headers.authorization ||
-    !regex.test(data.title) ||
-    !regex.test(data.content)
-  ) {
+  // console.log("image : ", image);
+
+  if (!data || !image || !req.headers.authorization || !regex.test(data)) {
     res.status(400).json({ message: "Requête erronée." });
   } else {
     const token = jwt.getUserId(req.headers.authorization);
     const userId = token.userId;
 
     models.Post.create({
-      content: data.content,
-      title: data.title,
+      title: data,
       imageUrl: `${req.protocol}://${req.get("host")}/images/${
         req.file.filename
       }`,
@@ -83,6 +71,11 @@ exports.modifyPost = (req, res) => {
   console.log("-------------");
   console.log("---------- modifyPost");
 
+  // console.log("req.body : ", req.body); // undefined
+  console.log("req.body.content : ", req.body.content); // undefined
+  console.log("JSON.parse(req.body.content) : ", JSON.parse(req.body.content));
+  console.log("req.file : ", req.file); // undefined
+
   const data = req.file
     ? {
         ...JSON.parse(req.body.content),
@@ -91,7 +84,7 @@ exports.modifyPost = (req, res) => {
         }`,
       }
     : {
-        ...JSON.parse(req.body.data),
+        ...JSON.parse(req.body.content),
       };
 
   console.log("data : ", data);
@@ -99,11 +92,11 @@ exports.modifyPost = (req, res) => {
   if (
     !data ||
     !data.title ||
-    !data.content ||
+    !data.imageUrl ||
     !req.params.id ||
     !req.headers.authorization ||
     !regex.test(data.title) ||
-    !regex.test(data.content)
+    !regex.test(data.image)
   ) {
     res.status(400).json({ message: "Requête erronée." });
   } else {

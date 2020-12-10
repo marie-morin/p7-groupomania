@@ -2,6 +2,7 @@
 import { mapGetters, mapActions } from "vuex";
 import FormPostCreation from "@/components/FormPostCreation.vue";
 import BasePost from "@/components/BasePost.vue";
+
 export default {
   name: "Home",
 
@@ -10,30 +11,30 @@ export default {
   computed: mapGetters(["allPosts"]),
 
   created() {
-    const options = { url: process.env.VUE_APP_LOCALHOST_URL + "posts", mutation: "setPosts" };
+    const options = {
+      url: process.env.VUE_APP_LOCALHOST_URL + "posts",
+      mutation: "setPosts",
+    };
     this.fetch(options);
   },
 
-  methods: mapActions(["fetch"])
+  methods: mapActions(["fetch"]),
 };
 </script>
-
 
 <template>
   <div class="home">
     <FormPostCreation />
     <div class="posts">
-      <div 
-        v-for="post in allPosts" 
+      <BasePost
+        :post="post"
+        v-for="post in allPosts"
         :key="post.id"
         class="post"
-      >
-        <BasePost :post="post" />
-      </div>
-    </div>    
+      />
+    </div>
   </div>
 </template>
-
 
 <style scope lang="scss">
 // .home {

@@ -1,21 +1,22 @@
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from "vuex";
+
 export default {
   name: "ThePopup",
 
-  computed: {  ...mapGetters(['popup', 'currentUser']) },
+  computed: { ...mapGetters(["popup", "currentUser"]) },
 
   mounted() {
-    if(this.popup.intention === 'notification') {
-      setTimeout(() => this.$store.commit('hidePopup'), 7000);
+    if (this.popup.intention === "notification") {
+      setTimeout(() => this.$store.commit("hidePopup"), 6000);
     }
   },
 
   methods: {
-    ...mapActions(['update', 'delete']),
+    ...mapActions(["update", "delete"]),
 
     hidePopup() {
-      this.$store.commit('hidePopup');
+      this.$store.commit("hidePopup");
     },
 
     confirm() {
@@ -23,51 +24,50 @@ export default {
 
       let notifyContexte = {
         message: "",
-        intention: "notification"
+        intention: "notification",
       };
 
       switch (origin) {
-        case 'updateUser':
-          this.update(this.popup.options);  
-          notifyContexte.message =  "Le compte à été modifié !";
+        case "updateUser":
+          this.update(this.popup.options);
+          notifyContexte.message = "Le compte à été modifié !";
           break;
-        case 'updateProfilPicture':
-          this.update(this.popup.options);  
-          notifyContexte.message =  "Le compte à été modifié !";
+        case "updateProfilPicture":
+          this.update(this.popup.options);
+          notifyContexte.message = "Le compte à été modifié !";
           break;
-        case 'updatePassword':
-          this.update(this.popup.options);  
-          notifyContexte.message =  "Le mot de passe a été modifié !";
+        case "updatePassword":
+          this.update(this.popup.options);
+          notifyContexte.message = "Le mot de passe a été modifié !";
           break;
-        case 'deletePost':
+        case "deletePost":
           this.delete(this.popup.options);
-          notifyContexte.message =  "Votre post à été supprimé !";
+          notifyContexte.message = "Votre post à été supprimé !";
           break;
-        case 'deleteComment':
+        case "deleteComment":
           this.delete(this.popup.options);
-          notifyContexte.message =  "Votre commentaire à été supprimé !";  
+          notifyContexte.message = "Votre commentaire à été supprimé !";
           break;
-        case 'deleteProfil':
+        case "deleteProfil":
           this.delete(this.popup.options);
-          notifyContexte.message =  "Le compte à été supprimé !";
+          notifyContexte.message = "Le compte à été supprimé !";
           if (this.currentUser.isAdmin) {
-            this.$router.push({ name: 'Home' });
+            this.$router.push({ name: "Home" });
           } else {
             localStorage.clear();
-            this.$router.push({ name: 'Landing' });
+            this.$router.push({ name: "Landing" });
           }
           break;
         default:
           console.log(`Error`);
       }
 
-      this.$store.commit('displayPopup', notifyContexte);
-      setTimeout(() => this.$store.commit('hidePopup'), 7000);
+      this.$store.commit("displayPopup", notifyContexte);
+      setTimeout(() => this.$store.commit("hidePopup"), 7000);
     },
-  }
+  },
 };
 </script>
-
 
 <template>
   <div class="popup">
@@ -86,12 +86,11 @@ export default {
       Oui
     </button>
 
-    <button v-if="popup.intention == 'confirmation'" @click="hidePopup()" >
+    <button v-if="popup.intention == 'confirmation'" @click="hidePopup()">
       Annuler
     </button>
   </div>
 </template>
-
 
 <style scope lang="scss">
 .popup {

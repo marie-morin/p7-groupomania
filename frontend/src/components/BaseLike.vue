@@ -1,5 +1,5 @@
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "BaseLike",
@@ -10,12 +10,12 @@ export default {
       required: false,
     },
     urlEndpoint: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     mutation: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
   },
 
@@ -25,89 +25,90 @@ export default {
     };
   },
 
-  computed: { 
-    ...mapGetters(['currentUser']),
+  computed: {
+    ...mapGetters(["currentUser"]),
   },
 
   created() {
     const likesOptions = {
-        url: process.env.VUE_APP_LOCALHOST_URL + `${this.urlEndpoint}/${this.item.id}/like`, mutation: "setPostLikes"
+      url:
+        process.env.VUE_APP_LOCALHOST_URL +
+        `${this.urlEndpoint}/${this.item.id}/like`,
+      mutation: "setPostLikes",
     };
 
     this.fetch(likesOptions).then(() => {
-      this.item.likes.forEach(like => {
+      this.item.likes.forEach((like) => {
         if (like.UserId === this.currentUser.id) {
-          return this.wasLiked = true;
+          return (this.wasLiked = true);
         }
-      })
+      });
     });
   },
 
   methods: {
-    ...mapActions(['fetch', 'rate']),
+    ...mapActions(["fetch", "rate"]),
 
-    like() {   
+    like() {
       const options = {
         url: process.env.VUE_APP_LOCALHOST_URL + `${this.urlEndpoint}/like`,
         mutation: this.mutation,
         id: this.item.id,
-        user: this.currentUser.id
+        user: this.currentUser.id,
       };
       this.rate(options);
       this.wasLiked = !this.wasLiked;
     },
-  }
+  },
 };
 </script>
 
-
 <template>
-    <div class="post-likes">
-        <p class="likes">{{ item.likes.length }}</p>
+  <div class="post-likes">
+    <p class="likes">{{ item.likes.length }}</p>
 
-        <font-awesome-icon
-        icon="arrow-up"
-        @click="like()"
-        :class="{ liked: wasLiked }"
-        class="icon up"
-        />
-    </div>
+    <font-awesome-icon
+      icon="arrow-up"
+      @click="like()"
+      :class="{ liked: wasLiked }"
+      class="icon up"
+    />
+  </div>
 </template>
 
-
 <style scope lang="scss">
-.post {
+// .post {
 
-  &-likes {
-    // width: 40px;
-    min-height: 100%;
-    margin: 0;
-    padding: 0;
-    background-color: $groupomania-back-grey;
-    @include flexbox(center, column, center);
-  }
+//   &-likes {
+//     // width: 40px;
+//     min-height: 100%;
+//     margin: 0;
+//     padding: 0;
+//     background-color: $groupomania-back-grey;
+//     @include flexbox(center, column, center);
+//   }
 
-  .icon {
-    color: $groupomania-police;
-    font-size: 20px;
-    margin: 0;
-    &.up {
-      &:hover {
-        color: green;
-      }
-    }
-    &.down {
-      &:hover {
-        color: red;
-      }
-    }
-    &.comment {
-      color: $groupomania-light-grey;
-    }
-  }
-}
+//   .icon {
+//     color: $groupomania-police;
+//     font-size: 20px;
+//     margin: 0;
+//     &.up {
+//       &:hover {
+//         color: green;
+//       }
+//     }
+//     &.down {
+//       &:hover {
+//         color: red;
+//       }
+//     }
+//     &.comment {
+//       color: $groupomania-light-grey;
+//     }
+//   }
+// }
 
-.liked {
-  background-color: green;
-}
+// .liked {
+//   background-color: green;
+// }
 </style>

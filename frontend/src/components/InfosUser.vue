@@ -1,12 +1,13 @@
 <script>
-import { mapActions } from 'vuex';
-import axios from "axios";
+import { mapActions } from "vuex";
+// import axios from "axios";
 import BaseButton from "@/components/BaseButton";
+import FormImageUpload from "@/components/FormImageUpload.vue";
 
 export default {
   name: "InfosUser",
 
-  components: { BaseButton },
+  components: { BaseButton, FormImageUpload },
 
   props: {
     user: {
@@ -16,48 +17,30 @@ export default {
     isOwner: {
       type: Boolean,
       requiered: true,
-    }
+    },
   },
 
   data() {
     return {
       file: null,
-      imagePreview: null,
-      progress: 0,
+      imageUploadDisplayed: false,
     };
   },
 
   methods: {
-    ...mapActions(['update']),
+    ...mapActions(["update"]),
 
-    selectFile(event) {
-      const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
-      this.file = event.target.files[0] || event.dataTransfer.files;
+    displayImageUpload() {
+      return (this.imageUploadDisplayed = !this.imageUploadDisplayed);
+    },
 
-      // if(!allowedTypes.includes(this.file.type) || this.file.size > 1000000) {
-      if(!allowedTypes.includes(this.file.type)) {
-        const contexte = {
-          intention: "notification",
-          message: "Vous devez selectionner des images (.jpeg, .jpg ou .png) ou des gif (.gif) de moins de 1 Mo !",
-        };
-        this.$store.commit("displayPopup", contexte);
-        this.file = null;
-        return;
-
-      } 
-      else {
-        const reader = new FileReader();
-        reader.onload = () => {
-          this.imagePreview = reader.result;
-        }
-        reader.readAsDataURL(event.target.files[0]);
-      }
+    setFile(image) {
+      this.file = image;
     },
 
     addPicture() {
       let formData = new FormData();
-
-      formData.append('file', this.file);
+      formData.append("file", this.file);
 
       if (formData.get("file") == "null") {
         const contexte = {
@@ -66,149 +49,110 @@ export default {
         };
         this.$store.commit("displayPopup", contexte);
         return;
-
       } else {
-        console.log(process.env.VUE_APP_LOCALHOST_URL + `users/${this.user.id}/picture`);
-        axios.put( 
-          process.env.VUE_APP_LOCALHOST_URL + `users/${this.user.id}/picture`,
+        const options = {
+          url:
+            process.env.VUE_APP_LOCALHOST_URL + `users/${this.user.id}/picture`,
+          mutation: "setUser",
           formData,
-          { 
-            headers: {
-              'Content-Type': 'multipart/form-data',
-              Authorization: "Bearer " + localStorage.getItem("jwt").replace(/['"']+/g, "")
-            }
-          },
-          { onUploadProgress: ProgressEvent => {
-              let progress =
-                Math.round((ProgressEvent.loaded / ProgressEvent.total) * 100)
-                +"%";
-              this.progress = progress;
-            } }
-        )
-          .then((response) => {
-            console.log(response);
-
-            this.$store.commit("setUser", response.data);
-  
-            this.file = null,
-            this.imagePreview = "";
-
-            this.$refs.inputFile.value = ''
-
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+        };
+        this.update(options);
       }
     },
-  }
-
+  },
 };
 </script>
-
 
 <template>
   <div class="page-content">
     <div class="infos-container">
-      <h1 v-if="isOwner">Bienvenue {{ user.firstname }} !</h1>
-      <h1 v-else>{{ user.username }}</h1>
+      <div class="infos">
+        <h1 v-if="isOwner">Bienvenue {{ user.firstname }} !</h1>
+        <h1 v-else>{{ user.username }}</h1>
 
-      <section v-if="user.imageUrl">
-        <img :src="user.imageUrl" :alt="user.username" class="image">
-        <br>
-        <button>Modifier la photo de profil</button>
-      </section>
+        <h3>Nom d'utilisateur :</h3>
+        <p>{{ user.firstname }} {{ user.lastname }}</p>
 
-      <section v-else>
-        <button>Ajouter un photo de profil</button>
-      </section>
+        <h3 v-if="isOwner">Email :</h3>
+        <p v-if="isOwner">{{ user.email }}</p>
 
-      <section>
-        <form @submit.prevent="addPicture">
-          <input
-            type="file"
-            id="file-input"
-            ref="inputFile"
-            accept="image/png, image/jpg, image/jpeg, image/gif"
-            @change="selectFile($event)"
-          />
+        <h3>Biographie :</h3>
+        <p v-if="user.bio">{{ user.bio }}</p>
+        <p v-else>
+          Vous n'avez pas encore ajouté de biographie à votre profil !
+        </p>
 
-          <section v-show="imagePreview">
-            <img :src="imagePreview" class="image"/>
-          </section>
+        <h3 v-if="user.isAdmin">Administration :</h3>
+        <p v-if="user.isAdmin">Vous êtes administrateur.</p>
+      </div>
 
-          <!-- <div v-show="showProgressBar">
-            <progress-bar :options="progressBarOptions" :value="uploadProgress" />
-          </div> -->
+      <div class="profilPicture">
+        <section v-if="user.imageUrl">
+          <img :src="user.imageUrl" :alt="user.username" class="image" /> <br />
+          <button @click="displayImageUpload">
+            Modifier la photo de profil
+          </button>
+        </section>
 
-          <div class="form-btn">
-            <BaseButton>Enregistrer</BaseButton>
-          </div>
+        <section v-else>
+          <button @click="displayImageUpload">
+            Ajouter un photo de profil
+          </button>
+        </section>
+
+        <form v-if="imageUploadDisplayed" @submit.prevent="addPicture">
+          <FormImageUpload v-on:send-imagefile="setFile" />
+          <BaseButton>Enregistrer</BaseButton> <br />
         </form>
-      </section>
-
-      <h3>Nom d'utilisateur :</h3>
-      <p>{{ user.firstname }} {{ user.lastname }}</p>
-
-      <h3 v-if="isOwner">Email :</h3>
-      <p v-if="isOwner">{{ user.email }}</p>
-
-      <h3>Biographie :</h3>
-      <p v-if="user.bio">{{ user.bio }}</p>
-      <p v-else>Vous n'avez pas encore ajouté de biographie à votre profil !</p>
-
-      <h3 v-if="user.isAdmin">Administration :</h3>
-      <p v-if="user.isAdmin">Vous êtes administrateur.</p>
+      </div>
     </div>
   </div>
 </template>
-
 
 <style scope lang="scss">
 .image {
   max-width: 200px;
   max-height: 200px;
 }
-h1 {
-  margin: 0;
-  color: $groupomania-red;
-  text-align: center;
-  margin-bottom: 20px;
-}
-h3 {
-  margin: 0;
-  color: $groupomania-font-blue;
-}
-p {
-  margin-top: 5px;
-}
-.infos {
-  width: 100%;
-  margin: 0 auto;
-  background-color: $groupomania-back-grey;
+// h1 {
+//   margin: 0;
+//   color: $groupomania-red;
+//   text-align: center;
+//   margin-bottom: 20px;
+// }
+// h3 {
+//   margin: 0;
+//   color: $groupomania-font-blue;
+// }
+// p {
+//   margin-top: 5px;
+// }
+// .infos {
+//   width: 100%;
+//   margin: 0 auto;
+//   background-color: $groupomania-back-grey;
 
-  &-container {
-    margin: 0 auto;
-    padding: 30px;
-    background-color: $groupomania-back-grey;
-    border-radius: $radius;
-    border: 2px solid $groupomania-red;
-    text-align: left;
-    color: $groupomania-font-blue;
+//   &-container {
+//     margin: 0 auto;
+//     padding: 30px;
+//     background-color: $groupomania-back-grey;
+//     border-radius: $radius;
+//     border: 2px solid $groupomania-red;
+//     text-align: left;
+//     color: $groupomania-font-blue;
 
-    @media screen and(max-width: $large + 100) {
-      width: 70%;
-    }
-    @media screen and(max-width: $small) {
-      width: 90%;
-      padding: 40px 10px;
-    }
-  }
-}
+//     @media screen and(max-width: $large + 100) {
+//       width: 70%;
+//     }
+//     @media screen and(max-width: $small) {
+//       width: 90%;
+//       padding: 40px 10px;
+//     }
+//   }
+// }
 
-.option {
-  color: $groupomania-red;
-  text-transform: none;
-}
+// .option {
+//   color: $groupomania-red;
+//   text-transform: none;
+// }
 </style>
-

@@ -1,13 +1,14 @@
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from "vuex";
 import BaseComment from "@/components/BaseComment.vue";
+import FormImageUpload from "@/components/FormImageUpload.vue";
 import BaseLike from "@/components/BaseLike.vue";
-import axios from "axios";
+// import axios from "axios";
 
 export default {
   name: "BasePost",
 
-  components: { BaseComment, BaseLike },
+  components: { BaseComment, BaseLike, FormImageUpload },
 
   props: {
     post: {
@@ -19,49 +20,57 @@ export default {
   data() {
     return {
       displayComments: false,
-      editing : false,
+      editing: false,
       newComment: "",
-      imagePreview: null,
       file: null,
       updatedPost: {
         title: this.post.title,
-        content: this.post.content,
         imageUrl: this.post.imageUrl,
-        id: this.post.id
+        id: this.post.id,
       },
     };
   },
 
-  computed: { 
-    ...mapGetters(['currentUser', 'allPosts', 'popup']),
+  computed: {
+    ...mapGetters(["currentUser", "allPosts", "popup"]),
 
-    isAllowed() { return this.currentUser.isAdmin == true || this.post.userId == this.currentUser.id },
+    isAllowed() {
+      return (
+        this.currentUser.isAdmin == true ||
+        this.post.userId == this.currentUser.id
+      );
+    },
 
-    isCreator() { return this.post.userId == this.currentUser.id },
+    isCreator() {
+      return this.post.userId == this.currentUser.id;
+    },
 
     wasPublished() {
-      const creationDate = new Date(this.post.createdAt); 
-      const now = new Date()
-      const timeSinceCreation = (now.getTime() - creationDate.getTime()) / (1000 * 3600 * 24);
-      const daysSinceCreation = Math.round(timeSinceCreation)
+      const creationDate = new Date(this.post.createdAt);
+      const now = new Date();
+      const timeSinceCreation =
+        (now.getTime() - creationDate.getTime()) / (1000 * 3600 * 24);
+      const daysSinceCreation = Math.round(timeSinceCreation);
 
       if (daysSinceCreation < 1) {
         return "aujourd'hui";
       }
       return `il y a ${daysSinceCreation} jours`;
-    }
+    },
   },
 
   created() {
-    // console.log("this.post : ", this.post);
-    const commentOptions = { url: process.env.VUE_APP_LOCALHOST_URL + `comments/from/${this.post.id}`, mutation: "setComments" };
+    const commentOptions = {
+      url: process.env.VUE_APP_LOCALHOST_URL + `comments/from/${this.post.id}`,
+      mutation: "setComments",
+    };
     this.fetch(commentOptions);
   },
 
   methods: {
-    ...mapActions(['fetch', 'add', 'update']),
+    ...mapActions(["fetch", "add", "update"]),
 
-    deletePost(id)  {      
+    deletePost(id) {
       const contexte = {
         origin: "deletePost",
         intention: "confirmation",
@@ -75,9 +84,13 @@ export default {
       this.$store.commit("displayPopup", contexte);
     },
 
-    displayComment() { this.displayComments = !this.displayComments },
+    displayComment() {
+      this.displayComments = !this.displayComments;
+    },
 
-    editPost() { this.editing = !this.editing },
+    editPost() {
+      this.editing = !this.editing;
+    },
 
     addComment() {
       if (this.newComment == "") {
@@ -93,175 +106,101 @@ export default {
       const options = {
         url: process.env.VUE_APP_LOCALHOST_URL + "comments/",
         mutation: "newComment",
-        data: comment
-      }
+        data: comment,
+      };
       this.add(options);
       this.newComment = "";
     },
 
-    selectFile(event) {
-      const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
-      this.file = event.target.files[0] || event.dataTransfer.files;
-
-      // if(!allowedTypes.includes(this.file.type) || this.file.size > 1000000) {
-      if(!allowedTypes.includes(this.file.type)) {
-        const contexte = {
-          intention: "notification",
-          message: "Vous devez selectionner des images (.jpeg, .jpg ou .png) ou des gif (.gif) de moins de 1 Mo !",
-        };
-        this.$store.commit("displayPopup", contexte);
-        this.file = null;
-        return;
-
-      } 
-      else {
-        const reader = new FileReader();
-        reader.onload = () => {
-          this.imagePreview = reader.result;
-        }
-        reader.readAsDataURL(event.target.files[0]);
-      }
+    setFile(image) {
+      this.file = image;
     },
 
     updatePost() {
-      if (this.updatedPost.title == "" || this.updatedPost.content == "") {
-        const contexte = {
-          intention: "notification",
-          message: "Vtre publication doit contenir un titre et du contenu !",
-        };
-        this.$store.commit("displayPopup", contexte);
-        return;
-      }
-      // console.log("pass");
+      let formData = new FormData();
+      formData.append("content", JSON.stringify(this.updatedPost));
 
       if (this.file != null) {
-        console.log("il y a un file");
+        formData.append("file", this.file);
 
-        let formData = new FormData();
-        formData.append('file', this.file);
-        formData.append('content', JSON.stringify(this.updatedPost));
-
-        axios.put( 
-          process.env.VUE_APP_LOCALHOST_URL + `posts/${this.updatedPost.id}`,
-          formData,
-          { 
-            headers: {
-              'Content-Type': 'multipart/form-data',
-              Authorization: "Bearer " + localStorage.getItem("jwt").replace(/['"']+/g, "")
-            }
-          },
-          { onUploadProgress: ProgressEvent => {
-              let progress =
-                Math.round((ProgressEvent.loaded / ProgressEvent.total) * 100)
-                +"%";
-              this.progress = progress;
-            } }
-        )
-          .then((response) => {
-            // console.log(response.data);
-
-            this.$store.commit("updatePost", response.data);
-  
-            this.updatedPost.title = "";
-            this.updatedPost.content = "";
-            this.file = null,
-            this.imagePreview = "";
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-
-      } else {
-        // console.log("il y a pas de file");
-        const options = {
-          url: process.env.VUE_APP_LOCALHOST_URL + `posts/${this.updatedPost.id}`,
-          mutation: "updatePost",
-          data: this.updatedPost,
+        if (this.updatedPost.title == "" || formData.get("file") == "null") {
+          const contexte = {
+            intention: "notification",
+            message: "Votre publication doit contenir un titre et une image !",
+          };
+          this.$store.commit("displayPopup", contexte);
+          return;
         }
-        this.update(options);   
+      } else {
+        if (this.updatedPost.title == "") {
+          const contexte = {
+            intention: "notification",
+            message: "Votre publication doit contenir un titre et une image !",
+          };
+          this.$store.commit("displayPopup", contexte);
+          return;
+        }
       }
-
+      const options = {
+        url: process.env.VUE_APP_LOCALHOST_URL + `posts/${this.updatedPost.id}`,
+        mutation: "updatePost",
+        formData,
+      };
+      this.update(options);
       this.editing = false;
     },
-  }
+  },
 };
 </script>
 
-
 <template>
   <div class="post-unit">
-    
-    <BaseLike
-      :item="post"
-      url-endpoint="posts"
-      mutation="ratePost"
-    />
+    <BaseLike :item="post" url-endpoint="posts" mutation="ratePost" />
 
     <div class="post-content">
       <p class="meta">
-        <router-link :to="{ name: 'Profil', params: { id: post.UserId }}">{{ post.User.username }}</router-link>, {{ wasPublished }}.
+        <router-link :to="{ name: 'Profil', params: { id: post.UserId } }">{{
+          post.User.username
+        }}</router-link
+        >, {{ wasPublished }}.
       </p>
       <p class="title">{{ post.title }}</p>
 
       <div v-if="post.imageUrl" class="image">
-        <img :src="post.imageUrl" :alt="post.title" class="image">
+        <img :src="post.imageUrl" :alt="post.title" class="image" />
       </div>
-      
+
       <p class="text">{{ post.content }}</p>
 
       <div v-if="editing">
-        <label for="title">Nouveau titre</label>
-        <input
-          type="text"
-          name="title"
-          required
-          v-model="updatedPost.title"
-          @keyup.enter="updatePost()"
-        />
-        <br>
+        <form enctype="multipart/form-data" @submit.prevent="updatePost">
+          <label for="title">Nouveau titre</label>
+          <input
+            type="text"
+            name="title"
+            required
+            v-model="updatedPost.title"
+            @keyup.enter="updatePost()"
+          />
+          <br />
 
-        <label for="content">Nouveau contenu</label>
-        <input
-          type="text"
-          name="content"
-          required
-          v-model="updatedPost.content"
-          @keyup.enter="updatePost()"
-        />
+          <label for="upload">Nouvelle image</label>
+          <div class="upload">
+            <FormImageUpload v-on:send-imagefile="setFile" />
+          </div>
 
-        <label for="file-input">Nouvelle image</label>
-        <input
-          type="file"
-          id="file-input"
-          ref="inputFile"
-          accept="image/png, image/jpg, image/jpeg, image/gif"
-          @change="selectFile($event)"
-        />
-
-        <section v-show="imagePreview">
-          <img :src="imagePreview" class="image"/>
-        </section>
-
-        <button @click="updatePost()">Valider la modification</button>
-        <button @click="editPost()">Annuler</button>
+          <button>Valider la modification</button>
+          <button @click="editPost()">Annuler</button>
+        </form>
       </div>
 
       <div class="post-comments" @click="displayComment()">
-        <font-awesome-icon
-          icon="comment"
-          class="icon comment"
-        />
+        <font-awesome-icon icon="comment" class="icon comment" />
         <p>{{ post.comments.length }} commentaires</p>
       </div>
 
-      <div
-        v-show="displayComments === true"
-        class="comment-container"
-      >
-        <div
-          v-for="comment in post.comments"
-          :key="comment.id"
-        >
+      <div v-show="displayComments === true" class="comment-container">
+        <div v-for="comment in post.comments" :key="comment.id">
           <BaseComment :comment="comment" />
         </div>
 
@@ -272,79 +211,68 @@ export default {
           v-model="newComment"
           @keyup.enter="addComment()"
         />
-      </div> 
+      </div>
 
-      <button
-        v-if="isAllowed"
-        @click="deletePost(post.id)"
-      >
+      <button v-if="isAllowed" @click="deletePost(post.id)">
         Supprimer le post
       </button>
 
-      <button
-        v-if="isCreator"
-        @click="editPost()"
-      >
+      <button v-if="isCreator" @click="editPost()">
         Modifier votre post
       </button>
-
-      
     </div>
-
   </div>
 </template>
 
-
 <style scope lang="scss">
-.post {
+// .post {
+//   &-unit {
+//     // width: 100%;
+//     height: 100%;
+//     padding: 0;
+//     @include flexbox(flex-start, row, stretch);
+//     background-color: $groupomania-background;
+//     color: $groupomania-font-blue;
+//     border-radius: $radius;
+//     border: 1px solid $groupomania-medium-grey;
+//     text-align: left;
+//   }
 
-  &-unit{
-    // width: 100%;
-    height: 100%;
-    padding: 0;
-    @include flexbox(flex-start, row, stretch);
-    background-color: $groupomania-background;
-    color: $groupomania-font-blue;
-    border-radius: $radius;
-    border: 1px solid $groupomania-medium-grey;
-    text-align: left;
-  }
+//   &-content {
+//     // width: 100%;
+//     padding: 5px;
+//   }
 
-  &-content {
-    // width: 100%;
-    padding: 5px;
-  }
+//   &-comments {
+//     @include flexbox(flex-start, row, center);
+//     cursor: pointer;
 
-  &-comments {
-    @include flexbox(flex-start, row, center);
-    cursor: pointer;
+//     p {
+//       margin: 0 0 0 5px;
+//     }
+//   }
 
-    p {
-      margin: 0 0 0 5px;
-    }
-  }
+//   .meta {
+//     font-style: italic;
+//     font-weight: lighter;
+//     color: $groupomania-light-grey;
+//     margin: 0;
+//   }
 
-  .meta {
-    font-style: italic;
-    font-weight: lighter;
-    color: $groupomania-light-grey;
-    margin: 0;
-  }
+//   .title {
+//     font-weight: bold;
+//     font-size: 27px;
+//     margin: 10px 0;
+//   }
 
-  .title {
-    font-weight: bold;
-    font-size: 27px;
-    margin: 10px 0;
-  }
+//   .text {
+//     font-size: 20px;
+//     margin: 5px 0;
+//   }
+// }
 
-  .text {
-    font-size: 20px;
-    margin: 5px 0;
-  }
-}
-
-.image{
-  max-width: 200px;
-  height: 200px;
-}
+// .image {
+//   max-width: 200px;
+//   height: 200px;
+// }
 </style>

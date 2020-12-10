@@ -37,13 +37,21 @@ const actions = {
   async add({ commit }, item) {
     const response = await axios.post(
       item.url,
-      { data: JSON.stringify(item.data) },
+      // { data: JSON.stringify(item.data) },
+      // { data: JSON.stringify(item.formData) },
+      item.formData,
       {
         headers: {
           Authorization:
             "Bearer " + localStorage.getItem("jwt").replace(/['"']+/g, ""),
         },
       }
+      // {
+      //   headers: {
+      //     Authorization:
+      //       "Bearer " + localStorage.getItem("jwt").replace(/['"']+/g, ""),
+      //   },
+      // }
     );
     commit(item.mutation, response.data);
   },
@@ -78,9 +86,12 @@ const actions = {
   },
 
   async update({ commit }, item) {
+    console.log("sotre item : ", item.formData);
+
     const response = await axios.put(
       item.url,
-      { data: JSON.stringify(item.data) },
+      item.formData,
+      // { data: JSON.stringify(item.data) },
       {
         headers: {
           Authorization:

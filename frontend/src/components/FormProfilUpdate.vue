@@ -1,41 +1,38 @@
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from "vuex";
 import BaseButton from "@/components/BaseButton";
-
 
 export default {
   name: "FormProfilUpdate",
 
   components: { BaseButton },
 
-  data() {
-    return {
-      isOwner: false,
-      isAdmin: false,
-      profilFormDisplayed: false,
-      passwordFormDisplayed: false,
-    };
-  },
+  computed: {
+    ...mapGetters(["currentUser"]),
 
-  computed: { 
-    ...mapGetters(['currentUser']),
-
-    user() { return { ...this.currentUser } }
+    user() {
+      return { ...this.currentUser };
+    },
   },
 
   methods: {
-    ...mapActions(['update']),
+    ...mapActions(["update"]),
 
     updateUser() {
-      if (this.user.email == "" || this.user.firstname == "" || this.user.lastname == "") {
+      if (
+        this.user.email == "" ||
+        this.user.firstname == "" ||
+        this.user.lastname == ""
+      ) {
         const contexte = {
           intention: "notification",
-          message: "Vous devez renseigner une adresse mail, un nom et un prénom !",
+          message:
+            "Vous devez renseigner une adresse mail, un nom et un prénom !",
         };
         this.$store.commit("displayPopup", contexte);
         return;
       }
-      
+
       const contexte = {
         origin: "updateUser",
         intention: "confirmation",
@@ -48,7 +45,7 @@ export default {
       };
       this.$store.commit("displayPopup", contexte);
     },
-  }
+  },
 };
 </script>
 
@@ -56,42 +53,35 @@ export default {
   <div class="form-section">
     <div class="form-container">
       <form @submit.prevent="updateUser" class="form">
-
-        <label for="email">Adresse email</label> 
+        <label for="email">Adresse email</label>
         <input
           type="email"
           id="email"
           name="email"
           required
           v-model="user.email"
-        >
+        />
 
-        <label for="firstname">Prénom</label> 
+        <label for="firstname">Prénom</label>
         <input
           type="text"
           id="firstname"
           name="firstname"
           required
           v-model="user.firstname"
-        >
+        />
 
-        <label for="lastname">Nom</label> 
+        <label for="lastname">Nom</label>
         <input
           type="text"
           id="lastname"
           name="lastname"
           required
           v-model="user.lastname"
-        >
+        />
 
         <label for="bio">Biographie</label>
-        <textarea
-          id="bio"
-          name="bio"
-          cols="10"
-          rows="10"
-          v-model="user.bio"
-        >
+        <textarea id="bio" name="bio" cols="10" rows="10" v-model="user.bio">
         </textarea>
 
         <div class="form-btn">
