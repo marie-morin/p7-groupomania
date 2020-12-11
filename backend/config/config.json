@@ -5,7 +5,11 @@
     "database": "groupomania_development",
     "host": "127.0.0.1",
     "dialect": "mysql",
-    "port": "8889"
+    "port": "8889",
+    "dialectOptions": {
+			"timezone": "local"
+		},
+		"timezone": "Europe/Paris"
   },
   "test": {
     "username": "root",
@@ -13,7 +17,11 @@
     "database": "groupomania_test",
     "host": "127.0.0.1",
     "dialect": "mysql",
-    "port": "8889"
+    "port": "8889",
+    "dialectOptions": {
+			"timezone": "local"
+		},
+		"timezone": "Europe/Paris"
   },
   "production": {
     "username": "root",
@@ -21,6 +29,10 @@
     "database": "groupomania_production",
     "host": "127.0.0.1",
     "dialect": "mysql",
-    "port": "8889"
+    "port": "8889",
+    "dialectOptions": {
+			"timezone": "local"
+		},
+		"timezone": "Europe/Paris"
   }
 }
