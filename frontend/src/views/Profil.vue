@@ -1,9 +1,9 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
-import InfosUser from "@/components/InfosUser.vue";
-import FormProfilUpdate from "@/components/FormProfilUpdate.vue";
-import FormPasswordUpdate from "@/components/FormPasswordUpdate.vue";
-import BasePost from "@/components/BasePost.vue";
+import InfosUser from "@/components/InfosUser";
+import FormProfilUpdate from "@/components/FormProfilUpdate";
+import FormPasswordUpdate from "@/components/FormPasswordUpdate";
+import BasePost from "@/components/BasePost";
 import BaseButton from "@/components/BaseButton";
 
 export default {

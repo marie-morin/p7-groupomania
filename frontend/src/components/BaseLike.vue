@@ -26,6 +26,7 @@ export default {
   data() {
     return {
       wasLiked: false,
+      showUsers: false,
     };
   },
 
@@ -68,7 +69,16 @@ export default {
 
 <template>
   <div class="post-likes">
-    <p class="likes">{{ item.likes.length }}</p>
+    <p
+      @mouseover="showUsers = true"
+      @mouseout="showUsers = false"
+      class="likes"
+    >
+      {{ item.likes.length }}
+    </p>
+    <div v-if="showUsers">
+      <p v-for="like in item.likes" :key="like.id">{{ like.User.username }}</p>
+    </div>
 
     <font-awesome-icon
       icon="arrow-up"

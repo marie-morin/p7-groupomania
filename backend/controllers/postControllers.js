@@ -185,6 +185,9 @@ exports.deletePost = (req, res) => {
 exports.like = (req, res, next) => {
   console.log("----------- giveOpinion on post");
 
+  console.log("req.body : ", req.body);
+  console.log("req.body.data : ", req.body.data);
+
   const data = JSON.parse(req.body.data);
 
   if (!data || !req.headers.authorization || !regex.test(data)) {
@@ -196,11 +199,10 @@ exports.like = (req, res, next) => {
     models.PostLikes.findOne({ where: { UserId: userId, PostId: data } })
       .then((like) => {
         if (like) {
+          console.log("passssss");
           if (userId === like.userId) {
             models.PostLikes.destroy({ where: { id: like.id } })
               .then(() => {
-                console.log("pass");
-
                 res.status(204).json({ message: "Elément supprimé." });
               })
               .catch((error) => res.status(501).json(error));
@@ -208,8 +210,16 @@ exports.like = (req, res, next) => {
             res.status(403).json({ message: "Action non autorisée." });
           }
         } else {
+          console.log("pppppppppp");
           models.PostLikes.create({ UserId: userId, PostId: data })
-            .then((like) => res.status(201).json(like))
+            .then(() => {
+              models.PostLikes.findOne({
+                where: { UserId: userId, PostId: data },
+                include: [{ model: models.User, attributes: ["username"] }],
+              })
+                .then((like) => res.status(200).json(like))
+                .catch((error) => res.status(404).json(error));
+            })
             .catch((error) => res.status(501).json(error));
         }
       })

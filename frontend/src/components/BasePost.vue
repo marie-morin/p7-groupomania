@@ -1,8 +1,8 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
-import FormImageUpload from "@/components/FormImageUpload.vue";
-import SectionComments from "@/components/SectionComments.vue";
-import BaseLike from "@/components/BaseLike.vue";
+import FormImageUpload from "@/components/FormImageUpload";
+import SectionComments from "@/components/SectionComments";
+import BaseLike from "@/components/BaseLike";
 
 export default {
   name: "BasePost",
@@ -29,7 +29,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["currentUser", "allPosts", "popup"]),
+    ...mapGetters(["currentUser", "popup"]),
 
     isAllowed() {
       return (
@@ -88,7 +88,7 @@ export default {
       if (this.file != null) {
         formData.append("file", this.file);
 
-        if (this.updatedPost.title == "" || formData.get("file") == "null") {
+        if (this.updatedPost.title == "" || formData.get("file") == null) {
           const contexte = {
             intention: "notification",
             message: "Votre publication doit contenir un titre et une image !",

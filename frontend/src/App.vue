@@ -1,8 +1,8 @@
 <script>
 import { mapGetters } from 'vuex';
-import TheHeader from "@/components/TheHeader.vue";
-import TheFooter from "@/components/TheFooter.vue";
-import ThePopup from '@/components/ThePopup.vue';
+import TheHeader from "@/components/TheHeader";
+import TheFooter from "@/components/TheFooter";
+import ThePopup from '@/components/ThePopup';
 
 export default {
   name: "App",

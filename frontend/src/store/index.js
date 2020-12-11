@@ -78,6 +78,8 @@ const actions = {
       itemId: item.id,
       userId: item.user,
     };
+    console.log("rate : ", rate);
+    console.log("item.mutation : ", item.mutation);
     commit(item.mutation, rate);
   },
 

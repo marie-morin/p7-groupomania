@@ -1,7 +1,7 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
-import FormPostCreation from "@/components/FormPostCreation.vue";
-import BasePost from "@/components/BasePost.vue";
+import FormPostCreation from "@/components/FormPostCreation";
+import BasePost from "@/components/BasePost";
 
 export default {
   name: "Home",
@@ -24,6 +24,7 @@ export default {
 
 <template>
   <div class="home">
+    <Button>Créer une publication</Button>
     <FormPostCreation />
     <div class="posts">
       <BasePost

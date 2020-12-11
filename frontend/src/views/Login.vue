@@ -1,5 +1,5 @@
 <script>
-import FormRegister from "@/components/FormRegister.vue";
+import FormRegister from "@/components/FormRegister";
 
 export default {
   name: "Login",

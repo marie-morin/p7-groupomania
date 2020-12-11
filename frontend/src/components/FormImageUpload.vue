@@ -2,6 +2,13 @@
 export default {
   name: "FormImageUpload",
 
+  props: {
+    wasPosted: {
+      type: Boolean,
+      required: true,
+    },
+  },
+
   data() {
     return {
       imagePreview: null,
@@ -9,8 +16,21 @@ export default {
     };
   },
 
+  watch: {
+    wasPosted() {
+      console.log(this.wasPosted);
+      this.imagePreview = null;
+      this.$refs.inputFile.value = "";
+    },
+  },
+
   methods: {
-    selectFile(event) {
+    selectFile(event) {      
+      if (event.target.files.length < 1) {
+        console.log("passss");
+        return;
+      }
+      
       const allowedTypes = [
         "image/jpeg",
         "image/jpg",
@@ -18,13 +38,18 @@ export default {
         "image/gif",
       ];
       this.file = event.target.files[0] || event.dataTransfer.files;
+      // console.log("file : ", this.file);
+      // console.log("size : ", this.file.size);
 
-      // if(!allowedTypes.includes(this.file.type) || this.file.size > 1000000) {
-      if (!allowedTypes.includes(this.file.type)) {
+      if (
+        !event.target ||
+        !allowedTypes.includes(this.file.type) ||
+        this.file.size > 104857600
+      ) {
         const contexte = {
           intention: "notification",
           message:
-            "Vous devez selectionner des images (.jpeg, .jpg ou .png) ou des gif (.gif) de moins de 1 Mo !",
+            "Vous devez selectionner une image (.jpeg, .jpg ou .png) ou un gif (.gif) de moins de 100 Mo !",
         };
         this.$store.commit("displayPopup", contexte);
         this.file = null;

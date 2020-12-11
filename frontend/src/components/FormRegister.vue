@@ -16,13 +16,13 @@ export default {
     settings: {
       type: Object,
       required: true,
-    }
+    },
   },
 
   data() {
     return {
       passwordConfirmed: false,
-    }
+    };
   },
 
   computed: mapGetters(["currentUser"]),
@@ -38,7 +38,8 @@ export default {
         if (this.user.email == "" || this.user.password == "") {
           const contexte = {
             intention: "notification",
-            message: "Vous devez renseigner une adresse mail et un mot de passe !",
+            message:
+              "Vous devez renseigner une adresse mail et un mot de passe !",
           };
           this.$store.commit("displayPopup", contexte);
           return;
@@ -56,7 +57,8 @@ export default {
         ) {
           const contexte = {
             intention: "notification",
-            message: "Vous devez renseigner une adresse email, un nom, un prénom et un mot de passe !",
+            message:
+              "Vous devez renseigner une adresse email, un nom, un prénom et un mot de passe !",
           };
           this.$store.commit("displayPopup", contexte);
           return;
@@ -65,7 +67,7 @@ export default {
         if (!passwordRegex.test(this.user.password)) {
           const contexte = {
             intention: "notification",
-            message: `Le mot de passe doit comporter au moins 8 caractères, une majuscule, une minuscule, une lettre et un chiffre. Seuls les caractères suivant sont autorisée : @ $ ! % ?`,
+            message: `Le mot de passe doit comporter au moins 8 caractères, une majuscule, une minuscule, une lettre et un chiffre. Seuls les caractères spéciaux suivants sont autorisée : @ $ ! % ?`,
           };
           this.$store.commit("displayPopup", contexte);
           return;
@@ -77,15 +79,16 @@ export default {
           this.passwordConfirmed = false;
           const contexte = {
             intention: "notification",
-            message: "La confirmation du mot de passe doit être identique au mot de passe !",
+            message:
+              "La confirmation du mot de passe doit être identique au mot de passe !",
           };
           this.$store.commit("displayPopup", contexte);
           return;
         }
       }
 
-      if(this.passwordConfirmed) {
-        const data = { user : this.user, url: this.settings.urlPost }
+      if (this.passwordConfirmed) {
+        const data = { user: this.user, url: this.settings.urlPost };
         this.registerUser(data);
       }
     },
@@ -93,17 +96,15 @@ export default {
 };
 </script>
 
-
 <template>
   <div class="form-section">
     <div class="form-container">
-      
       <h1 v-if="settings.destination === 'login'">Inscrivez-vous !</h1>
       <h1 v-else>Connectez-vous !</h1>
 
       <form @submit.prevent="submitUser" class="form">
         <div>
-          <label for="email">Adresse email</label> 
+          <label for="email">Adresse email</label>
           <input
             type="email"
             id="email"
@@ -111,11 +112,11 @@ export default {
             placeholder="Mon adresse email..."
             required
             v-model="user.email"
-          >
+          />
         </div>
 
         <div v-if="settings.destination === 'login'">
-          <label for="firstname">Prénom</label> 
+          <label for="firstname">Prénom</label>
           <input
             type="text"
             id="firstname"
@@ -123,11 +124,11 @@ export default {
             placeholder="Mon prénom..."
             required
             v-model="user.firstname"
-          >
+          />
         </div>
 
         <div v-if="settings.destination === 'login'">
-          <label for="lastname">Nom</label> 
+          <label for="lastname">Nom</label>
           <input
             type="text"
             id="lastname"
@@ -135,11 +136,11 @@ export default {
             placeholder="Mon nom..."
             required
             v-model="user.lastname"
-          >
+          />
         </div>
 
         <div>
-          <label for="password">Mot de passe</label> 
+          <label for="password">Mot de passe</label>
           <input
             type="password"
             id="password"
@@ -147,11 +148,11 @@ export default {
             placeholder="Mon mot de passe..."
             required
             v-model="user.password"
-          >
+          />
         </div>
 
         <div v-if="settings.destination === 'login'">
-          <label for="passwordConf">Confirmation mot de passe</label> 
+          <label for="passwordConf">Confirmation mot de passe</label>
           <input
             type="password"
             id="passwordConf"
@@ -159,7 +160,7 @@ export default {
             placeholder="La confirmation de mon mot de passe..."
             required
             v-model="user.passwordConf"
-          >
+          />
         </div>
 
         <div v-if="settings.destination === 'login'">
@@ -181,15 +182,13 @@ export default {
     </div>
     <p>
       {{ settings.question }} ?
-      <router-link
-        :to="'/' + settings.destination"
-        class="option">{{ settings.option }}
+      <router-link :to="'/' + settings.destination" class="option"
+        >{{ settings.option }}
       </router-link>
       !
     </p>
   </div>
 </template>
-
 
 <style scoped lang="scss">
 // .form {

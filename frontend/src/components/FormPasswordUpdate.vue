@@ -34,8 +34,7 @@ export default {
         this.updatedPassword == "" ||
         this.updatedPassword.initialMdp == "" ||
         this.updatedPassword.newMdp == "" ||
-        this.updatedPassword.newMdpConf == "" ||
-        this.updatedPassword.id == ""
+        this.updatedPassword.newMdpConf == ""
       ) {
         const contexte = {
           intention: "notification",
@@ -69,6 +68,7 @@ export default {
         },
       };
       this.$store.commit("displayPopup", contexte);
+      this.$emit("display-form");
     },
   },
 };

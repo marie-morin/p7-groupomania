@@ -160,7 +160,14 @@ exports.like = (req, res, next) => {
           }
         } else {
           models.CommentLikes.create({ UserId: userId, CommentId: data })
-            .then((like) => res.status(201).json(like))
+            .then(() => {
+              models.CommentLikes.findOne({
+                where: { UserId: userId, CommentId: data },
+                include: [{ model: models.User, attributes: ["username"] }],
+              })
+                .then((like) => res.status(200).json(like))
+                .catch((error) => res.status(404).json(error));
+            })
             .catch((error) => res.status(501).json(error));
         }
       })

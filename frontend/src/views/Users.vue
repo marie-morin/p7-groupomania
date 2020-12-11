@@ -1,7 +1,7 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
-import BaseCardUser from "@/components/BaseCardUser.vue";
-import BaseSearch from "@/components/BaseSearch.vue";
+import BaseCardUser from "@/components/BaseCardUser";
+import BaseSearch from "@/components/BaseSearch";
 
 export default {
   name: "Users",

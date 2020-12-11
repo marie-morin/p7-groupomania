@@ -1,6 +1,6 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
-import BaseLike from "@/components/BaseLike.vue";
+import BaseLike from "@/components/BaseLike";
 
 export default {
   name: "BaseComment",
@@ -36,7 +36,12 @@ export default {
     },
 
     wasPublished() {
-      const creationDate = new Date(this.comment.createdAt);
+      let creationDate;
+      if (this.comment.createdAt == this.comment.updatedAt) {
+        creationDate = new Date(this.comment.createdAt);
+      } else {
+        creationDate = new Date(this.comment.updatedAt);
+      }
       const now = new Date();
       const timeSinceCreation =
         (now.getTime() - creationDate.getTime()) / (1000 * 3600 * 24);

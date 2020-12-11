@@ -1,7 +1,7 @@
 <script>
 import { mapActions } from "vuex";
 import BaseButton from "@/components/BaseButton";
-import FormImageUpload from "@/components/FormImageUpload.vue";
+import FormImageUpload from "@/components/FormImageUpload";
 
 export default {
   name: "FormPostCreation",
@@ -12,6 +12,7 @@ export default {
     return {
       file: null,
       newPostTitle: "",
+      wasPosted: false,
     };
   },
 
@@ -46,6 +47,7 @@ export default {
         };
         this.add(options);
         this.newPostTitle = "";
+        this.wasPosted = true;
       }
     },
   },
@@ -67,11 +69,9 @@ export default {
     />
 
     <label for="file-input">Image</label>
-    <FormImageUpload v-on:send-imagefile="setFile" />
+    <FormImageUpload v-on:send-imagefile="setFile" :wasPosted="wasPosted" />
 
-    <div class="btn">
-      <BaseButton>Publier</BaseButton>
-    </div>
+    <BaseButton>Publier</BaseButton>
   </form>
 </template>
 

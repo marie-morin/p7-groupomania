@@ -67,7 +67,7 @@ const mutations = {
     posts.forEach((post) => {
       post.comments.forEach((comment) => {
         if (comment.id === rate.itemId) {
-          if (rate.response.status == 201) {
+          if (rate.response.status == 200) {
             comment.likes.push(rate);
           } else {
             comment.likes = comment.likes.filter(

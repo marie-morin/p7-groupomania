@@ -36,7 +36,7 @@ export default {
       const contexte = {
         origin: "updateUser",
         intention: "confirmation",
-        message: "Voulez-vous vraiment modifier votre compte ?",
+        message: "Voulez-vous vraiment modifier votre profil ?",
         options: {
           url: process.env.VUE_APP_LOCALHOST_URL + `users/${this.user.id}`,
           mutation: "setUser",
@@ -44,6 +44,8 @@ export default {
         },
       };
       this.$store.commit("displayPopup", contexte);
+
+      this.$emit("display-form");
     },
   },
 };

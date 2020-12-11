@@ -1,5 +1,5 @@
 <script>
-import BaseCardUser from "@/components/BaseCardUser.vue";
+import BaseCardUser from "@/components/BaseCardUser";
 
 export default {
   name: "BaseSearch",

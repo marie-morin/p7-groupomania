@@ -2,7 +2,7 @@
 import { mapActions } from "vuex";
 // import axios from "axios";
 import BaseButton from "@/components/BaseButton";
-import FormImageUpload from "@/components/FormImageUpload.vue";
+import FormImageUpload from "@/components/FormImageUpload";
 
 export default {
   name: "InfosUser",
@@ -24,6 +24,7 @@ export default {
     return {
       file: null,
       imageUploadDisplayed: false,
+      wasPosted: false,
     };
   },
 
@@ -42,7 +43,7 @@ export default {
       let formData = new FormData();
       formData.append("file", this.file);
 
-      if (formData.get("file") == "null") {
+      if (formData.get("file") == null) {
         const contexte = {
           intention: "notification",
           message: "Vous devez selectionner une image !",
@@ -57,6 +58,8 @@ export default {
           data: formData,
         };
         this.update(options);
+        this.wasPosted = true;
+        this.imageUploadDisplayed = false;
       }
     },
   },
@@ -101,7 +104,10 @@ export default {
         </section>
 
         <form v-if="imageUploadDisplayed" @submit.prevent="addPicture">
-          <FormImageUpload v-on:send-imagefile="setFile" />
+          <FormImageUpload
+            v-on:send-imagefile="setFile"
+            :wasPosted="wasPosted"
+          />
           <BaseButton>Enregistrer</BaseButton> <br />
         </form>
       </div>

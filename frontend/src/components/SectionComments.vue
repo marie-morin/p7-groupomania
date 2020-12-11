@@ -1,6 +1,6 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
-import BaseComment from "@/components/BaseComment.vue";
+import BaseComment from "@/components/BaseComment";
 
 export default {
   name: "SectionComments",
