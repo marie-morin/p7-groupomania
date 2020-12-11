@@ -1,42 +1,60 @@
-<script>
-import { mapGetters } from 'vuex';
-import TheHeader from "@/components/TheHeader";
-import TheFooter from "@/components/TheFooter";
-import ThePopup from '@/components/ThePopup';
-
-export default {
-  name: "App",
-  components: { TheHeader, TheFooter, ThePopup },
-  computed: { ...mapGetters(['popup']) },
-};
-</script>
-
-
 <template>
-  <div id="app">
-      <div class="top-content">
-        <TheHeader />
-        <div class="content">
-          <router-view />
-          <ThePopup v-if="popup.isDisplayed" />
-        </div>
+  <v-app>
+    <v-app-bar
+      app
+      color="primary"
+      dark
+    >
+      <div class="d-flex align-center">
+        <v-img
+          alt="Vuetify Logo"
+          class="shrink mr-2"
+          contain
+          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
+          transition="scale-transition"
+          width="40"
+        />
+
+        <v-img
+          alt="Vuetify Name"
+          class="shrink mt-1 hidden-sm-and-down"
+          contain
+          min-width="100"
+          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
+          width="100"
+        />
       </div>
 
-      <TheFooter />
-  </div>
+      <v-spacer></v-spacer>
+
+      <v-btn
+        href="https://github.com/vuetifyjs/vuetify/releases/latest"
+        target="_blank"
+        text
+      >
+        <span class="mr-2">Latest Release</span>
+        <v-icon>mdi-open-in-new</v-icon>
+      </v-btn>
+    </v-app-bar>
+
+    <v-main>
+      <HelloWorld/>
+    </v-main>
+  </v-app>
 </template>
 
+<script>
+import HelloWorld from './components/HelloWorld';
 
-<style lang="scss">
-#app {
-  position: relative;
-  // @include flexbox(space-between, column, center);
-  // font-family: Avenir, Helvetica, Arial, sans-serif;
-  // -webkit-font-smoothing: antialiased;
-  // -moz-osx-font-smoothing: grayscale;
-  // text-align: center;
-  // color: $groupomania-police;
-}
-</style>
+export default {
+  name: 'App',
 
+  components: {
+    HelloWorld,
+  },
 
+  data: () => ({
+    //
+  }),
+};
+</script>
