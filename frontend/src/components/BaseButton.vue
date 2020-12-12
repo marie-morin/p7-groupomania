@@ -50,22 +50,4 @@ export default {
   </div>
 </template>
 
-<style scoped lang="scss">
-// .global-btn {
-//   margin: 0 10px;
-//   padding: 10px 20px;
-
-//   border-radius: $radius;
-
-//   background-color: $groupomania-red;
-//   color: white;
-
-//   font-weight: bold;
-//   text-decoration: none;
-//   text-transform: uppercase;
-
-//   &:hover {
-//     background-color: darken($color: $groupomania-red, $amount: 5);
-//   }
-// }
-</style>
+<style scoped lang="scss"></style>

@@ -20,26 +20,4 @@ export default {
 </template>
 
 <style scope lang="scss">
-// .landing {
-//   height: 100vh;
-//   @include flexbox(center, column, center);
-//   background-image: url("../../public/images/fond.png");
-//   background-size: cover;
-// }
-
-// .content {
-//   @include flexbox(center, column, center);
-// }
-
-// .redirection {
-//   @media screen and (max-width: 400px) {
-//     @include flexbox(center, column, center);
-//   }
-// }
-
-// .btn {
-//   @media screen and (max-width: $x-small) {
-//     margin-top: 20px;
-//   }
-// }
 </style>

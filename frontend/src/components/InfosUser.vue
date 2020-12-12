@@ -120,45 +120,4 @@ export default {
   max-width: 200px;
   max-height: 200px;
 }
-// h1 {
-//   margin: 0;
-//   color: $groupomania-red;
-//   text-align: center;
-//   margin-bottom: 20px;
-// }
-// h3 {
-//   margin: 0;
-//   color: $groupomania-font-blue;
-// }
-// p {
-//   margin-top: 5px;
-// }
-// .infos {
-//   width: 100%;
-//   margin: 0 auto;
-//   background-color: $groupomania-back-grey;
-
-//   &-container {
-//     margin: 0 auto;
-//     padding: 30px;
-//     background-color: $groupomania-back-grey;
-//     border-radius: $radius;
-//     border: 2px solid $groupomania-red;
-//     text-align: left;
-//     color: $groupomania-font-blue;
-
-//     @media screen and(max-width: $large + 100) {
-//       width: 70%;
-//     }
-//     @media screen and(max-width: $small) {
-//       width: 90%;
-//       padding: 40px 10px;
-//     }
-//   }
-// }
-
-// .option {
-//   color: $groupomania-red;
-//   text-transform: none;
-// }
 </style>

@@ -28,19 +28,4 @@ export default {
 </template>
 
 <style scoped lang="scss">
-// .login {
-//   min-height: 100vh;
-//   @include flexbox(space-between, column, center);
-// }
-// .top-content {
-//   width: 100vw;
-//   height: 100%;
-// }
-// .content {
-//   width: 100vw;
-//   min-height: 80vh;
-//   background-image: url("../../public/images/fond.png");
-//   background-size: cover;
-//   padding: 70px 0;
-// }
 </style>

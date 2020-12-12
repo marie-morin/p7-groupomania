@@ -90,38 +90,4 @@ export default {
 </template>
 
 <style scope lang="scss">
-// .post {
-
-//   &-likes {
-//     // width: 40px;
-//     min-height: 100%;
-//     margin: 0;
-//     padding: 0;
-//     background-color: $groupomania-back-grey;
-//     @include flexbox(center, column, center);
-//   }
-
-//   .icon {
-//     color: $groupomania-police;
-//     font-size: 20px;
-//     margin: 0;
-//     &.up {
-//       &:hover {
-//         color: green;
-//       }
-//     }
-//     &.down {
-//       &:hover {
-//         color: red;
-//       }
-//     }
-//     &.comment {
-//       color: $groupomania-light-grey;
-//     }
-//   }
-// }
-
-// .liked {
-//   background-color: green;
-// }
 </style>

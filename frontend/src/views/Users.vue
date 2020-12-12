@@ -30,16 +30,4 @@ export default {
 </template>
 
 <style scope lang="scss">
-// .home {
-//   min-height: 100vh;
-//   @include flexbox(space-between, column, center);
-//   color: black;
-// }
-
-// .content {
-//   width: 100vw;
-//   min-height: 80vh;
-//   background-color: $groupomania-background;
-//   padding: 70px 0;
-// }
 </style>

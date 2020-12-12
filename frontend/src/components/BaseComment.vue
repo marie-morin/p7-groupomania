@@ -128,39 +128,4 @@ export default {
   </div>
 </template>
 
-<style scope lang="scss">
-// .comment-unit {
-//   border: 1px solid black;
-//   margin: 10px 0 10px 10px;
-//   background-color: darkgray;
-// }
-
-// .comment-likes {
-//   width: 40px;
-//     min-height: 100%;
-//     margin: 0;
-//     padding: 0;
-//     background-color: $groupomania-back-grey;
-//     @include flexbox(center, column, center);
-// }
-
-//  .likes {
-//     margin: 5px 0;
-//     font-weight: bold;
-//     color: $groupomania-police;
-//   }
-
-//   .liked {
-//   background-color: green;
-// }
-
-// .icon {
-//   color: $groupomania-police;
-//   font-size: 20px;
-//   margin: 0;
-
-//   &:hover {
-//     color: green;
-//   }
-// }
-</style>
+<style scope lang="scss"></style>
