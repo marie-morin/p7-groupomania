@@ -22,32 +22,40 @@ export default {
 
 <template>
   <div class="header">
-    <img src="../../public/images/icon-white.png" alt="Logo" class="logo" />
-    <div id="nav">
-      <router-link v-if="currentUser.id" to="/home">
-        Accueil
-      </router-link>
+    <v-avatar
+      class="mr-10"
+      color="grey darken-1"
+      size="32"
+      v-if="currentUser.id"
+    ></v-avatar>
 
-      <router-link v-if="currentUser.id" to="/users">
-        Utilisateurs
-      </router-link>
+    <!-- <p v-if="currentUser.id">
+      Bonjour
+      <span>{{ currentUser.firstname }}</span>
+    </p> -->
 
+    <v-btn text>
+      <router-link v-if="currentUser.id" to="/home">Accueil</router-link> 
+    </v-btn>
+
+    <v-btn text>
+      <router-link v-if="currentUser.id" to="/users">Utilisateurs</router-link>   
+    </v-btn>
+
+    <v-btn text>
       <router-link
         v-if="currentUser.id"
         :to="{ name: 'Profil', params: { id: currentUser.id } }"
       >
         Profil
       </router-link>
+    </v-btn>
 
+    <v-btn text>
       <a v-if="currentUser.id" href="#" @click.prevent="logout">
         Déconnexion
       </a>
-
-      <p v-if="currentUser.id">
-        Bonjour
-        <span>{{ currentUser.firstname }}</span>
-      </p>
-    </div>
+    </v-btn>
   </div>
 </template>
 

@@ -1,60 +1,73 @@
-<template>
-  <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
-    </v-app-bar>
-
-    <v-main>
-      <HelloWorld/>
-    </v-main>
-  </v-app>
-</template>
-
 <script>
-// import HelloWorld from './components/HelloWorld';
+import { mapGetters } from 'vuex';
+import TheHeader from "@/components/TheHeader.vue";
+import TheFooter from "@/components/TheFooter.vue";
+// import ThePopup from '@/components/ThePopup.vue';
 
 export default {
-  name: 'App',
+  name: "App",
 
-  // components: {
-  //   HelloWorld,
-  // },
+  components: { TheHeader, TheFooter },
+  // components: { TheHeader, TheFooter, ThePopup },
 
-  data: () => ({
-    //
-  }),
-};
+  computed: { ...mapGetters(['popup']) },
+}
 </script>
+
+
+<template>
+  <v-app id="inspire">
+
+    <!-- Header -->
+    <v-app-bar
+      app
+      color="white"
+      flat
+    >
+      <v-container class="py-0 fill-height">
+
+        <the-header />
+
+        <!-- <v-avatar
+          class="mr-10"
+          color="grey darken-1"
+          size="32"
+        ></v-avatar>
+
+        <v-btn
+          v-for="link in links"
+          :key="link"
+          text
+        >
+          {{ link }}
+        </v-btn>
+
+        <v-spacer></v-spacer>
+
+        <v-responsive max-width="260">
+          <v-text-field
+            dense
+            flat
+            hide-details
+            rounded
+            solo-inverted
+          ></v-text-field>
+        </v-responsive> -->
+      </v-container>
+    </v-app-bar>
+
+    <!-- Contenue du router -->
+    <v-main class="grey lighten-3">
+      <v-container>
+        <v-sheet
+          min-height="70vh"
+          rounded="lg"
+        >
+          <router-view></router-view>
+        </v-sheet>
+      </v-container>
+    </v-main>
+
+    <the-footer />
+  </v-app>
+</template>

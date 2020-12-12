@@ -95,7 +95,7 @@ export default {
 <style scope lang="scss">
 .popup {
   width: 300px;
-  background-color: $groupomania-red;
+  // background-color: $groupomania-red;
   position: fixed;
   left: 20px;
   bottom: 20px;
