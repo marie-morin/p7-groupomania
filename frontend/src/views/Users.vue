@@ -23,7 +23,7 @@ export default {
 </script>
 
 <template>
-  <div class="home">
+  <div>
     <BaseSearch :items="allUsers" />
     <BaseCardUser v-for="user in allUsers" :key="user.id" :user="user" />
   </div>

@@ -29,7 +29,7 @@ export default {
 </script>
 
 <template>
-  <div class="signup">
+  <div>
     <FormRegister :settings="settings" :user="user" />
   </div>
 </template>

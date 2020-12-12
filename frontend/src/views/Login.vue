@@ -22,7 +22,7 @@ export default {
 </script>
 
 <template>
-  <div class="login">
+  <div>
     <FormRegister :user="user" :settings="settings" />
   </div>
 </template>

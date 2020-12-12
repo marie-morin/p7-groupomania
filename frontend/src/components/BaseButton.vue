@@ -39,12 +39,11 @@ export default {
       v-if="!onClick"
       :href="href"
       :to="to"
-      class="global-btn"
     >
       <slot />
     </component>
 
-    <button v-else @click.prevent.stop="onClick" class="global-btn">
+    <button v-else @click.prevent.stop="onClick">
       <slot />
     </button>
   </div>

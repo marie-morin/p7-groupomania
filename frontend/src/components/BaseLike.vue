@@ -68,11 +68,10 @@ export default {
 </script>
 
 <template>
-  <div class="post-likes">
+  <div>
     <p
       @mouseover="showUsers = true"
       @mouseout="showUsers = false"
-      class="likes"
     >
       {{ item.likes.length }}
     </p>
@@ -84,7 +83,6 @@ export default {
       icon="arrow-up"
       @click="like()"
       :class="{ liked: wasLiked }"
-      class="icon up"
     />
   </div>
 </template>

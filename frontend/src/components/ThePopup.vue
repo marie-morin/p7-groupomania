@@ -70,7 +70,7 @@ export default {
 </script>
 
 <template>
-  <div class="popup">
+  <div>
     <p v-if="popup.intention == 'notification'">
       Notification d'action
     </p>

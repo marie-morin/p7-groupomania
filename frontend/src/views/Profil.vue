@@ -107,7 +107,7 @@ export default {
 </script>
 
 <template>
-  <div class="profil">
+  <div>
     <InfosUser v-if="isOwner" :is-owner="isOwner" :user="currentUser" />
     <InfosUser v-else :is-owner="isOwner" :user="guest" />
 
@@ -133,7 +133,7 @@ export default {
       Supprimer le profil
     </BaseButton>
 
-    <div v-for="post in posts" :key="post.id" class="post">
+    <div v-for="post in posts" :key="post.id">
       <BasePost :post="post" />
     </div>
   </div>
