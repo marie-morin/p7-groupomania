@@ -68,16 +68,14 @@ export default {
 </script>
 
 <template>
-  <div class="test">
-    <div class="post-comments" @click="displayComment()">
-      <font-awesome-icon icon="comment" class="icon comment" />
+  <div>
+    <div @click="displayComment()">
+      <font-awesome-icon icon="comment" />
       <p>{{ post.comments.length }} commentaires</p>
     </div>
 
-    <div v-show="displayComments === true" class="comment-container">
-      <div v-for="comment in post.comments" :key="comment.id">
-        <BaseComment :comment="comment" />
-      </div>
+    <div v-show="displayComments === true">
+      <BaseComment v-for="comment in post.comments" :key="comment.id" :comment="comment" />
 
       <input
         type="text"

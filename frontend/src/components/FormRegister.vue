@@ -105,7 +105,6 @@ export default {
     <h1 v-if="settings.destination === 'login'">Inscrivez-vous !</h1>
     <h1 v-else>Connectez-vous !</h1>
 
-
     <!-- Adresse email -->
     <div>
       <label for="email">Adresse email</label>
@@ -158,8 +157,6 @@ export default {
       />
     </div>
 
-
-
     <!-- Confirmation de mot de passe -->
     <div v-if="settings.destination === 'login'">
       <label for="passwordConf">Confirmation mot de passe</label>
@@ -172,7 +169,6 @@ export default {
         v-model="user.passwordConf"
       />
     </div>
-
 
     <!-- Biographie -->
     <div v-if="settings.destination === 'login'">
@@ -187,13 +183,11 @@ export default {
       ></textarea>
     </div>    
 
-    <div class="form-btn">
-      <BaseButton>{{ settings.title }}</BaseButton>
-    </div>
+    <BaseButton>{{ settings.title }}</BaseButton>
 
     <p>
       {{ settings.question }} ?
-      <router-link :to="'/' + settings.destination" class="option"
+      <router-link :to="'/' + settings.destination"
         >{{ settings.option }}
       </router-link>
       !

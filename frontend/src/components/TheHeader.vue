@@ -21,11 +21,8 @@ export default {
 </script>
 
 <template>
-  <div class="header">
-    <p v-if="currentUser.id">
-      Bonjour
-      <span>{{ currentUser.firstname }}</span>
-    </p>
+  <div>
+    <p v-if="currentUser.id">Bonjour {{ currentUser.firstname }}</p>
     <router-link v-if="currentUser.id" to="/home">Accueil</router-link> 
     <router-link v-if="currentUser.id" to="/users">Utilisateurs</router-link>   
     <router-link

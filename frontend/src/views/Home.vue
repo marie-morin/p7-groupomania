@@ -23,17 +23,13 @@ export default {
 </script>
 
 <template>
-  <div class="home">
-    <Button>Créer une publication</Button>
+  <div>
     <FormPostCreation />
-    <div class="posts">
-      <BasePost
-        :post="post"
-        v-for="post in allPosts"
-        :key="post.id"
-        class="post"
-      />
-    </div>
+    <BasePost
+      :post="post"
+      v-for="post in allPosts"
+      :key="post.id"
+    />
   </div>
 </template>
 

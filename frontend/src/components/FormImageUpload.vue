@@ -72,7 +72,7 @@ export default {
 </script>
 
 <template>
-  <div class="upload">
+  <div>
     <input
       type="file"
       id="file-input"
@@ -81,9 +81,7 @@ export default {
       @change="selectFile($event)"
     />
 
-    <section v-show="imagePreview">
-      <img :src="imagePreview" class="image" />
-    </section>
+    <img v-show="imagePreview" :src="imagePreview" />
   </div>
 </template>
 

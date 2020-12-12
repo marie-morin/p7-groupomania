@@ -84,7 +84,6 @@ export default {
       required
       v-model="updatedPassword.initialMdp"
     />
-    <br />
 
     <label for="newMdp">Votre nouveau mot de passe :</label><br />
     <input
@@ -94,10 +93,8 @@ export default {
       required
       v-model="updatedPassword.newMdp"
     />
-    <br />
 
-    <label for="newMdpConf">Confirmation de votre nouveau mot de passe :</label
-    ><br />
+    <label for="newMdpConf">Confirmation de votre nouveau mot de passe :</label>
     <input
       type="password"
       id="newMdpConf"
@@ -105,21 +102,14 @@ export default {
       required
       v-model="updatedPassword.newMdpConf"
     />
-    <br />
 
-    <div class="form-btn">
-      <BaseButton :onClick="updatePassword">Modifier</BaseButton>
-      <!-- <BaseButton :onClick="displayPasswordFrom">Annuler</BaseButton> -->
+    <BaseButton :onClick="updatePassword">Modifier</BaseButton>
 
-      <div class="form-btn">
-        <input
-          type="submit"
-          value="Annuler test"
-          @click.prevent.stop="$emit('display-form')"
-          class="form-submit"
-        />
-      </div>
-    </div>
+    <input
+      type="submit"
+      value="Annuler test"
+      @click.prevent.stop="$emit('display-form')"
+    />
   </form>
 </template>
 

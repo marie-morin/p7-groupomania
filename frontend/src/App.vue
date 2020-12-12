@@ -14,14 +14,13 @@ export default {
 
 <template>
   <div id="app">
-      <div class="top-content">
+      <div>
         <TheHeader />
-        <div class="content">
+        <div>
           <router-view />
           <ThePopup v-if="popup.isDisplayed" />
         </div>
       </div>
-
       <TheFooter />
   </div>
 </template>

@@ -67,9 +67,7 @@ export default {
 </script>
 
 <template>
-  <div class="page-content">
-    <div class="infos-container">
-      <div class="infos">
+    <div >
         <h1 v-if="isOwner">Bienvenue {{ user.firstname }} !</h1>
         <h1 v-else>{{ user.username }}</h1>
 
@@ -87,11 +85,9 @@ export default {
 
         <h3 v-if="user.isAdmin">Administration :</h3>
         <p v-if="user.isAdmin">Vous êtes administrateur.</p>
-      </div>
 
-      <div class="profilPicture">
         <section v-if="user.imageUrl">
-          <img :src="user.imageUrl" :alt="user.username" class="image" /> <br />
+          <img :src="user.imageUrl" :alt="user.username" /> <br />
           <button @click="displayImageUpload">
             Modifier la photo de profil
           </button>
@@ -110,9 +106,7 @@ export default {
           />
           <BaseButton>Enregistrer</BaseButton> <br />
         </form>
-      </div>
     </div>
-  </div>
 </template>
 
 <style scope lang="scss">

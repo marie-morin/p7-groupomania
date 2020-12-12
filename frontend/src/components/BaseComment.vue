@@ -98,7 +98,7 @@ export default {
 </script>
 
 <template>
-  <div class="comment-unit">
+  <div>
     <BaseLike
       :item="comment"
       url-endpoint="comments"
@@ -107,7 +107,6 @@ export default {
     />
 
     {{ comment.content }} par {{ comment.User.username }}, {{ wasPublished }}.
-    <br />
 
     <div v-if="editing">
       <input

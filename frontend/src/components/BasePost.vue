@@ -119,7 +119,7 @@ export default {
 </script>
 
 <template>
-  <div class="post-unit">
+  <div>
     <BaseLike
       :item="post"
       url-endpoint="posts"
@@ -127,42 +127,34 @@ export default {
       setMutation="setPostLikes"
     />
 
-    <div class="post-content">
-      <p class="meta">
+      <p>
         <router-link :to="{ name: 'Profil', params: { id: post.UserId } }">{{
           post.User.username
         }}</router-link
         >, {{ wasPublished }}.
       </p>
-      <p class="title">{{ post.title }}</p>
+      <p>{{ post.title }}</p>
 
-      <div v-if="post.imageUrl" class="image">
-        <img :src="post.imageUrl" :alt="post.title" class="image" />
-      </div>
+      <img v-if="post.imageUrl" :src="post.imageUrl" :alt="post.title" />
 
-      <p class="text">{{ post.content }}</p>
+      <p>{{ post.content }}</p>
 
-      <div v-if="editing">
-        <form enctype="multipart/form-data" @submit.prevent="updatePost">
-          <label for="title">Nouveau titre</label>
-          <input
-            type="text"
-            name="title"
-            required
-            v-model="updatedPost.title"
-            @keyup.enter="updatePost()"
-          />
-          <br />
+      <form v-if="editing" enctype="multipart/form-data" @submit.prevent="updatePost">
+        <label for="title">Nouveau titre</label>
+        <input
+          type="text"
+          name="title"
+          required
+          v-model="updatedPost.title"
+          @keyup.enter="updatePost()"
+        />
 
-          <label for="upload">Nouvelle image</label>
-          <div class="upload">
-            <FormImageUpload v-on:send-imagefile="setFile" />
-          </div>
+        <label for="upload">Nouvelle image</label>
+        <FormImageUpload v-on:send-imagefile="setFile" />
 
-          <button>Valider la modification</button>
-          <button @click="editPost()">Annuler</button>
-        </form>
-      </div>
+        <button>Valider la modification</button>
+        <button @click="editPost()">Annuler</button>
+      </form>
 
       <SectionComments :post="post" />
 
@@ -173,7 +165,6 @@ export default {
       <button v-if="isCreator" @click="editPost()">
         Modifier votre post
       </button>
-    </div>
   </div>
 </template>
 

@@ -8,14 +8,10 @@ export default {
 </script>
 
 <template>
-  <div class="landing">
-    <div class="bienvenue">
-      <h1>Bienvenue sur votre réseau interne Groupomania</h1>
-    </div>
-    <div class="redirection">
-      <BaseButton to="/signup">S'inscrire</BaseButton>
-      <BaseButton to="/login">Se connecter</BaseButton>
-    </div>
+  <div>
+    <h1>Bienvenue sur votre réseau interne Groupomania</h1>
+    <BaseButton to="/signup">S'inscrire</BaseButton>
+    <BaseButton to="/login">Se connecter</BaseButton>
   </div>
 </template>
 

@@ -52,55 +52,45 @@ export default {
 </script>
 
 <template>
-  <div class="form-section">
-    <div class="form-container">
-      <form @submit.prevent="updateUser" class="form">
-        <label for="email">Adresse email</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          required
-          v-model="user.email"
-        />
+  <form @submit.prevent="updateUser">
+    <label for="email">Adresse email</label>
+    <input
+      type="email"
+      id="email"
+      name="email"
+      required
+      v-model="user.email"
+    />
 
-        <label for="firstname">Prénom</label>
-        <input
-          type="text"
-          id="firstname"
-          name="firstname"
-          required
-          v-model="user.firstname"
-        />
+    <label for="firstname">Prénom</label>
+    <input
+      type="text"
+      id="firstname"
+      name="firstname"
+      required
+      v-model="user.firstname"
+    />
 
-        <label for="lastname">Nom</label>
-        <input
-          type="text"
-          id="lastname"
-          name="lastname"
-          required
-          v-model="user.lastname"
-        />
+    <label for="lastname">Nom</label>
+    <input
+      type="text"
+      id="lastname"
+      name="lastname"
+      required
+      v-model="user.lastname"
+    />
 
-        <label for="bio">Biographie</label>
-        <textarea id="bio" name="bio" cols="10" rows="10" v-model="user.bio">
-        </textarea>
+    <label for="bio">Biographie</label>
+    <textarea id="bio" name="bio" cols="10" rows="10" v-model="user.bio"></textarea>
 
-        <div class="form-btn">
-          <BaseButton>Enregistrer</BaseButton>
-        </div>
+    <BaseButton>Enregistrer</BaseButton>
 
-        <div class="form-btn">
-          <input
-            type="submit"
-            value="Annuler"
-            @click.prevent.stop="$emit('display-form')"
-            class="form-submit"
-          />
-        </div>
-      </form>
-    </div>
-  </div>
+    <input
+      type="submit"
+      value="Annuler"
+      @click.prevent.stop="$emit('display-form')"
+    />
+  </form>
 </template>
 
 <style scoped lang="scss">
