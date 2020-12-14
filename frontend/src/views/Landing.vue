@@ -8,12 +8,32 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div class="landing">
     <h1>Bienvenue sur votre réseau interne Groupomania</h1>
-    <BaseButton to="/signup">S'inscrire</BaseButton>
-    <BaseButton to="/login">Se connecter</BaseButton>
+    <div class="btns">
+      <BaseButton to="/signup" class="btns__unit">S'inscrire</BaseButton>
+      <BaseButton to="/login" class="btns__unit">Se connecter</BaseButton>
+    </div>
   </div>
 </template>
 
 <style scope lang="scss">
+.landing {
+  @include flexbox(center, column, center);
+  background-image: url("../../public/images/fond.png");
+  background-origin: border-box;
+  background-size: cover;
+  background-position: center;
+}
+.btns {
+  @include flexbox(center, row, center);
+
+  @media screen and (max-width: $x-small + 100) {
+    @include flexbox(center, column, center);
+  }
+
+  &__unit {
+    margin: 5px;
+  }
+}
 </style>

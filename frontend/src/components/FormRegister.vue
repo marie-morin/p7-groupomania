@@ -115,6 +115,8 @@ export default {
         placeholder="Mon adresse email..."
         required
         v-model="user.email"
+        class="input"
+
       />
     </div>
 
@@ -141,6 +143,7 @@ export default {
         placeholder="Mon nom..."
         required
         v-model="user.lastname"
+        class="input"
       />
     </div>
 

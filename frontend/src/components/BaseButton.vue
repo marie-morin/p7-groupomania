@@ -39,14 +39,42 @@ export default {
       v-if="!onClick"
       :href="href"
       :to="to"
+      class="btn"
     >
       <slot />
     </component>
 
-    <button v-else @click.prevent.stop="onClick">
+    <button v-else @click.prevent.stop="onClick" class="btn btn-animate">
       <slot />
-    </button>
+    </button>    
   </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.btn {
+  display: inline-block;
+  padding: 15px 40px;
+
+  color: #fff;
+  background-color: #2dce89;
+
+  border-radius: 100px;
+  border: none;
+
+  text-align: center;
+  text-transform: uppercase;
+
+  cursor: pointer;
+
+  transition: all .2s;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+}
+
+.btn:active {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+</style>

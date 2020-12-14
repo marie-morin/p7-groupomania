@@ -21,22 +21,19 @@ export default {
 </script>
 
 <template>
-  <div>
-    <p v-if="currentUser.id">Bonjour {{ currentUser.firstname }}</p>
-    <router-link v-if="currentUser.id" to="/home">Accueil</router-link> 
-    <router-link v-if="currentUser.id" to="/users">Utilisateurs</router-link>   
-    <router-link
-      v-if="currentUser.id"
-      :to="{ name: 'Profil', params: { id: currentUser.id } }"
-    >
+  <div class="header">
+    <p>Bonjour {{ currentUser.firstname }}</p>
+    <router-link to="/home">Accueil</router-link> 
+    <router-link to="/users">Utilisateurs</router-link>   
+    <router-link :to="{ name: 'Profil', params: { id: currentUser.id } }">
       Profil
     </router-link>
-
-    <a v-if="currentUser.id" href="#" @click.prevent="logout">
-      Déconnexion
-    </a>
+    <a href="#" @click.prevent="logout">Déconnexion</a>
   </div>
 </template>
 
 <style scoped lang="scss">
+.header {
+  background-color: chocolate;
+}
 </style>
