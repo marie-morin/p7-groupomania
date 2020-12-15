@@ -29,10 +29,7 @@ export default {
 </script>
 
 <template>
-  <div>
-    <FormRegister :settings="settings" :user="user" />
-  </div>
+  <FormRegister :settings="settings" :user="user" />
 </template>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

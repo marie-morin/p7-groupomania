@@ -1,13 +1,74 @@
-.input {
-    display: block;
-    width: 100%;
-    padding: 10px 20px;
-    // font-size: 1rem;
-    line-height: 1.5;
-    color: #8898aa;
-    background-color: #fff;
-    background-clip: padding-box;
+.form {
+    width: 70%;
+    padding: 50px 50px;
     border: 1px solid #cad1d7;
     border-radius: 3px;
-    box-shadow: none;
-}
+    box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
+    color: $gray;
+    background-color: #e2e7eb;
+    text-align: left;
+
+    @media screen and (max-width: $small + 100) {
+      width: 85%
+    }
+
+    @media screen and (max-width: $x-small + 100) {
+      width: 90%;
+      padding: 50px 20px;
+    }
+
+    &__title {
+        text-align: center;
+    }
+  
+    &__group {
+      margin: 10px 0 30px 0;
+      padding: 15px 0 0;
+      position: relative;
+    }
+  
+    &__label {
+      position: absolute;
+      display: block;
+      top: 0;
+      transition: 0.2s;
+    }
+  
+    &__field {
+      width: 100%;
+      padding: 7px 0;
+      border: 0;
+      border-bottom: 2px solid $gray;
+      outline: 0;
+      background: transparent;
+      color: $gray;
+      transition: border-color 0.2s;
+  
+      &::placeholder {
+        color: transparent;
+      }
+  
+      &:placeholder-shown ~ .form__label {
+        top: 20px;
+        cursor: text;
+      }
+  
+      // &:required,
+      // &:invalid { 
+      //   box-shadow:none;
+      // }
+      
+      &:focus {
+        ~ .form__label {
+          display: block;
+          position: absolute;
+          top: 0;
+          color: $primary;
+          transition: 0.2s;
+        }
+        padding-bottom: 6px;  
+        border-image: linear-gradient(to right, $primary,$secondary);
+        border-image-slice: 1;
+      }
+    }
+  }

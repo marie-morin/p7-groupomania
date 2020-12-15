@@ -100,14 +100,12 @@ export default {
 </script>
 
 <template>
-  <form @submit.prevent="submitUser">
+  <form @submit.prevent="submitUser" class="form">
 
-    <h1 v-if="settings.destination === 'login'">Inscrivez-vous !</h1>
-    <h1 v-else>Connectez-vous !</h1>
+    <h1 v-if="settings.destination === 'login'" class="form__title">Inscrivez-vous !</h1>
+    <h1 v-else class="form__title">Connectez-vous !</h1>
 
-    <!-- Adresse email -->
-    <div>
-      <label for="email">Adresse email</label>
+    <div class="form__group">
       <input
         type="email"
         id="email"
@@ -115,14 +113,12 @@ export default {
         placeholder="Mon adresse email..."
         required
         v-model="user.email"
-        class="input"
-
+        class="form__field"
       />
+      <label for="email" class="form__label">Adresse email</label>
     </div>
 
-    <!-- Prénom -->
-    <div v-if="settings.destination === 'login'">
-      <label for="firstname">Prénom</label>
+    <div v-if="settings.destination === 'login'" class="form__group">
       <input
         type="text"
         id="firstname"
@@ -130,12 +126,12 @@ export default {
         placeholder="Mon prénom..."
         required
         v-model="user.firstname"
+        class="form__field"
       />
+      <label for="firstname" class="form__label">Prénom</label>
     </div>
 
-    <!-- Nom -->
-    <div v-if="settings.destination === 'login'">
-      <label for="lastname">Nom</label>
+    <div v-if="settings.destination === 'login'" class="form__group">
       <input
         type="text"
         id="lastname"
@@ -143,13 +139,12 @@ export default {
         placeholder="Mon nom..."
         required
         v-model="user.lastname"
-        class="input"
+        class="form__field"
       />
+      <label for="lastname" class="form__label">Nom</label>
     </div>
 
-    <!-- Mot de passe -->
-    <div>
-      <label for="password">Mot de passe</label>
+    <div class="form__group">
       <input
         type="password"
         id="password"
@@ -157,12 +152,12 @@ export default {
         placeholder="Mon mot de passe..."
         required
         v-model="user.password"
+        class="form__field"
       />
+      <label for="password" class="form__label">Mot de passe</label>
     </div>
 
-    <!-- Confirmation de mot de passe -->
-    <div v-if="settings.destination === 'login'">
-      <label for="passwordConf">Confirmation mot de passe</label>
+    <div v-if="settings.destination === 'login'" class="form__group">
       <input
         type="password"
         id="passwordConf"
@@ -170,12 +165,12 @@ export default {
         placeholder="La confirmation de mon mot de passe..."
         required
         v-model="user.passwordConf"
+        class="form__field"
       />
+      <label for="passwordConf" class="form__label">Confirmation mot de passe</label>
     </div>
 
-    <!-- Biographie -->
-    <div v-if="settings.destination === 'login'">
-      <label for="bio">Biographie</label>
+    <div v-if="settings.destination === 'login'" class="form__group">
       <textarea
         id="bio"
         name="bio"
@@ -183,12 +178,14 @@ export default {
         cols="10"
         rows="10"
         v-model="user.bio"
+        class="form__field"
       ></textarea>
+      <label for="bio" class="form__label">Biographie</label>
     </div>    
 
-    <BaseButton>{{ settings.title }}</BaseButton>
+    <BaseButton class="center">{{ settings.title }}</BaseButton>
 
-    <p>
+    <p class="center">
       {{ settings.question }} ?
       <router-link :to="'/' + settings.destination"
         >{{ settings.option }}
@@ -200,4 +197,7 @@ export default {
 
 
 <style scoped lang="scss">
+.center {
+  text-align: center;
+}
 </style>

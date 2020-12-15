@@ -33,18 +33,18 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div class="btn">
     <component
       :is="type"
       v-if="!onClick"
       :href="href"
       :to="to"
-      class="btn"
+      class="btn__unit"
     >
       <slot />
     </component>
 
-    <button v-else @click.prevent.stop="onClick" class="btn btn-animate">
+    <button v-else @click.prevent.stop="onClick" class="btn__unit">
       <slot />
     </button>    
   </div>
@@ -52,29 +52,37 @@ export default {
 
 <style scoped lang="scss">
 .btn {
-  display: inline-block;
-  padding: 15px 40px;
+  margin: 5px;
 
-  color: #fff;
-  background-color: #2dce89;
 
-  border-radius: 100px;
-  border: none;
+  &__unit {
+    display: block;
+    // display: inline-block;
+    padding: 15px 40px;
+    margin: 0 auto;
+  
+    color: #fff;
+    background-color: #2dce89;
+  
+    border-radius: 100px;
+    border: none;
+  
+    text-align: center;
+    text-transform: uppercase;
+  
+    cursor: pointer;
+  
+    transition: all .2s;
 
-  text-align: center;
-  text-transform: uppercase;
+    &:hover {
+      transform: translateY(-3px);
+    }
 
-  cursor: pointer;
-
-  transition: all .2s;
+    &:active {
+        transform: translateY(-1px);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    }
+  }
 }
 
-.btn:hover {
-  transform: translateY(-3px);
-}
-
-.btn:active {
-    transform: translateY(-1px);
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-}
 </style>

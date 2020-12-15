@@ -20,7 +20,8 @@ export default {
   <div id="app">
     <div :class="{ fullheight: !isLoged }" class="app__topcontent">
       <TheHeader v-if="isLoged" />
-      <router-view :class="{ fullheight: !isLoged }"/>
+      <router-view />
+      <!-- <router-view :class="{ fullheight: !isLoged }"/> -->
       <ThePopup v-if="popup.isDisplayed" />
     </div>
     <TheFooter v-if="isLoged"/>
@@ -30,24 +31,23 @@ export default {
 
 <style lang="scss">
 #app {
+  min-height: 100vh;
   position: relative;
-
   @include flexbox(space-between, column, center);
-  background-color: burlywood;
-
+  text-align: center;
+  // background-color: rgba(243, 236, 247, 0.333);
+  background-color: lightcoral;
+  color: $groupomania-police;
   // -webkit-font-smoothing: antialiased;
   // -moz-osx-font-smoothing: grayscale;
   // text-align: center;
-  color: $groupomania-police;
-  min-height: 100vh;
-
-  text-align: center;
-
 }
+
 .app__topcontent {
   min-width: 100%;
   min-height: 100%;
-  background-color: crimson;
+  @include flexbox(center, column, center);
+  // background-color: crimson;
 }
 
 .fullheight {

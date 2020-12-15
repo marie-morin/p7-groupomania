@@ -19,21 +19,21 @@ export default {
 
 <style scope lang="scss">
 .landing {
+  min-width: 100%;
+  min-height: 100vh;
   @include flexbox(center, column, center);
+
   background-image: url("../../public/images/fond.png");
   background-origin: border-box;
   background-size: cover;
   background-position: center;
 }
+
 .btns {
   @include flexbox(center, row, center);
 
   @media screen and (max-width: $x-small + 100) {
     @include flexbox(center, column, center);
-  }
-
-  &__unit {
-    margin: 5px;
   }
 }
 </style>
