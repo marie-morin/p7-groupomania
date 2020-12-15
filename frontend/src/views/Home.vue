@@ -23,7 +23,7 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div class="home">
     <FormPostCreation />
     <BasePost
       :post="post"
@@ -34,4 +34,7 @@ export default {
 </template>
 
 <style scope lang="scss">
+.home {
+  width: 100%;
+}
 </style>

@@ -13,10 +13,13 @@ export default {
 
 <style scoped lang="scss">
 .footer {
-  background-color: cornflowerblue;
+  width: 100%;
+  @include flexbox(center, row, center);
+  background-color: $groupomania-red;
 }
 .logo {
   width: 15%;
-  min-width: 150px;
+  min-width: 170px;
+  margin: 15px auto;
 }
 </style>
