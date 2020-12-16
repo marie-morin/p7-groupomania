@@ -37,7 +37,9 @@ exports.addPost = (req, res) => {
       .then((post) => {
         models.Post.findOne({
           where: { id: post.id },
-          include: [{ model: models.User, attributes: ["username"] }],
+          include: [
+            { model: models.User, attributes: ["imageUrl", "username"] },
+          ],
         })
           .then((post) => res.status(200).json(post))
           .catch((error) => res.status(404).json(error));

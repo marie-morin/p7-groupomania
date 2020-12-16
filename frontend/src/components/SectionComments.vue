@@ -68,24 +68,69 @@ export default {
 </script>
 
 <template>
-  <div>
-    <div @click="displayComment()">
-      <font-awesome-icon icon="comment" />
-      <p>{{ post.comments.length }} commentaires</p>
+  <div class="comment-section">
+
+    <div @click="displayComment()" class="comment-section__preview">
+      <font-awesome-icon icon="comment" class="comment-section__icon" />
+      <p class="comment-section__amout">{{ post.comments.length }} commentaires</p>
     </div>
 
-    <div v-show="displayComments === true">
+    <div v-show="displayComments === true" >
       <BaseComment v-for="comment in post.comments" :key="comment.id" :comment="comment" />
 
-      <input
-        type="text"
-        placeholder="Ajouter un commentaire..."
-        required
-        v-model="newComment"
-        @keyup.enter="addComment()"
-      />
+      <div class="comment-section__new">
+        <img :src="post.imageUrl" alt="currentUser.username" class="comment-section__userimage">
+        <input
+          type="text"
+          placeholder="Ajouter un commentaire..."
+          required
+          v-model="newComment"
+          @keyup.enter="addComment()"
+          class="comment-section__entry"
+        />
+      </div>
+
     </div>
   </div>
 </template>
 
-<style scope lang="scss"></style>
+<style scope lang="scss">
+.comment-section {
+  padding: 10px 20px;
+
+  &__preview {
+    @include flexbox(flex-start, row, center);
+    cursor: pointer;
+  }
+
+  &__icon {
+    margin: 0 5px 0 0;
+  }
+
+  &__amout {
+    margin: 0;
+  }
+
+  &__new {
+    @include flexbox(flex-start, row, flex-start);
+  }
+
+  &__userimage {
+    width: 35px;
+    height: 35px;
+    margin-right: 10px;
+    border-radius: 50%;
+  }
+
+  &__entry {
+    width: 100%;
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    background-color: rgb(240, 240, 240);
+    padding: 5px 15px;
+    border-radius: 15px;
+    border: none;
+  }
+}
+</style>

@@ -98,33 +98,112 @@ export default {
 </script>
 
 <template>
-  <div>
-    <BaseLike
-      :item="comment"
-      url-endpoint="comments"
-      rateMutation="rateComment"
-      setMutation="setCommentLikes"
-    />
+  <div class="comment">
 
-    {{ comment.content }} par {{ comment.User.username }}, {{ wasPublished }}.
+    <img :src="currentUser.imageUrl" alt="currentUser.username" class="comment__userimage">
 
-    <div v-if="editing">
-      <input
-        type="text"
-        required
-        v-model="updatedComment"
-        @keyup.enter="updateComment()"
-      />
-      <button @click="editComment()">Annuler</button>
+    <div class="comment__main">
+
+      <div class="comment__content">
+        <p class="comment__meta">
+          <router-link :to="{ name: 'Profil', params: { id: comment.UserId } }">{{
+            comment.User.username
+          }}</router-link
+          >, {{ wasPublished }}.
+        </p>
+
+        {{ comment.content }}
+      </div>
+
+      <div class="comment__likes">
+        <BaseLike
+          :item="comment"
+          url-endpoint="comments"
+          rateMutation="rateComment"
+          setMutation="setCommentLikes"
+        />
+      </div>
+
     </div>
 
-    <button @click="deleteComment(comment.id)" v-if="isAllowed">
-      Supprimer le commentaire
-    </button>
-    <button @click="editComment()" v-if="isCreator">
-      Modifier votre commentaire
-    </button>
+
+    <div class="comment__options">
+        <div class="comment__dots">
+          <font-awesome-icon icon="ellipsis-h" />
+        </div>
+
+        <div class="comment__buttons">
+          <!-- <button @click="deleteComment(comment.id)" v-if="isAllowed">
+            <font-awesome-icon icon="trash-alt" />
+            Supprimer le commentaire
+          </button>
+          <button @click="editComment()" v-if="isCreator">
+            <font-awesome-icon icon="pencil-alt" />
+            Modifier votre commentaire
+          </button> -->
+        </div>
+      </div>
+
+      <!-- <div v-if="editing">
+        <input
+          type="text"
+          required
+          v-model="updatedComment"
+          @keyup.enter="updateComment()"
+        />
+        <button @click="editComment()">Annuler</button>
+      </div> -->
   </div>
 </template>
 
-<style scope lang="scss"></style>
+<style scope lang="scss">
+.comment {
+  margin: 10px 0;
+  // background-color: lightsalmon;
+  text-align: left;
+  @include flexbox(flex-start, row, flex-start);
+
+  &__userimage {
+    width: 35px;
+    height: 35px;
+    margin-right: 10px;
+    border-radius: 50%;
+  }
+
+  &__main {
+    @include flexbox(space-between, row, center);
+    background-color: rgb(240, 240, 240);
+    padding: 5px 15px;
+    border-radius: 15px;
+  }
+
+
+  &__meta {
+    margin: 0;
+
+    a {
+    text-decoration: none;
+    color: inherit;
+    }
+  }
+
+  &__dots {
+    @include flexbox(center, row, center);
+    width: 35px;
+    height: 35px;
+    margin: 0 15px;
+    border-radius: 50%;
+    font-size: 1.3rem;
+    color: rgb(240, 240, 240);
+    cursor: pointer;
+
+    &:hover {
+      box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
+    }
+
+    &--active {
+      box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
+    }
+  }
+}
+</style>

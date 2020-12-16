@@ -35,7 +35,8 @@ export default {
   position: relative;
   @include flexbox(space-between, column, center);
   text-align: center;
-  background-color: rgba(243, 236, 247, 0.333);
+  background-color: #fff;
+  // background-color: rgba(243, 236, 247, 0.333);
   // background-color: lightcoral;
   color: $groupomania-police;
   // -webkit-font-smoothing: antialiased;

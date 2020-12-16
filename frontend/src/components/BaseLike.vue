@@ -68,24 +68,46 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div class="likes">
+    <font-awesome-icon
+      icon="thumbs-up"
+      @click="like()"
+      class="likes__icon"
+      :class="{ liked: wasLiked }"
+    />
+
     <p
       @mouseover="showUsers = true"
       @mouseout="showUsers = false"
+      class="likes__amout"
     >
       {{ item.likes.length }}
     </p>
+
+
     <div v-if="showUsers">
       <p v-for="like in item.likes" :key="like.id">{{ like.User.username }}</p>
     </div>
-
-    <font-awesome-icon
-      icon="arrow-up"
-      @click="like()"
-      :class="{ liked: wasLiked }"
-    />
   </div>
 </template>
 
 <style scope lang="scss">
+.likes {
+  @include flexbox(flex-start, row, flex-start);
+  // padding: 10px 20px;
+  padding: 10px 0px 10px 20px;
+
+  &__amout {
+    margin: 0;
+  }
+
+  &__icon {
+    margin: 0 5px 0 0;
+    cursor: pointer;
+  }
+}
+
+.liked {
+  color: green;
+}
 </style>
