@@ -36,5 +36,6 @@ export default {
 <style scope lang="scss">
 .home {
   width: 100%;
+  background-color: lightpink;
 }
 </style>

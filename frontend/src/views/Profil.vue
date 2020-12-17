@@ -1,28 +1,27 @@
 <script>
+// import { mapGetters } from "vuex";
 import { mapActions, mapGetters } from "vuex";
 import InfosUser from "@/components/InfosUser";
-import FormProfilUpdate from "@/components/FormProfilUpdate";
-import FormPasswordUpdate from "@/components/FormPasswordUpdate";
+// import FormPasswordUpdate from "@/components/FormPasswordUpdate";
 import BasePost from "@/components/BasePost";
-import BaseButton from "@/components/BaseButton";
+// import BaseButton from "@/components/BaseButton";
 
 export default {
   name: "Profil",
 
   components: {
     InfosUser,
-    FormProfilUpdate,
-    FormPasswordUpdate,
+    // FormPasswordUpdate,
     BasePost,
-    BaseButton,
+    // BaseButton,
   },
 
   data() {
     return {
       isOwner: false,
       isAdmin: false,
-      profilFormDisplayed: false,
-      passwordFormDisplayed: false,
+      // profilFormDisplayed: false,
+      // passwordFormDisplayed: false,
     };
   },
 
@@ -79,59 +78,59 @@ export default {
   methods: {
     ...mapActions(["fetch"]),
 
-    deleteProfil() {
-      const contexte = {
-        origin: "deleteProfil",
-        intention: "confirmation",
-        message: "Voulez-vous vraiment supprimer votre compte ?",
-        options: {
-          url:
-            process.env.VUE_APP_LOCALHOST_URL +
-            `users/${this.$route.params.id}`,
-          mutation: "removeUser",
-          id: this.$route.params.id,
-        },
-      };
-      this.$store.commit("displayPopup", contexte);
-    },
+    // deleteProfil() {
+    //   const contexte = {
+    //     origin: "deleteProfil",
+    //     intention: "confirmation",
+    //     message: "Voulez-vous vraiment supprimer votre compte ?",
+    //     options: {
+    //       url:
+    //         process.env.VUE_APP_LOCALHOST_URL +
+    //         `users/${this.$route.params.id}`,
+    //       mutation: "removeUser",
+    //       id: this.$route.params.id,
+    //     },
+    //   };
+    //   this.$store.commit("displayPopup", contexte);
+    // },
 
-    displayProfilForm() {
-      return (this.profilFormDisplayed = !this.profilFormDisplayed);
-    },
+    // displayProfilForm() {
+    //   return (this.profilFormDisplayed = !this.profilFormDisplayed);
+    // },
 
-    displayPasswordFrom() {
-      return (this.passwordFormDisplayed = !this.passwordFormDisplayed);
-    },
+    // displayPasswordFrom() {
+    //   return (this.passwordFormDisplayed = !this.passwordFormDisplayed);
+    // },
   },
 };
 </script>
 
 <template>
-  <div>
+  <div class="profil">
     <InfosUser v-if="isOwner" :is-owner="isOwner" :user="currentUser" />
     <InfosUser v-else :is-owner="isOwner" :user="guest" />
 
-    <BaseButton v-if="isOwner" :onClick="displayProfilForm">
-      Modifier mon profil
-    </BaseButton>
-    <FormProfilUpdate
+    <!-- <FormProfilUpdate
       v-if="isOwner"
       v-show="profilFormDisplayed"
       @display-form="displayProfilForm()"
-    />
-
-    <BaseButton v-if="isOwner" :onClick="displayPasswordFrom">
+    /> -->
+    <!-- <BaseButton v-if="isOwner" :onClick="displayProfilForm">
+      Modifier mon profil
+    </BaseButton> -->
+    
+    <!-- <BaseButton v-if="isOwner" :onClick="displayPasswordFrom">
       Modifier mon mot de passe
-    </BaseButton>
-    <FormPasswordUpdate
+    </BaseButton> -->
+    <!-- <FormPasswordUpdate
       v-if="isOwner"
       v-show="passwordFormDisplayed"
       @display-form="displayPasswordFrom()"
-    />
+    /> -->
 
-    <BaseButton v-if="isOwner || isAdmin" :onClick="deleteProfil">
+    <!-- <BaseButton v-if="isOwner || isAdmin" :onClick="deleteProfil">
       Supprimer le profil
-    </BaseButton>
+    </BaseButton> -->
 
     <div v-for="post in posts" :key="post.id">
       <BasePost :post="post" />
@@ -140,4 +139,8 @@ export default {
 </template>
 
 <style scope lang="scss">
+.profil {
+  width: 100%;
+  background-color: lightpink;
+}
 </style>

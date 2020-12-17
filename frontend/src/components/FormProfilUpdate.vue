@@ -52,36 +52,53 @@ export default {
 </script>
 
 <template>
-  <form @submit.prevent="updateUser">
-    <label for="email">Adresse email</label>
-    <input
-      type="email"
-      id="email"
-      name="email"
-      required
-      v-model="user.email"
-    />
+  <form @submit.prevent="updateUser" class="form">
+    <div class="form__group">
+      <input
+        type="email"
+        id="email"
+        name="email"
+        required
+        v-model="user.email"
+        class="form__field"
+      />
+      <label for="email" class="form__label">Adresse email</label>
+    </div>
 
-    <label for="firstname">Prénom</label>
-    <input
-      type="text"
-      id="firstname"
-      name="firstname"
-      required
-      v-model="user.firstname"
-    />
+    <div class="form__group">
+      <input
+        type="text"
+        id="firstname"
+        name="firstname"
+        required
+        v-model="user.firstname"
+        class="form__field"
+      />
+      <label for="firstname" class="form__label">Prénom</label>
+    </div>
 
-    <label for="lastname">Nom</label>
-    <input
-      type="text"
-      id="lastname"
-      name="lastname"
-      required
-      v-model="user.lastname"
-    />
+    <div class="form__group field">
+      <input
+        type="text"
+        id="lastname"
+        name="lastname"
+        required
+        v-model="user.lastname"
+        class="form__field"
+      />
+      <label for="lastname" class="form__label">Nom</label>
+    </div>
 
-    <label for="bio">Biographie</label>
-    <textarea id="bio" name="bio" cols="10" rows="10" v-model="user.bio"></textarea>
+    <div class="form__group">
+      <textarea
+        id="bio"
+        name="bio"
+       
+        v-model="user.bio"
+        class="form__field"
+      ></textarea>
+      <label for="bio" class="form__label">Biographie</label>
+    </div>
 
     <BaseButton>Enregistrer</BaseButton>
 
@@ -89,9 +106,11 @@ export default {
       type="submit"
       value="Annuler"
       @click.prevent.stop="$emit('display-form')"
+      class="global-btn"
     />
   </form>
 </template>
 
 <style scoped lang="scss">
+
 </style>

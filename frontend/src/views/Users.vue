@@ -23,11 +23,15 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div class="users">
     <BaseSearch :items="allUsers" />
-    <BaseCardUser v-for="user in allUsers" :key="user.id" :user="user" />
+    <BaseCardUser v-for="user in allUsers" :key="user.id" :user="user"/>
   </div>
 </template>
 
 <style scope lang="scss">
+.users {
+  width: 100%;
+  background-color: khaki;
+}
 </style>

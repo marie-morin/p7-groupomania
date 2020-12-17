@@ -32,4 +32,5 @@ export default {
   <FormRegister :settings="settings" :user="user" />
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+</style>

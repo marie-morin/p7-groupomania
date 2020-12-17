@@ -75,40 +75,50 @@ export default {
 </script>
 
 <template>
-  <form>
-    <label for="initialMdp">Votre mot de passe actuel :</label> <br />
-    <input
-      type="password"
-      id="initialMdp"
-      name="initialMdp"
-      required
-      v-model="updatedPassword.initialMdp"
-    />
+  <form class="form">
+    <div class="form__group">
+      <input
+        type="password"
+        id="initialMdp"
+        name="initialMdp"
+        required
+        v-model="updatedPassword.initialMdp"
+        class="form__field"
+      />
+      <label for="initialMdp" class="form__label">Votre mot de passe actuel :</label> <br />
+    </div>
 
-    <label for="newMdp">Votre nouveau mot de passe :</label><br />
-    <input
-      type="password"
-      id="newMdp"
-      name="newMdp"
-      required
-      v-model="updatedPassword.newMdp"
-    />
+    <div class="form__group">
+      <input
+        type="password"
+        id="newMdp"
+        name="newMdp"
+        required
+        v-model="updatedPassword.newMdp"
+        class="form__field"
+      />
+      <label for="newMdp" class="form__label">Votre nouveau mot de passe :</label><br />
+    </div>
 
-    <label for="newMdpConf">Confirmation de votre nouveau mot de passe :</label>
-    <input
-      type="password"
-      id="newMdpConf"
-      name="newMdpConf"
-      required
-      v-model="updatedPassword.newMdpConf"
-    />
+    <div class="form__group">
+      <input
+        type="password"
+        id="newMdpConf"
+        name="newMdpConf"
+        required
+        v-model="updatedPassword.newMdpConf"
+        class="form__field"
+      />
+      <label for="newMdpConf" class="form__label">Confirmation de votre nouveau mot de passe :</label>
+    </div>
 
     <BaseButton :onClick="updatePassword">Modifier</BaseButton>
 
     <input
       type="submit"
-      value="Annuler test"
+      value="Annuler"
       @click.prevent.stop="$emit('display-form')"
+      class="global-btn"
     />
   </form>
 </template>

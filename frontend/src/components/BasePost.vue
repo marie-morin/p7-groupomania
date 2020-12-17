@@ -20,6 +20,7 @@ export default {
     return {
       editing: false,
       file: null,
+      optionsDisplayed: false,
       updatedPost: {
         title: this.post.title,
         imageUrl: this.post.imageUrl,
@@ -81,6 +82,8 @@ export default {
       this.file = image;
     },
 
+    displayOptions() { this.optionsDisplayed = !this.optionsDisplayed },
+
     updatePost() {
       let formData = new FormData();
       formData.append("content", JSON.stringify(this.updatedPost));
@@ -132,21 +135,21 @@ export default {
         </p>
       </div>
 
-      <div class="post__options">
-        <div class="post__dots">
+      <div class="options">
+        <div class="options__dots" @click="displayOptions">
           <font-awesome-icon icon="ellipsis-h" />
         </div>
 
-        <!-- <div class="post__buttons">
-          <button v-if="isAllowed" @click="deletePost(post.id)">
+        <div v-show="optionsDisplayed" class="options__dropdown">
+          <button v-if="isAllowed" @click="deletePost(post.id)" class="options__button">
             <font-awesome-icon icon="trash-alt" />
             Supprimer le post
           </button>
-          <button v-if="isCreator" @click="editPost()">
+          <button v-if="isCreator" @click="editPost()" class="options__button">
             <font-awesome-icon icon="pencil-alt" />
             Modifier votre post
           </button>
-        </div> -->
+        </div>
       </div>
     </div>
 
@@ -191,7 +194,7 @@ export default {
 
 <style scope lang="scss">
 .post {
-  position: relative;
+  // position: relative;
   width: 70%;
   margin: 20px auto;
   border-radius: 3px;
@@ -221,25 +224,6 @@ export default {
     }
   }
 
-  &__dots {
-    @include flexbox(center, row, center);
-    width: 35px;
-    height: 35px;
-    margin: 0 15px;
-    border-radius: 50%;
-    font-size: 1.3rem;
-    color: inherit;
-    cursor: pointer;
-
-    &:hover {
-      box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
-    }
-
-    &--active {
-      box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
-    }
-  }
-
   &__content {
     text-align: left;
   }
@@ -253,7 +237,6 @@ export default {
     height: 500px;
     background-color: rgb(36, 35, 35);
 
-
     img {
       display: block;
       margin: 0 auto;
@@ -263,20 +246,7 @@ export default {
   }
 
 }
-// &__buttons {
-//   position: absolute;
-//   padding: 15px;
-//   border-radius: 3px;
-//   background-color: #fff;
-//   @include flexbox(flex-start, column, center);
 
-//   button {
-//     @include flexbox(flex-start, row, center);
-//     border: none;
-//     background-color: transparent;
-//     cursor: pointer;
-//   }
-// }
 
 // padding: 50px 50px;
 // text-align: left;

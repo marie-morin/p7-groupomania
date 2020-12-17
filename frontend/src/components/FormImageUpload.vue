@@ -72,17 +72,97 @@ export default {
 </script>
 
 <template>
-  <div>
-    <input
-      type="file"
-      id="file-input"
-      ref="inputFile"
-      accept="image/png, image/jpg, image/jpeg, image/gif"
-      @change="selectFile($event)"
-    />
+  <div class="imageSelection">
+    <!-- <label for="file-input">Image</label> -->
+    <div class="imageSelection__button">
 
-    <img v-show="imagePreview" :src="imagePreview" />
+      <label for="file-input" class="imageSelection__label">
+        Choisez une image ou un gif
+      </label>
+
+      <input
+        type="file"
+        id="file-input"
+        ref="inputFile"
+        accept="image/png, image/jpg, image/jpeg, image/gif"
+        @change="selectFile($event)"
+        class="testou"
+      />
+    </div>
+    <div v-show="imagePreview" class="imageSelection__preview">
+      <img  :src="imagePreview" />
+    </div>
+
   </div>
 </template>
 
-<style scope lang="scss"></style>
+<style scope lang="scss">
+.imageSelection {
+  
+
+  // &__button {
+  //   // width: 70%;
+    
+  // }
+
+  &__icon {
+    font-size: 1.3rem;
+    color: green
+  }
+
+  &__label {
+    width: 50%;
+    // @include flexbox(center, row, center);
+    cursor: pointer;
+    display: block;
+    padding: 15px 40px;
+    margin: 0 auto;
+    
+    color: #fff;
+    background-color: #2dce89;
+    
+    border-radius: 100px;
+    border: none;
+    
+    text-align: center;
+    text-transform: uppercase;
+    
+    // cursor: pointer;
+    
+    transition: all .2s;
+
+    &:hover {
+      transform: translateY(-3px);
+    }
+
+    &:active {
+        transform: translateY(-1px);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  &__preview {
+    height: 500px;
+    background-color: rgb(36, 35, 35);
+
+    img {
+      display: block;
+      margin: 0 auto;
+      max-width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+[type="file"] {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute !important;
+  white-space: nowrap;
+  width: 1px;
+  cursor: pointer;
+}
+</style>

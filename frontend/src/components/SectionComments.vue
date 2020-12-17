@@ -101,6 +101,7 @@ export default {
   &__preview {
     @include flexbox(flex-start, row, center);
     cursor: pointer;
+    margin-bottom: 5px;
   }
 
   &__icon {

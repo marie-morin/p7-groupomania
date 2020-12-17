@@ -30,37 +30,72 @@ export default {
           this.matcheditems.push(item);
         }
       }
+
+      if (event.target.value.length === 0) {
+        this.matcheditems = [];
+      }
     },
+
+    blur() {
+      this.matcheditems = [];
+    }
   },
 };
 </script>
 
 <template>
-  <div>
-    <label for="pays">Rechercher un utilisateur :</label>
-    <input type="text" id="pays" @input="search" />
-    <div id="suggestions">
+  <div class="search">
+    <input type="text" id="pays" placeholder="Rechercher un utilisateur..." @input="search" @blur="blur" class="search__input" />
+    <div class="search__results" :class="{ display : matcheditems.length > 0 }">
       <BaseCardUser v-for="item in matcheditems" :key="item.id" :user="item" />
     </div>
   </div>
 </template>
 
 <style scope lang="scss">
-// .suggestion {
-//     padding-left: 2px;
-//     padding-right: 2px;
-// }
+.search {
+  width: 100%;
+  position: relative;
 
-// /* Modifie la couleur de la suggestion survolée par la souris */
-// .suggestion:hover {
-//     background-color: #adf;
-//     cursor: pointer;
-// }
+  &__input {
+    width: 300px;
+    height: 50px;
 
-// /* Positionne la liste des suggestions au-dessous de la zone de saisie */
-// #suggestions {
-//     // position: absolute;
-//     border: 1px solid black;
-//     left: 171px;
-// }
+    margin: 20px auto;
+    padding: 5px 15px;
+
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+
+    border: none;
+    border-radius: 15px;
+
+    background-color: rgb(228, 226, 226);
+    color: grey;
+
+  }
+
+  &__results {
+    width: 300px;
+
+    display: none;
+
+    position: absolute;
+    left: 50%;
+
+    padding: 15px;
+
+    border-radius: 3px;
+    box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
+
+    background-color: rgb(228, 226, 226);
+
+    transform: translate(-50%, 0);
+  }
+}
+
+.display {
+  display: block;
+}
 </style>

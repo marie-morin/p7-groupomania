@@ -18,6 +18,7 @@ export default {
     return {
       updatedComment: "",
       editing: false,
+      optionsDisplayed: false,
     };
   },
 
@@ -71,9 +72,10 @@ export default {
       this.$store.commit("displayPopup", contexte);
     },
 
-    editComment() {
-      this.editing = !this.editing;
-    },
+    editComment() { this.editing = !this.editing },
+
+    displayOptions() { this.optionsDisplayed = !this.optionsDisplayed },
+
 
     updateComment() {
       if (this.updatedComment == "") {
@@ -127,20 +129,20 @@ export default {
     </div>
 
 
-    <div class="comment__options">
-        <div class="comment__dots">
+    <div class="options">
+        <div @click="displayOptions" class="options__dots">
           <font-awesome-icon icon="ellipsis-h" />
         </div>
 
-        <div class="comment__buttons">
-          <!-- <button @click="deleteComment(comment.id)" v-if="isAllowed">
+        <div v-show="optionsDisplayed" class="options__dropdown">
+          <button @click="deleteComment(comment.id)" v-if="isAllowed" class="options__button">
             <font-awesome-icon icon="trash-alt" />
             Supprimer le commentaire
           </button>
-          <button @click="editComment()" v-if="isCreator">
+          <button @click="editComment()" v-if="isCreator" class="options__button">
             <font-awesome-icon icon="pencil-alt" />
             Modifier votre commentaire
-          </button> -->
+          </button>
         </div>
       </div>
 
@@ -161,7 +163,7 @@ export default {
   margin: 10px 0;
   // background-color: lightsalmon;
   text-align: left;
-  @include flexbox(flex-start, row, flex-start);
+  @include flexbox(flex-start, row, center);
 
   &__userimage {
     width: 35px;
@@ -180,6 +182,8 @@ export default {
 
   &__meta {
     margin: 0;
+    color: #5a6269;
+    font-size: 1rem;
 
     a {
     text-decoration: none;

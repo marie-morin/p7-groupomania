@@ -102,8 +102,8 @@ export default {
 <template>
   <form @submit.prevent="submitUser" class="form">
 
-    <h1 v-if="settings.destination === 'login'" class="form__title">Inscrivez-vous !</h1>
-    <h1 v-else class="form__title">Connectez-vous !</h1>
+    <h1 v-if="settings.destination === 'login'" class="form__title">Inscrivez-vous au reseau interne de Groupomania !</h1>
+    <h1 v-else class="form__title">Connectez-vous à votre compte Groupomania !</h1>
 
     <div class="form__group">
       <input
@@ -175,8 +175,6 @@ export default {
         id="bio"
         name="bio"
         placeholder="Ma biographie..."
-        cols="10"
-        rows="10"
         v-model="user.bio"
         class="form__field"
       ></textarea>

@@ -55,20 +55,22 @@ export default {
 </script>
 
 <template>
-  <form enctype="multipart/form-data" @submit.prevent="addPost">
-    <h2>Partager avec vos collègues :</h2>
+  <form enctype="multipart/form-data" @submit.prevent="addPost" class="form postcreation">
+    <h2 class="form__title">Partager avec vos collègues :</h2>
 
-    <label for="title">Titre</label>
-    <input
-      type="text"
-      id="title"
-      name="title"
-      placeholder="Titre"
-      required
-      v-model="newPostTitle"
-    />
+    <div class="form__group">
+      <input
+        type="text"
+        id="title"
+        name="title"
+        placeholder="Titre"
+        required
+        v-model="newPostTitle"
+        class="form__field"
+      />
+      <label for="title" class="form__label">Titre</label>
+    </div>
 
-    <label for="file-input">Image</label>
     <FormImageUpload v-on:send-imagefile="setFile" :wasPosted="wasPosted" />
 
     <BaseButton>Publier</BaseButton>
@@ -76,4 +78,9 @@ export default {
 </template>
 
 <style scope lang="scss">
+.postcreation {
+  // width: 70%;
+  // background-color: brown;
+  margin: 30px auto;
+}
 </style>

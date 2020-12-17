@@ -84,8 +84,7 @@ export default {
       {{ item.likes.length }}
     </p>
 
-
-    <div v-if="showUsers">
+    <div class="likes__users" v-if="item.likes.length > 0 && showUsers">
       <p v-for="like in item.likes" :key="like.id">{{ like.User.username }}</p>
     </div>
   </div>
@@ -96,14 +95,36 @@ export default {
   @include flexbox(flex-start, row, flex-start);
   // padding: 10px 20px;
   padding: 10px 0px 10px 20px;
+  position: relative;
 
   &__amout {
     margin: 0;
+    // cursor: pointer
   }
 
   &__icon {
     margin: 0 5px 0 0;
     cursor: pointer;
+  }
+
+  &__users {
+    width: 150px;
+    position: absolute;
+    top: 40px;
+    // left: -165px;
+    // top: 40px;
+    padding: 15px;
+    border-radius: 3px;
+    background-color: #fff;
+    box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
+    // @include flexbox(flex-start, column, center);
+    border-radius: 3px;
+    z-index: 1;
+
+    p {
+      margin: 0;
+      padding: 0;
+    }
   }
 }
 
