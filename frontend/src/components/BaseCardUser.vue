@@ -1,8 +1,11 @@
 <script>
 import { mapGetters } from "vuex";
+import BaseAvatar from "@/components/BaseAvatar";
 
 export default {
   name: "BaseCardUser",
+
+  components: { BaseAvatar },
 
   props: {
     user: {
@@ -19,20 +22,25 @@ export default {
 </script>
 
 <template>
-  <div class="user">
-    <img :src="currentUser.imageUrl" alt="currentUser.username" class="avatar">
-    <router-link :to="{ name: 'Profil', params: { id: user.id } }" class="user__link">
+    <router-link :to="{ name: 'Profil', params: { id: user.id } }" class="user">
+      <!-- <img :src="currentUser.imageUrl" alt="currentUser.username" class="avatar"> -->
+      <BaseAvatar :user="user" origin="comment" />
       {{ user.firstname }} {{ user.lastname }}
     </router-link>
-  </div>
 </template>
 
 <style scope lang="scss">
 .user {
-  @include flexbox(flex-start, row, center);
+  display: block;
+  cursor: pointer;
+  width: 20rem;
+  @include flexbox(center, column, center);
+  margin: $centered-margin;
   padding: $base-padding;
-  color: inherit;
+  color: $police-color;
   border-radius: $medium-radius;
+  font-family: inherit;
+  text-decoration: none;
 
   &:hover {
     box-shadow: $shadow;
@@ -40,12 +48,6 @@ export default {
 
   &:active {
     box-shadow: $shadow;
-  }
-
-  &__link {
-    color: $police-color;
-    font-family: inherit;
-    text-decoration: none;
   }
 }
 </style>

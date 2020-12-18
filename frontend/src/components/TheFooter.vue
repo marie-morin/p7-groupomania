@@ -15,7 +15,7 @@ export default {
 .footer {
   width: 100%;
   @include flexbox(center, row, center);
-  background-color: $primary-color;
+  background-color: lighten($color: $primary-color, $amount: 10);
 
   &__logo {
     width: 15%;

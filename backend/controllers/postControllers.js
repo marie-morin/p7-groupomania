@@ -38,7 +38,10 @@ exports.addPost = (req, res) => {
         models.Post.findOne({
           where: { id: post.id },
           include: [
-            { model: models.User, attributes: ["imageUrl", "username"] },
+            {
+              model: models.User,
+              attributes: ["imageUrl", "username", "lastname", "firstname"],
+            },
           ],
         })
           .then((post) => res.status(200).json(post))
@@ -53,7 +56,12 @@ exports.getAllPosts = (req, res) => {
   console.log("------------ getAllPosts");
 
   models.Post.findAll({
-    include: [{ model: models.User, attributes: ["username"] }],
+    include: [
+      {
+        model: models.User,
+        attributes: ["imageUrl", "username", "lastname", "firstname"],
+      },
+    ],
     order: [["createdAt", "DESC"]],
   })
     .then((posts) => {
@@ -128,7 +136,17 @@ exports.modifyPost = (req, res) => {
             .then(() => {
               models.Post.findOne({
                 where: { id: postId },
-                include: [{ model: models.User, attributes: ["username"] }],
+                include: [
+                  {
+                    model: models.User,
+                    attributes: [
+                      "imageUrl",
+                      "username",
+                      "lastname",
+                      "firstname",
+                    ],
+                  },
+                ],
               })
                 .then((post) => res.status(200).json(post))
                 .catch((error) => res.status(404).json(error));
@@ -217,7 +235,17 @@ exports.like = (req, res, next) => {
             .then(() => {
               models.PostLikes.findOne({
                 where: { UserId: userId, PostId: data },
-                include: [{ model: models.User, attributes: ["username"] }],
+                include: [
+                  {
+                    model: models.User,
+                    attributes: [
+                      "imageUrl",
+                      "username",
+                      "lastname",
+                      "firstname",
+                    ],
+                  },
+                ],
               })
                 .then((like) => res.status(200).json(like))
                 .catch((error) => res.status(404).json(error));
@@ -238,7 +266,12 @@ exports.getLikesFromPost = (req, res, next) => {
   } else {
     models.PostLikes.findAll({
       where: { postId: req.params.id },
-      include: [{ model: models.User, attributes: ["username"] }],
+      include: [
+        {
+          model: models.User,
+          attributes: ["imageUrl", "username", "lastname", "firstname"],
+        },
+      ],
       order: [["createdAt", "ASC"]],
     })
       .then((likes) => {

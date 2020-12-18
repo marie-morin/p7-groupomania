@@ -138,4 +138,8 @@ export default {
   </div>
 </template>
 
-<style scope lang="scss"></style>
+<style scope lang="scss">
+.profil {
+  position: relative;
+}
+</style>

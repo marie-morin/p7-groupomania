@@ -76,6 +76,13 @@ export default {
 
 <template>
   <form class="form">
+    <font-awesome-icon
+      icon="times"
+      @click.prevent.stop="$emit('display-form')"
+      class="close-cross"
+    />
+
+    <h2 class="form__title">Modifiez votre mot de passe :</h2>
     <div class="form__group">
       <input
         type="password"

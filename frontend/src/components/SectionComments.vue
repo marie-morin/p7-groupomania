@@ -1,11 +1,12 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import BaseComment from "@/components/BaseComment";
+import BaseAvatar from "@/components/BaseAvatar";
 
 export default {
   name: "SectionComments",
 
-  components: { BaseComment },
+  components: { BaseComment, BaseAvatar },
 
   props: {
     post: {
@@ -22,7 +23,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["popup"]),
+    ...mapGetters(["currentUser", "popup"]),
   },
 
   created() {
@@ -79,7 +80,8 @@ export default {
       <BaseComment v-for="comment in post.comments" :key="comment.id" :comment="comment" />
 
       <div class="comment-section__new">
-        <img :src="post.imageUrl" alt="currentUser.username" class="avatar">
+        <!-- <img :src="post.imageUrl" alt="currentUser.username" class="avatar"> -->
+        <BaseAvatar :user="currentUser" origin="commentSection" />
         <input
           type="text"
           placeholder="Ajouter un commentaire..."
@@ -113,7 +115,7 @@ export default {
   }
 
   &__new {
-    @include flexbox(flex-start, row, flex-start);
+    @include flexbox(flex-start, row, center);
   }
 
   &__entry {

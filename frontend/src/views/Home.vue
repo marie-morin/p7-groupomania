@@ -2,11 +2,18 @@
 import { mapGetters, mapActions } from "vuex";
 import FormPostCreation from "@/components/FormPostCreation";
 import BasePost from "@/components/BasePost";
+import BaseButton from "@/components/BaseButton";
 
 export default {
   name: "Home",
 
-  components: { FormPostCreation, BasePost },
+  components: { FormPostCreation, BasePost, BaseButton },
+
+  data() {
+    return {
+      postCreationFormDisplayed: false,
+    };
+  },
 
   computed: mapGetters(["allPosts"]),
 
@@ -18,13 +25,32 @@ export default {
     this.fetch(options);
   },
 
-  methods: mapActions(["fetch"]),
+  methods:  {
+    ...mapActions(["fetch"]),
+
+    displayPostCreationForm() {
+      this.postCreationFormDisplayed = !this.postCreationFormDisplayed;
+    },
+
+  }
 };
 </script>
 
 <template>
   <div class="home">
-    <FormPostCreation />
+
+    <BaseButton :onClick="displayPostCreationForm">Créer une publication</BaseButton>
+
+    <div
+      v-show="postCreationFormDisplayed"
+      class="popupform"
+    >
+      <FormPostCreation
+        class="popup-form__form"
+        @display-form="displayPostCreationForm()"
+      />
+    </div>
+
     <BasePost
       :post="post"
       v-for="post in allPosts"

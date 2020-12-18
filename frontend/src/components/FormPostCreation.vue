@@ -48,6 +48,7 @@ export default {
         this.add(options);
         this.newPostTitle = "";
         this.wasPosted = true;
+        this.$emit("display-form");
       }
     },
   },
@@ -56,6 +57,11 @@ export default {
 
 <template>
   <form enctype="multipart/form-data" @submit.prevent="addPost" class="form postcreation">
+    <font-awesome-icon
+      icon="times"
+      @click.prevent.stop="$emit('display-form')"
+      class="close-cross"
+    />
     <h2 class="form__title">Partager avec vos collègues :</h2>
 
     <div class="form__group">
@@ -74,6 +80,12 @@ export default {
     <FormImageUpload v-on:send-imagefile="setFile" :wasPosted="wasPosted" />
 
     <BaseButton>Publier</BaseButton>
+    <input
+      type="submit"
+      value="Annuler"
+      @click.prevent.stop="$emit('display-form')"
+      class="global-btn"
+    />
   </form>
 </template>
 

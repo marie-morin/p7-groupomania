@@ -74,7 +74,7 @@ export default {
     <font-awesome-icon v-if="popup.intention == 'notification'" icon="check-circle" class="popup__icon popup__icon--success"/>
     <font-awesome-icon v-else icon="question-circle" class="popup__icon popup__icon--warning"/>
 
-    <font-awesome-icon icon="times" @click="hidePopup" class="popup__icon popup__icon--close"/>
+    <font-awesome-icon icon="times" @click="hidePopup" class="popup__icon close-cross"/>
 
     <p>{{ popup.message }}</p>
 
@@ -112,22 +112,6 @@ export default {
 
     &--warning {
       color: $warning-color;
-    }
-
-    &--close {
-      position: absolute;
-      right: 0;
-      top: 0;
-      margin: 0;
-      margin: 0.5rem;
-      padding: 0;
-
-      // font-size: 1.3rem;
-      cursor: pointer;
-
-      &:hover {
-        color: darken($color: $police-color, $amount: 10)
-      }
     }
   }
 

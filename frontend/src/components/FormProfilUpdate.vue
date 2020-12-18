@@ -53,6 +53,13 @@ export default {
 
 <template>
   <form @submit.prevent="updateUser" class="form">
+    <font-awesome-icon
+      icon="times"
+      @click.prevent.stop="$emit('display-form')"
+      class="close-cross"
+    />
+
+    <h2 class="form__title">Modifiez votre profil :</h2>
     <div class="form__group">
       <input
         type="email"

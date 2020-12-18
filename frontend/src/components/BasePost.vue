@@ -3,11 +3,17 @@ import { mapGetters, mapActions } from "vuex";
 import FormImageUpload from "@/components/FormImageUpload";
 import SectionComments from "@/components/SectionComments";
 import BaseLike from "@/components/BaseLike";
+import BaseAvatar from "@/components/BaseAvatar";
 
 export default {
   name: "BasePost",
 
-  components: { BaseLike, FormImageUpload, SectionComments },
+  components: {
+    BaseLike,
+    FormImageUpload,
+    SectionComments,
+    BaseAvatar,
+  },
 
   props: {
     post: {
@@ -126,7 +132,8 @@ export default {
 
     <div class="post__header">
       <div class="post__meta">
-        <img :src="post.imageUrl" alt="currentUser.username" class="avatar">
+        <!-- <img :src="post.imageUrl" alt="currentUser.username" class="avatar"> -->
+        <BaseAvatar :user="post.User" origin="post" />
         <p>
           <router-link :to="{ name: 'Profil', params: { id: post.UserId } }">{{
             post.User.username
@@ -212,12 +219,18 @@ export default {
     @include flexbox(flex-start, row, center);
 
     a {
+      color: inherit;
       text-decoration: none;
+
+      &:hover {
+        color: darken($color: $success-color, $amount: 10);
+        text-decoration: underline;
+      }
     }
   }
 
   &__title {
-    padding-left: 2rem; 
+    padding: 0 2rem; 
   }
 
   &__content {

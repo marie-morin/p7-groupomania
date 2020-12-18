@@ -32,7 +32,12 @@ exports.addComment = (req, res) => {
       .then((comment) => {
         models.Comment.findOne({
           where: { id: comment.id },
-          include: [{ model: models.User, attributes: ["username"] }],
+          include: [
+            {
+              model: models.User,
+              attributes: ["imageUrl", "username", "lastname", "firstname"],
+            },
+          ],
         })
           .then((comment) => res.status(201).json(comment))
           .catch((error) => res.status(404).json(error));
@@ -50,7 +55,12 @@ exports.getCommentsFromPost = (req, res, next) => {
   } else {
     models.Comment.findAll({
       where: { postId: req.params.id },
-      include: [{ model: models.User, attributes: ["username"] }],
+      include: [
+        {
+          model: models.User,
+          attributes: ["imageUrl", "username", "lastname", "firstname"],
+        },
+      ],
       order: [["createdAt", "ASC"]],
     })
       .then((comments) => {
@@ -95,7 +105,17 @@ exports.modifyComment = (req, res) => {
             .then(() => {
               models.Comment.findOne({
                 where: { id: commentId },
-                include: [{ model: models.User, attributes: ["username"] }],
+                include: [
+                  {
+                    model: models.User,
+                    attributes: [
+                      "imageUrl",
+                      "username",
+                      "lastname",
+                      "firstname",
+                    ],
+                  },
+                ],
               })
                 .then((comment) => res.status(200).json(comment))
                 .catch((error) => res.status(404).json(error));
@@ -163,7 +183,17 @@ exports.like = (req, res, next) => {
             .then(() => {
               models.CommentLikes.findOne({
                 where: { UserId: userId, CommentId: data },
-                include: [{ model: models.User, attributes: ["username"] }],
+                include: [
+                  {
+                    model: models.User,
+                    attributes: [
+                      "imageUrl",
+                      "username",
+                      "lastname",
+                      "firstname",
+                    ],
+                  },
+                ],
               })
                 .then((like) => res.status(200).json(like))
                 .catch((error) => res.status(404).json(error));
@@ -184,7 +214,12 @@ exports.getLikesFromComment = (req, res, next) => {
   } else {
     models.CommentLikes.findAll({
       where: { commentId: req.params.id },
-      include: [{ model: models.User, attributes: ["username"] }],
+      include: [
+        {
+          model: models.User,
+          attributes: ["imageUrl", "username", "lastname", "firstname"],
+        },
+      ],
       order: [["createdAt", "ASC"]],
     })
       .then((likes) => {

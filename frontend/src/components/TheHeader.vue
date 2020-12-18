@@ -1,9 +1,12 @@
 <script>
 import { mapGetters } from "vuex";
 import store from "../store";
+import BaseAvatar from "@/components/BaseAvatar";
 
 export default {
   name: "TheHeader",
+
+  components: { BaseAvatar },
 
   data() {
     return {
@@ -34,8 +37,7 @@ export default {
   <div class="header">
 
     <div class="header__welcome">
-      <img :src="currentUser.imageUrl" alt="currentUser.username" class="avatar">
-
+      <BaseAvatar :user="currentUser" origin="header" />
       <p>{{ currentUser.firstname }} {{ currentUser.lastname }}</p>
     </div>
 

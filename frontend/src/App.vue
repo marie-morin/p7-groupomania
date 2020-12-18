@@ -43,8 +43,8 @@ export default {
   -moz-osx-font-smoothing: grayscale;
 
   &__topcontent {
-    min-width: 100vw;
-    min-height: 100vh;
+    min-width: 100%;
+    min-height: 100%;
     @include flexbox(center, column, center);
   }
 

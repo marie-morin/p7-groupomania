@@ -181,9 +181,9 @@ export default {
       <label for="bio" class="form__label">Biographie</label>
     </div>    
 
-    <BaseButton class="center">{{ settings.title }}</BaseButton>
+    <BaseButton>{{ settings.title }}</BaseButton>
 
-    <p class="center">
+    <p>
       {{ settings.question }} ?
       <router-link :to="'/' + settings.destination"
         >{{ settings.option }}

@@ -1,6 +1,6 @@
 .form {
     width: 70%;
-
+    position: relative;
     margin: $centered-margin;
     padding: 5rem;
 
@@ -10,7 +10,7 @@
     box-shadow: $shadow;
     border-radius: $small-radius;
 
-    text-align: left;
+    text-align: center;
 
     @media screen and (max-width: $small + 100) {
       width: 85%
@@ -19,6 +19,16 @@
     @media screen and (max-width: $x-small + 100) {
       width: 90%;
       padding: 5rem 2rem;
+    }
+
+    a {
+      color: $success-color;
+      text-decoration: none;
+      
+      &:hover {
+        color: darken($color: $success-color, $amount: 10);
+        text-decoration: underline;
+      }
     }
 
     &__title {
@@ -32,9 +42,13 @@
     }
   
     &__label {
+      width: 100%;
       display: block;
       position: absolute;
       top: 0;
+      // padding-bottom: 1rem;
+      background-color: $clear-color;
+      text-align: left;
       transition: 0.2s;
     }
   
@@ -174,9 +188,33 @@
   }
 }
 
-.avatar {
-  width: 3.5rem;
-  height: 3.5rem;
-  margin-right: 1rem;
-  border-radius: $round-radius;
+.close-cross {
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: 0;
+  margin: 0.5rem;
+  padding: 0;
+  cursor: pointer;
+
+  &:hover {
+    color: darken($color: $police-color, $amount: 10)
+  }
+}
+
+.popupform {
+  width: 100%;
+  height: 100%;
+  @include flexbox(center, column, center);
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  background-color: rgb(10, 23, 52, 0.6);
+  // transform: translate(-50%, -50%);
+  z-index: 2;
+
+  &__form {
+    background-color: $clear-color;
+  }
 }

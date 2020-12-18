@@ -1,11 +1,12 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import BaseLike from "@/components/BaseLike";
+import BaseAvatar from "@/components/BaseAvatar";
 
 export default {
   name: "BaseComment",
 
-  components: { BaseLike },
+  components: { BaseLike, BaseAvatar },
 
   props: {
     comment: {
@@ -102,7 +103,8 @@ export default {
 <template>
   <div class="comment">
 
-    <img :src="currentUser.imageUrl" alt="currentUser.username" class="avatar">
+    <!-- <img :src="currentUser.imageUrl" alt="currentUser.username" class="avatar"> -->
+    <BaseAvatar :user="comment.User" origin="post" />
 
     <div class="comment__main">
 
@@ -160,11 +162,12 @@ export default {
 
 <style scope lang="scss">
 .comment {
-  @include flexbox(center, row, center);
+  @include flexbox(flex-start, row, center);
   margin: $marged-centered-margin;
   text-align: left;
 
   &__main {
+    max-width: 90%;
     @include flexbox(space-between, row, center);
     padding: $base-padding;
     background-color: $base-color;
@@ -178,7 +181,17 @@ export default {
     a {
       color: inherit;
       text-decoration: none;
+
+      &:hover {
+        color: darken($color: $success-color, $amount: 10);
+        text-decoration: underline;
+      }
     }
+  }
+
+  &__content {
+    max-width: 90%;
+    word-wrap: break-word ;
   }
 }
 </style>
