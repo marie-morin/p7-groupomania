@@ -198,19 +198,19 @@ export default {
 
 <style scope lang="scss">
 .userinfos {
-  @include flexbox(flex-start, row, flex-start);
-  // background-color: lightsteelblue;
   width: 70%;
-  margin: 20px auto;
-  padding: 30px;
-  border-radius: $small-radius;
-  box-shadow: $shadow;
+  @include flexbox(flex-start, row, flex-start);
+  margin: $marged-centered-margin;
+  padding: 3rem;
+
   color: $police-color;
+  box-shadow: $shadow;
+  border-radius: $small-radius;
 
   &__image {
-    width: 200px;
-    height: 200px;
-    margin: 20px 40px;
+    width: 20rem;
+    height: 20rem;
+    margin: 2rem 4rem;
     border-radius: $round-radius;
   }
 
@@ -219,30 +219,7 @@ export default {
   }
 
   &__name {
-    font-size: 30px;
+    font-size: 3rem;
   }
-
-  &__dots {
-    @include flexbox(center, row, center);
-    width: 35px;
-    height: 35px;
-    margin: 0 15px;
-    border-radius: $round-radius;
-    font-size: 1.3rem;
-    color: inherit;
-    cursor: pointer;
-
-    &:hover {
-      box-shadow: $shadow;
-    }
-
-    &--active {
-      box-shadow: $shadow;
-    }
-  }
-}
-.image {
-  max-width: 200px;
-  max-height: 200px;
 }
 </style>

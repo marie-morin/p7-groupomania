@@ -52,6 +52,6 @@ export default {
 
 <style scoped lang="scss">
 .btn {
-  margin: 5px;
+  margin: 0.5rem;
 }
 </style>

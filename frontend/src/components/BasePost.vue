@@ -126,7 +126,7 @@ export default {
 
     <div class="post__header">
       <div class="post__meta">
-        <img :src="post.imageUrl" alt="currentUser.username" class="welcome__image">
+        <img :src="post.imageUrl" alt="currentUser.username" class="avatar">
         <p>
           <router-link :to="{ name: 'Profil', params: { id: post.UserId } }">{{
             post.User.username
@@ -194,68 +194,46 @@ export default {
 
 <style scope lang="scss">
 .post {
-  // position: relative;
   width: 70%;
-  margin: 20px auto;
-  border-radius: $small-radius;
-  box-shadow: $shadow;
-  // background-color: lightpink;
+  margin: $marged-centered-margin;
+
   background-color: $clear-color;
-  // background-color: #e2e7eb;
   color: $police-color;
+
+  box-shadow: $shadow;
+  border-radius: $small-radius;
 
   &__header {
     @include flexbox(space-between, row, center);
-    padding: 5px 20px;
+    padding: $base-padding;
   }
 
   &__meta {
     @include flexbox(flex-start, row, center);
-
-    img {
-      width: 35px;
-      height: 35px;
-      margin-right: 10px;
-      border-radius: $round-radius;
-    }
 
     a {
       text-decoration: none;
     }
   }
 
+  &__title {
+    padding-left: 2rem; 
+  }
+
   &__content {
     text-align: left;
   }
 
-  &__title {
-    padding-left: 20px; 
-    font-size: 18px;
-  }
-
   &__image {
-    height: 500px;
+    height: 50rem;
     background-color: $secondary-color;
 
     img {
-      display: block;
-      margin: 0 auto;
       max-width: 100%;
       height: 100%;
+      display: block;
+      margin: $centered-margin;
     }
   }
-
 }
-
-
-// padding: 50px 50px;
-// text-align: left;
-
-// @media screen and (max-width: $small + 100) {
-//   width: 85%
-// }
-
-// @media screen and (max-width: $x-small + 100) {
-//   width: 90%;
-// }
 </style>

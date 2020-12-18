@@ -33,16 +33,16 @@ export default {
 <template>
   <div class="header">
 
-    <div class="welcome">
-      <img :src="currentUser.imageUrl" alt="currentUser.username" class="welcome__image">
+    <div class="header__welcome">
+      <img :src="currentUser.imageUrl" alt="currentUser.username" class="avatar">
 
       <p>{{ currentUser.firstname }} {{ currentUser.lastname }}</p>
     </div>
 
-    <nav class="nav">
+    <nav class="header__nav">
       <router-link
         to="/home"
-        class="nav__unit"
+        class="header__link"
         :class="{ active : selectedPage == 'home' }"
       >
         <font-awesome-icon icon="home" @click="setActive('home')"/>
@@ -50,7 +50,7 @@ export default {
 
       <router-link
         to="/users"
-        class="nav__unit"
+        class="header__link"
         :class="{ active : selectedPage == 'users' }"
       >
         <font-awesome-icon icon="users" @click="setActive('users')"/>
@@ -58,7 +58,7 @@ export default {
 
       <router-link
         :to="{ name: 'Profil', params: { id: currentUser.id } }"
-        class="nav__unit"
+        class="header__link"
         :class="{ active : selectedPage == 'profil' }"
       >
         <font-awesome-icon icon="user-circle" @click="setActive('profil')"/>
@@ -66,7 +66,7 @@ export default {
 
       <a
         href="#"
-        class="nav__unit"
+        class="header__link"
         @click.prevent="logout"
       >
         <font-awesome-icon icon="power-off" />
@@ -80,59 +80,55 @@ export default {
 .header {
   width: 100%;
   @include flexbox(space-around, row, center);
+
   background-color: lighten($color: $primary-color, $amount: 10);
   color: $clear-color;
 
   @media screen and (max-width: $small) {
     @include flexbox(flex-start, column, center);
   }
-}
 
-.welcome {
-  @include flexbox(flex-start, row, center);
-
-  &__image {
-    width: 35px;
-    height: 35px;
-    margin-right: 10px;
-    border-radius: $round-radius;
+  &__welcome {
+    @include flexbox(flex-start, row, center);
   }
-}
 
-.nav {
-  @include flexbox(space-between, row, center);
+  &__nav {
+    @include flexbox(space-between, row, center);
 
-  @media screen and (max-width: $small) {
-   margin-bottom: 15px;
+    @media screen and (max-width: $small) {
+      margin-bottom: 1.5rem;
+    }
   }
-  
-  &__unit {
+
+  &__link {
+    width: 3.5rem;
+    height: 3.5rem;
     @include flexbox(center, row, center);
-    width: 35px;
-    height: 35px;
-    margin: 0 15px;
-    border-radius: $round-radius;
-    text-decoration: none;
-    font-size: 1.3rem;
+    margin: 0 1.5rem;
+
     color: $clear-color;
+
+    border-radius: $round-radius;
+
+    font-size: 2.3rem;
+    text-decoration: none;
+
     cursor: pointer;
     transition: all .2s;
 
     &:hover {
-      transform: translateY(-3px);
+      transform: translateY(-0.3rem);
     }
 
     &:active {
-      transform: translateY(-1px);
-    }
-
-    &--active {
       box-shadow: $shadow;
+      transform: translateY(-0.1rem);
     }
   }
 }
+
 .active {
-  border-radius: $round-radius;
   box-shadow: $shadow;
+  border-radius: $round-radius;
 }
 </style>

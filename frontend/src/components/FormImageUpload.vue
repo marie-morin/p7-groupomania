@@ -73,22 +73,19 @@ export default {
 
 <template>
   <div class="imageSelection">
-    <!-- <label for="file-input">Image</label> -->
-    <div class="imageSelection__button">
 
-      <label for="file-input" class="imageSelection__label">
-        Choisez une image ou un gif
-      </label>
+    <label for="file-input" class="imageSelection__label">
+      Choisez une image ou un gif
+    </label>
 
-      <input
-        type="file"
-        id="file-input"
-        ref="inputFile"
-        accept="image/png, image/jpg, image/jpeg, image/gif"
-        @change="selectFile($event)"
-        class="testou"
-      />
-    </div>
+    <input
+      type="file"
+      id="file-input"
+      ref="inputFile"
+      accept="image/png, image/jpg, image/jpeg, image/gif"
+      @change="selectFile($event)"
+    />
+
     <div v-show="imagePreview" class="imageSelection__preview">
       <img  :src="imagePreview" />
     </div>
@@ -98,71 +95,57 @@ export default {
 
 <style scope lang="scss">
 .imageSelection {
-  
-
-  // &__button {
-  //   // width: 70%;
-    
-  // }
-
-  &__icon {
-    font-size: 1.3rem;
-    color: $success-color;
-  }
 
   &__label {
     width: 50%;
-    // @include flexbox(center, row, center);
-    cursor: pointer;
     display: block;
-    padding: 15px 40px;
-    margin: 0 auto;
+    margin: $centered-margin;
+    padding: $base-padding;
     
-    color: $clear-color;
     background-color: $success-color;
+    color: $clear-color;
     
-    border-radius: $medium-radius;
     border: none;
+    border-radius: $medium-radius;
     
     text-align: center;
     text-transform: uppercase;
-    
-    // cursor: pointer;
-    
+        
+    cursor: pointer;
     transition: all .2s;
 
     &:hover {
-      transform: translateY(-3px);
+      transform: translateY(-0.3rem);
     }
 
     &:active {
-        transform: translateY(-1px);
-        box-shadow: $shadow;
+      transform: translateY(-0.1rem);
+      box-shadow: $shadow;
     }
   }
 
   &__preview {
-    height: 500px;
+    height: 50rem;
     background-color: $secondary-color;
 
     img {
-      display: block;
-      margin: 0 auto;
       max-width: 100%;
       height: 100%;
+      display: block;
+      margin: $centered-margin;
     }
   }
 }
 
 [type="file"] {
+  width: 0.1rem;
+  height: 0.1rem;
+  position: absolute !important;
+  padding: 0;
   border: 0;
   clip: rect(0, 0, 0, 0);
-  height: 1px;
   overflow: hidden;
-  padding: 0;
-  position: absolute !important;
   white-space: nowrap;
-  width: 1px;
   cursor: pointer;
 }
 </style>

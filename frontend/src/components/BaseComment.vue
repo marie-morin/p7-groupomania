@@ -102,7 +102,7 @@ export default {
 <template>
   <div class="comment">
 
-    <img :src="currentUser.imageUrl" alt="currentUser.username" class="comment__userimage">
+    <img :src="currentUser.imageUrl" alt="currentUser.username" class="avatar">
 
     <div class="comment__main">
 
@@ -160,53 +160,24 @@ export default {
 
 <style scope lang="scss">
 .comment {
-  margin: 10px 0;
-  // background-color: lightsalmon;
+  @include flexbox(center, row, center);
+  margin: $marged-centered-margin;
   text-align: left;
-  @include flexbox(flex-start, row, center);
-
-  &__userimage {
-    width: 35px;
-    height: 35px;
-    margin-right: 10px;
-    border-radius: $round-radius;
-  }
 
   &__main {
     @include flexbox(space-between, row, center);
+    padding: $base-padding;
     background-color: $base-color;
-    padding: 5px 15px;
     border-radius: $medium-radius;
   }
-
 
   &__meta {
     margin: 0;
     color: $police-color;
-    font-size: 1rem;
 
     a {
-    text-decoration: none;
-    color: inherit;
-    }
-  }
-
-  &__dots {
-    @include flexbox(center, row, center);
-    width: 35px;
-    height: 35px;
-    margin: 0 15px;
-    border-radius: $round-radius;
-    font-size: 1.3rem;
-    color: $police-color;
-    cursor: pointer;
-
-    &:hover {
-      box-shadow: $shadow;
-    }
-
-    &--active {
-      box-shadow: $shadow;
+      color: inherit;
+      text-decoration: none;
     }
   }
 }

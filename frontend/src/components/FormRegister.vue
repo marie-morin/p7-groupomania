@@ -194,8 +194,4 @@ export default {
 </template>
 
 
-<style scoped lang="scss">
-.center {
-  text-align: center;
-}
-</style>
+<style scoped lang="scss"></style>

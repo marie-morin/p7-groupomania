@@ -1,4 +1,4 @@
-// <script>
+<script>
 import { mapGetters } from 'vuex';
 import TheHeader from "@/components/TheHeader.vue";
 import TheFooter from "@/components/TheFooter.vue";
@@ -17,11 +17,10 @@ export default {
 
 
 <template>
-  <div id="app">
+  <div id="app" class="app">
     <div :class="{ fullheight: !isLoged }" class="app__topcontent">
       <TheHeader v-if="isLoged" />
-      <router-view />
-      <!-- <router-view :class="{ fullheight: !isLoged }"/> -->
+      <router-view class="app__router"/>
       <ThePopup v-if="popup.isDisplayed" />
     </div>
     <TheFooter v-if="isLoged"/>
@@ -30,25 +29,28 @@ export default {
 
 
 <style lang="scss">
-#app {
+.app {
   min-height: 100vh;
-  position: relative;
   @include flexbox(space-between, column, center);
-  text-align: center;
-  background-color: $clear-color;
-  // background-color: rgba(243, 236, 247, 0.333);
-  // background-color: lightcoral;
-  color: $police-color;
-  // -webkit-font-smoothing: antialiased;
-  // -moz-osx-font-smoothing: grayscale;
-  // text-align: center;
-}
+  position: relative;
 
-.app__topcontent {
-  min-width: 100%;
-  min-height: 100%;
-  @include flexbox(center, column, center);
-  // background-color: crimson;
+  background-color: $clear-color;
+  color: $police-color;
+
+  text-align: center;
+  
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  &__topcontent {
+    min-width: 100vw;
+    min-height: 100vh;
+    @include flexbox(center, column, center);
+  }
+
+  &__router {
+    width: 100%;
+  }
 }
 
 .fullheight {

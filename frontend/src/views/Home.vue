@@ -33,9 +33,4 @@ export default {
   </div>
 </template>
 
-<style scope lang="scss">
-.home {
-  width: 100%;
-  // background-color: lightpink;
-}
-</style>
+<style scope lang="scss"></style>

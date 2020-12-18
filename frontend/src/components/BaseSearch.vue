@@ -58,38 +58,33 @@ export default {
   position: relative;
 
   &__input {
-    width: 300px;
-    height: 50px;
-
-    margin: 20px auto;
-    padding: 5px 15px;
-
-    font-family: inherit;
-    font-size: inherit;
-    font-weight: inherit;
-
-    border: none;
-    border-radius: $medium-radius;
+    width: 30rem;
+    height: 5rem;
+    margin: $marged-centered-margin;
+    padding: $base-padding;
 
     background-color: $base-color;
     color: $police-color;
 
+    border: none;
+    border-radius: $medium-radius;
+
+    font-size: 1.8rem;
+    font-family: inherit;
+    font-weight: inherit;
   }
 
   &__results {
-    width: 300px;
-
+    width: 30rem;
     display: none;
-
     position: absolute;
     left: 50%;
-
-    padding: 15px;
-
-    border-radius: $small-radius;
-    box-shadow: $shadow;
+    padding: $base-padding;
 
     background-color: $base-color;
+
+    box-shadow: $shadow;
+    border-radius: $small-radius;
 
     transform: translate(-50%, 0);
   }

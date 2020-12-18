@@ -10,7 +10,7 @@ export default {
 <template>
   <div class="landing">
     <h1>Bienvenue sur votre réseau interne Groupomania</h1>
-    <div class="btns">
+    <div class="landing__directions">
       <BaseButton to="/signup" class="btns__unit">S'inscrire</BaseButton>
       <BaseButton to="/login" class="btns__unit">Se connecter</BaseButton>
     </div>
@@ -19,23 +19,21 @@ export default {
 
 <style scope lang="scss">
 .landing {
-  min-width: 100%;
-  min-height: 100vh;
+  height: 100vh;
   @include flexbox(center, column, center);
 
   background-image: url("../../public/images/fond.png");
   background-origin: border-box;
   background-size: cover;
   background-position: center;
-
   color: $clear-color;
-}
 
-.btns {
-  @include flexbox(center, row, center);
+  &__directions {
+    @include flexbox(center, row, center);
 
-  @media screen and (max-width: $x-small + 100) {
-    @include flexbox(center, column, center);
+    @media screen and (max-width: $x-small + 100) {
+      @include flexbox(center, column, center);
+    }
   }
 }
 </style>

@@ -2,7 +2,7 @@
 $dark-grey: rgb(158, 158, 158);
 
 $clear-color: #fff;
-$base-color: rgb(208, 208, 208);
+$base-color: rgb(235, 235, 235);
 $police-color: rgb(82, 82, 82);
 
 $primary-color: rgb(196, 58, 72);
@@ -11,20 +11,22 @@ $secondary-color: rgb(10, 23, 52);
 $success-color: rgb(66, 172, 106);
 $warning-color: rgb(196, 58, 72);
 
+// -------------- Dimentions
+$base-padding: 1.5rem;
+$centered-margin: 0 auto;
+$marged-centered-margin: 2rem auto;
+
 // -------------- Radius
-$small-radius: 3px;
-$medium-radius: 15px;
+$small-radius: 0.3rem;
+$medium-radius: 1.5rem;
 $round-radius: 50%;
 
 // -------------- Radius
-$shadow: 0px 3px 15px rgba(0,0,0,0.2);
+$shadow: 0 0.3rem 1.5rem rgba(0,0,0,0.2);
 
-// -------------- Breaking Points
+// -------------- Break Points
 $x-small: 400px;
 $small: 650px;
 $medium: 900px;
 $large: 1100px;
 $x-large: 1500px;
-
-// -------------- Others
-$radius: 2px;

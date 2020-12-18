@@ -93,31 +93,28 @@ export default {
 <style scope lang="scss">
 .likes {
   @include flexbox(flex-start, row, flex-start);
-  // padding: 10px 20px;
-  padding: 10px 0px 10px 20px;
   position: relative;
-
-  &__amout {
-    margin: 0;
-    // cursor: pointer
-  }
+  padding: 1rem 0 1rem 2rem;
 
   &__icon {
-    margin: 0 5px 0 0;
+    margin: 0 0.5rem 0 0;
     cursor: pointer;
   }
 
+  &__amout {
+    margin: 0;
+  }
+
   &__users {
-    width: 150px;
+    width: 15rem;
     position: absolute;
-    top: 40px;
-    // left: -165px;
-    // top: 40px;
-    padding: 15px;
-    border-radius: $small-radius;
+    top: 4rem;
+    padding: $base-padding;
+
     background-color: $clear-color;
+
     box-shadow: $shadow;
-    // @include flexbox(flex-start, column, center);
+    border-radius: $small-radius;
     border-radius: $small-radius;
     z-index: 1;
 

@@ -20,46 +20,32 @@ export default {
 
 <template>
   <div class="user">
-
-    <img :src="currentUser.imageUrl" alt="currentUser.username" class="user__image">
-
+    <img :src="currentUser.imageUrl" alt="currentUser.username" class="avatar">
     <router-link :to="{ name: 'Profil', params: { id: user.id } }" class="user__link">
       {{ user.firstname }} {{ user.lastname }}
     </router-link>
-
   </div>
 </template>
 
 <style scope lang="scss">
 .user {
-  color: inherit;
-  // background-color: lightgreen;
   @include flexbox(flex-start, row, center);
-  // margin-top: 30px;
-  padding: 15px 20px;
+  padding: $base-padding;
+  color: inherit;
   border-radius: $medium-radius;
 
   &:hover {
     box-shadow: $shadow;
   }
 
-  &--active {
+  &:active {
     box-shadow: $shadow;
   }
 
-  &__image {
-    width: 35px;
-    height: 35px;
-    margin-right: 10px;
-    border-radius: $round-radius;
-  }
-
   &__link {
-    text-decoration: none;
-    font-size: inherit;
-    font-family: inherit;
     color: $police-color;
-
+    font-family: inherit;
+    text-decoration: none;
   }
 }
 </style>

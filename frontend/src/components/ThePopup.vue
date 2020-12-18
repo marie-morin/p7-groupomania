@@ -90,20 +90,21 @@ export default {
 
 <style scope lang="scss">
 .popup {
-  width: 300px;
+  width: 30rem;
   position: fixed;
-  left: 20px;
-  bottom: 20px;
+  left: 2rem;
+  bottom: 2rem;
+  padding: $base-padding;
+
   background-color: $clear-color;
-  border-radius: $small-radius;
-  box-shadow: $shadow;
   color: $police-color;
-  padding: 10px;
+
+  box-shadow: $shadow;
+  border-radius: $small-radius;
 
   &__icon {
-    font-size: 2rem;
     display: block;
-    margin: 10px auto;
+    margin: $marged-centered-margin;
 
     &--success {
       color: $success-color;
@@ -118,9 +119,10 @@ export default {
       right: 0;
       top: 0;
       margin: 0;
+      margin: 0.5rem;
       padding: 0;
-      font-size: 1.3rem;
-      margin: 5px;
+
+      // font-size: 1.3rem;
       cursor: pointer;
 
       &:hover {
@@ -130,13 +132,14 @@ export default {
   }
 
   &__button {
-    padding: 5px 15px;
-    margin: 5px;
+    padding: $base-padding;
+    margin: 0.5rem;
+
     color: $clear-color;
-    font-size: inherit;
+    border: none;
+
     font-family: inherit;
     font-weight: inherit;
-    border: none;
     cursor: pointer;
 
     &--confirm {
@@ -151,6 +154,5 @@ export default {
       background-color: darken($color: $police-color, $amount: 1);
     }
   }
-
 }
 </style>

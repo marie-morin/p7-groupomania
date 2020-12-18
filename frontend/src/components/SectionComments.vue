@@ -79,7 +79,7 @@ export default {
       <BaseComment v-for="comment in post.comments" :key="comment.id" :comment="comment" />
 
       <div class="comment-section__new">
-        <img :src="post.imageUrl" alt="currentUser.username" class="comment-section__userimage">
+        <img :src="post.imageUrl" alt="currentUser.username" class="avatar">
         <input
           type="text"
           placeholder="Ajouter un commentaire..."
@@ -96,16 +96,16 @@ export default {
 
 <style scope lang="scss">
 .comment-section {
-  padding: 10px 20px;
+  padding: $base-padding;
 
   &__preview {
     @include flexbox(flex-start, row, center);
     cursor: pointer;
-    margin-bottom: 5px;
+    margin-bottom: 0.5rem;
   }
 
   &__icon {
-    margin: 0 5px 0 0;
+    margin: 0 0.5rem 0 0;
   }
 
   &__amout {
@@ -116,22 +116,18 @@ export default {
     @include flexbox(flex-start, row, flex-start);
   }
 
-  &__userimage {
-    width: 35px;
-    height: 35px;
-    margin-right: 10px;
-    border-radius: $round-radius;
-  }
-
   &__entry {
     width: 100%;
-    font-family: inherit;
-    font-size: inherit;
-    color: inherit;
+    padding: $base-padding;
+
     background-color: $base-color;
-    padding: 5px 15px;
-    border-radius: $medium-radius;
+    color: inherit;
+
     border: none;
+    border-radius: $medium-radius;
+
+    font-size: 1.8rem;
+    font-family: inherit;
   }
 }
 </style>

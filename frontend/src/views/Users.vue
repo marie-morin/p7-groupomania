@@ -29,9 +29,4 @@ export default {
   </div>
 </template>
 
-<style scope lang="scss">
-.users {
-  width: 100%;
-  // background-color: khaki;
-}
-</style>
+<style scope lang="scss"></style>

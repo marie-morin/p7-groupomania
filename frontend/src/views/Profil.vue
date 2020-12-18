@@ -138,9 +138,4 @@ export default {
   </div>
 </template>
 
-<style scope lang="scss">
-.profil {
-  width: 100%;
-  // background-color: lightpink;
-}
-</style>
+<style scope lang="scss"></style>

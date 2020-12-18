@@ -77,10 +77,4 @@ export default {
   </form>
 </template>
 
-<style scope lang="scss">
-.postcreation {
-  // width: 70%;
-  // background-color: brown;
-  margin: 30px auto;
-}
-</style>
+<style scope lang="scss"></style>

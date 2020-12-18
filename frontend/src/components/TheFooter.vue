@@ -7,7 +7,7 @@ export default {
 
 <template>
   <div class="footer">
-    <img src="../../public/images/icon-white.png" alt="Logo" class="logo" />
+    <img src="../../public/images/icon-white.png" alt="Logo" class="footer__logo" />
   </div> 
 </template>
 
@@ -16,10 +16,11 @@ export default {
   width: 100%;
   @include flexbox(center, row, center);
   background-color: $primary-color;
-}
-.logo {
-  width: 15%;
-  min-width: 170px;
-  margin: 15px auto;
+
+  &__logo {
+    width: 15%;
+    min-width: 17rem;
+    margin: $marged-centered-margin;
+  }
 }
 </style>
