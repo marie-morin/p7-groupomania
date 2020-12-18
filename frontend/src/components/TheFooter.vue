@@ -15,7 +15,7 @@ export default {
 .footer {
   width: 100%;
   @include flexbox(center, row, center);
-  background-color: $groupomania-red;
+  background-color: $primary-color;
 }
 .logo {
   width: 15%;

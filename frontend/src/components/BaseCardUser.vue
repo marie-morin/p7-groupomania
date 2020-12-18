@@ -37,27 +37,28 @@ export default {
   @include flexbox(flex-start, row, center);
   // margin-top: 30px;
   padding: 15px 20px;
-  border-radius: 20px;
+  border-radius: $medium-radius;
 
   &:hover {
-    box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
+    box-shadow: $shadow;
   }
 
   &--active {
-    box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
+    box-shadow: $shadow;
   }
 
   &__image {
     width: 35px;
     height: 35px;
     margin-right: 10px;
-    border-radius: 50%;
+    border-radius: $round-radius;
   }
 
   &__link {
     text-decoration: none;
     font-size: inherit;
     font-family: inherit;
+    color: $police-color;
 
   }
 }

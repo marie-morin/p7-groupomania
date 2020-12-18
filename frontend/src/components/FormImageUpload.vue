@@ -107,7 +107,7 @@ export default {
 
   &__icon {
     font-size: 1.3rem;
-    color: green
+    color: $success-color;
   }
 
   &__label {
@@ -118,10 +118,10 @@ export default {
     padding: 15px 40px;
     margin: 0 auto;
     
-    color: #fff;
-    background-color: #2dce89;
+    color: $clear-color;
+    background-color: $success-color;
     
-    border-radius: 100px;
+    border-radius: $medium-radius;
     border: none;
     
     text-align: center;
@@ -137,13 +137,13 @@ export default {
 
     &:active {
         transform: translateY(-1px);
-        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        box-shadow: $shadow;
     }
   }
 
   &__preview {
     height: 500px;
-    background-color: rgb(36, 35, 35);
+    background-color: $secondary-color;
 
     img {
       display: block;

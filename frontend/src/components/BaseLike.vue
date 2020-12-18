@@ -114,11 +114,11 @@ export default {
     // left: -165px;
     // top: 40px;
     padding: 15px;
-    border-radius: 3px;
-    background-color: #fff;
-    box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
+    border-radius: $small-radius;
+    background-color: $clear-color;
+    box-shadow: $shadow;
     // @include flexbox(flex-start, column, center);
-    border-radius: 3px;
+    border-radius: $small-radius;
     z-index: 1;
 
     p {
@@ -129,6 +129,6 @@ export default {
 }
 
 .liked {
-  color: green;
+  color: $success-color;
 }
 </style>

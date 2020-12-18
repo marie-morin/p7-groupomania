@@ -69,10 +69,10 @@ export default {
     font-weight: inherit;
 
     border: none;
-    border-radius: 15px;
+    border-radius: $medium-radius;
 
-    background-color: rgb(228, 226, 226);
-    color: grey;
+    background-color: $base-color;
+    color: $police-color;
 
   }
 
@@ -86,10 +86,10 @@ export default {
 
     padding: 15px;
 
-    border-radius: 3px;
-    box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
+    border-radius: $small-radius;
+    box-shadow: $shadow;
 
-    background-color: rgb(228, 226, 226);
+    background-color: $base-color;
 
     transform: translate(-50%, 0);
   }

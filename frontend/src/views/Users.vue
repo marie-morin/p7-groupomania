@@ -32,6 +32,6 @@ export default {
 <style scope lang="scss">
 .users {
   width: 100%;
-  background-color: khaki;
+  // background-color: khaki;
 }
 </style>

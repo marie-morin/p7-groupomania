@@ -120,7 +120,7 @@ export default {
     width: 35px;
     height: 35px;
     margin-right: 10px;
-    border-radius: 50%;
+    border-radius: $round-radius;
   }
 
   &__entry {
@@ -128,9 +128,9 @@ export default {
     font-family: inherit;
     font-size: inherit;
     color: inherit;
-    background-color: rgb(240, 240, 240);
+    background-color: $base-color;
     padding: 5px 15px;
-    border-radius: 15px;
+    border-radius: $medium-radius;
     border: none;
   }
 }

@@ -27,6 +27,8 @@ export default {
   background-origin: border-box;
   background-size: cover;
   background-position: center;
+
+  color: $clear-color;
 }
 
 .btns {

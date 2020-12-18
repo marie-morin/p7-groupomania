@@ -35,10 +35,10 @@ export default {
   position: relative;
   @include flexbox(space-between, column, center);
   text-align: center;
-  background-color: #fff;
+  background-color: $clear-color;
   // background-color: rgba(243, 236, 247, 0.333);
   // background-color: lightcoral;
-  color: $groupomania-police;
+  color: $police-color;
   // -webkit-font-smoothing: antialiased;
   // -moz-osx-font-smoothing: grayscale;
   // text-align: center;

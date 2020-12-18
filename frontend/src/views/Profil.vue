@@ -141,6 +141,6 @@ export default {
 <style scope lang="scss">
 .profil {
   width: 100%;
-  background-color: lightpink;
+  // background-color: lightpink;
 }
 </style>

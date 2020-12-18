@@ -36,7 +36,7 @@ export default {
     <div class="welcome">
       <img :src="currentUser.imageUrl" alt="currentUser.username" class="welcome__image">
 
-      <p>Bonjour {{ currentUser.firstname }}</p>
+      <p>{{ currentUser.firstname }} {{ currentUser.lastname }}</p>
     </div>
 
     <nav class="nav">
@@ -80,8 +80,8 @@ export default {
 .header {
   width: 100%;
   @include flexbox(space-around, row, center);
-  background-color: $groupomania-red;
-  color: $groupomania-police;
+  background-color: lighten($color: $primary-color, $amount: 10);
+  color: $clear-color;
 
   @media screen and (max-width: $small) {
     @include flexbox(flex-start, column, center);
@@ -95,7 +95,7 @@ export default {
     width: 35px;
     height: 35px;
     margin-right: 10px;
-    border-radius: 50%;
+    border-radius: $round-radius;
   }
 }
 
@@ -111,10 +111,10 @@ export default {
     width: 35px;
     height: 35px;
     margin: 0 15px;
-    border-radius: 50%;
+    border-radius: $round-radius;
     text-decoration: none;
     font-size: 1.3rem;
-    color: $groupomania-police;
+    color: $clear-color;
     cursor: pointer;
     transition: all .2s;
 
@@ -127,12 +127,12 @@ export default {
     }
 
     &--active {
-      box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
+      box-shadow: $shadow;
     }
   }
 }
 .active {
-  border-radius: 50%;
-  box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
+  border-radius: $round-radius;
+  box-shadow: $shadow;
 }
 </style>

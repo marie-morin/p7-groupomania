@@ -169,20 +169,20 @@ export default {
     width: 35px;
     height: 35px;
     margin-right: 10px;
-    border-radius: 50%;
+    border-radius: $round-radius;
   }
 
   &__main {
     @include flexbox(space-between, row, center);
-    background-color: rgb(240, 240, 240);
+    background-color: $base-color;
     padding: 5px 15px;
-    border-radius: 15px;
+    border-radius: $medium-radius;
   }
 
 
   &__meta {
     margin: 0;
-    color: #5a6269;
+    color: $police-color;
     font-size: 1rem;
 
     a {
@@ -196,17 +196,17 @@ export default {
     width: 35px;
     height: 35px;
     margin: 0 15px;
-    border-radius: 50%;
+    border-radius: $round-radius;
     font-size: 1.3rem;
-    color: rgb(240, 240, 240);
+    color: $police-color;
     cursor: pointer;
 
     &:hover {
-      box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
+      box-shadow: $shadow;
     }
 
     &--active {
-      box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
+      box-shadow: $shadow;
     }
   }
 }

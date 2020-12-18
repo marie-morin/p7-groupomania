@@ -1,20 +1,23 @@
 // -------------- Couleurs
-$groupomania-red: rgb(196, 58, 72);
-$groupomania-font-blue: rgb(10, 23, 52);
-$groupomania-blue: rgb(15, 27, 50);
-$groupomania-police: white;
-$groupomania-background: white;
-$groupomania-back-grey: rgb(236, 236, 236);
-$groupomania-light-grey: rgb(158, 158, 158);
-$groupomania-medium-grey: rgb(64, 68, 71);
-$groupomania-dark-grey: rgb(54, 57, 59);
+$dark-grey: rgb(158, 158, 158);
 
-$primary: #11998e;
-$secondary: #38ef7d;
-$white: #fff;
-$gray: #707d8b;
+$clear-color: #fff;
+$base-color: rgb(208, 208, 208);
+$police-color: rgb(82, 82, 82);
 
+$primary-color: rgb(196, 58, 72);
+$secondary-color: rgb(10, 23, 52);
 
+$success-color: rgb(66, 172, 106);
+$warning-color: rgb(196, 58, 72);
+
+// -------------- Radius
+$small-radius: 3px;
+$medium-radius: 15px;
+$round-radius: 50%;
+
+// -------------- Radius
+$shadow: 0px 3px 15px rgba(0,0,0,0.2);
 
 // -------------- Breaking Points
 $x-small: 400px;

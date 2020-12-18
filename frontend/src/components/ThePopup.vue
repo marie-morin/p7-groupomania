@@ -94,10 +94,10 @@ export default {
   position: fixed;
   left: 20px;
   bottom: 20px;
-  background-color: #fff;
-  border-radius: 3px;
-  box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
-  color: grey;
+  background-color: $clear-color;
+  border-radius: $small-radius;
+  box-shadow: $shadow;
+  color: $police-color;
   padding: 10px;
 
   &__icon {
@@ -105,12 +105,12 @@ export default {
     display: block;
     margin: 10px auto;
 
-    &--sucess {
-      color: rgb(40, 150, 40);
+    &--success {
+      color: $success-color;
     }
 
     &--warning {
-      color: rgb(245, 81, 81)
+      color: $warning-color;
     }
 
     &--close {
@@ -124,7 +124,7 @@ export default {
       cursor: pointer;
 
       &:hover {
-        color: darken($color: grey, $amount: 10)
+        color: darken($color: $police-color, $amount: 10)
       }
     }
   }
@@ -132,7 +132,7 @@ export default {
   &__button {
     padding: 5px 15px;
     margin: 5px;
-    color: #fff;
+    color: $clear-color;
     font-size: inherit;
     font-family: inherit;
     font-weight: inherit;
@@ -140,15 +140,15 @@ export default {
     cursor: pointer;
 
     &--confirm {
-      color: rgb(40, 150, 40);
+      color: $success-color;
     }
 
     &--deny {
-      color: rgb(245, 81, 81);
+      color: $warning-color;
     }
 
     &:hover {
-      background-color: darken($color: grey, $amount: 1);
+      background-color: darken($color: $police-color, $amount: 1);
     }
   }
 

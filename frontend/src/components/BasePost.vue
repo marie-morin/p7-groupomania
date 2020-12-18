@@ -197,12 +197,12 @@ export default {
   // position: relative;
   width: 70%;
   margin: 20px auto;
-  border-radius: 3px;
-  box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
+  border-radius: $small-radius;
+  box-shadow: $shadow;
   // background-color: lightpink;
-  background-color: #fff;
+  background-color: $clear-color;
   // background-color: #e2e7eb;
-  color: $gray;
+  color: $police-color;
 
   &__header {
     @include flexbox(space-between, row, center);
@@ -216,7 +216,7 @@ export default {
       width: 35px;
       height: 35px;
       margin-right: 10px;
-      border-radius: 50%;
+      border-radius: $round-radius;
     }
 
     a {
@@ -235,7 +235,7 @@ export default {
 
   &__image {
     height: 500px;
-    background-color: rgb(36, 35, 35);
+    background-color: $secondary-color;
 
     img {
       display: block;

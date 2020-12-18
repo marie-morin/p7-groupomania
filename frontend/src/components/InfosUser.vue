@@ -203,15 +203,15 @@ export default {
   width: 70%;
   margin: 20px auto;
   padding: 30px;
-  border-radius: 3px;
-  box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
-  color: grey;
+  border-radius: $small-radius;
+  box-shadow: $shadow;
+  color: $police-color;
 
   &__image {
     width: 200px;
     height: 200px;
     margin: 20px 40px;
-    border-radius: 50%;
+    border-radius: $round-radius;
   }
 
   &__meta {
@@ -227,17 +227,17 @@ export default {
     width: 35px;
     height: 35px;
     margin: 0 15px;
-    border-radius: 50%;
+    border-radius: $round-radius;
     font-size: 1.3rem;
     color: inherit;
     cursor: pointer;
 
     &:hover {
-      box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
+      box-shadow: $shadow;
     }
 
     &--active {
-      box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
+      box-shadow: $shadow;
     }
   }
 }
