@@ -40,7 +40,7 @@ export default {
         this.passwordConfirmed = true;
         if (this.user.email == "" || this.user.password == "") {
           const contexte = {
-            intention: "notification",
+            intention: "alert",
             message:
               "Vous devez renseigner une adresse mail et un mot de passe !",
           };
@@ -59,7 +59,7 @@ export default {
           this.user.passwordConf == ""
         ) {
           const contexte = {
-            intention: "notification",
+            intention: "alert",
             message:
               "Vous devez renseigner une adresse email, un nom, un prénom et un mot de passe !",
           };
@@ -69,7 +69,7 @@ export default {
 
         if (!passwordRegex.test(this.user.password)) {
           const contexte = {
-            intention: "notification",
+            intention: "alert",
             message: `Le mot de passe doit comporter au moins 8 caractères, une majuscule, une minuscule, une lettre et un chiffre. Seuls les caractères spéciaux suivants sont autorisée : @ $ ! % ?`,
           };
           this.$store.commit("displayPopup", contexte);
@@ -81,7 +81,7 @@ export default {
         } else {
           this.passwordConfirmed = false;
           const contexte = {
-            intention: "notification",
+            intention: "alert",
             message:
               "La confirmation du mot de passe doit être identique au mot de passe !",
           };

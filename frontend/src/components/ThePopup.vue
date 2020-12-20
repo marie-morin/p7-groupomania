@@ -71,7 +71,8 @@ export default {
 
 <template>
   <div class="popup">
-    <font-awesome-icon v-if="popup.intention == 'notification'" icon="check-circle" class="popup__icon popup__icon--success"/>
+    <font-awesome-icon v-if="popup.intention == 'success'" icon="check-circle" class="popup__icon popup__icon--success"/>
+    <font-awesome-icon v-else-if="popup.intention == 'alert'" icon="exclamation-circle" class="popup__icon popup__icon--warning"/>
     <font-awesome-icon v-else icon="question-circle" class="popup__icon popup__icon--warning"/>
 
     <font-awesome-icon icon="times" @click="hidePopup" class="popup__icon close-cross"/>
@@ -108,6 +109,10 @@ export default {
 
     &--success {
       color: $success-color;
+    }
+
+    &--alert {
+      color: $warning-color;
     }
 
     &--warning {

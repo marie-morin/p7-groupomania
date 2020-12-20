@@ -36,44 +36,48 @@ export default {
 <template>
   <div class="header">
 
-    <div class="header__welcome">
-      <BaseAvatar :user="currentUser" origin="header" />
-      <p>{{ currentUser.firstname }} {{ currentUser.lastname }}</p>
+    <div class="container header__content">
+      <div class="header__welcome">
+        <BaseAvatar :user="currentUser" origin="header" />
+        <p>{{ currentUser.firstname }} {{ currentUser.lastname }}</p>
+      </div>
+
+      <nav class="header__nav">
+        <router-link
+          to="/home"
+          class="header__link"
+          :class="{ active : selectedPage == 'home' }"
+        >
+          <font-awesome-icon icon="home" @click="setActive('home')"/>
+        </router-link> 
+
+        <router-link
+          to="/users"
+          class="header__link"
+          :class="{ active : selectedPage == 'users' }"
+        >
+          <font-awesome-icon icon="users" @click="setActive('users')"/>
+        </router-link>
+
+        <router-link
+          :to="{ name: 'Profil', params: { id: currentUser.id } }"
+          class="header__link"
+          :class="{ active : selectedPage == 'profil' }"
+        >
+          <font-awesome-icon icon="user-circle" @click="setActive('profil')"/>
+        </router-link>
+
+        <a
+          href="#"
+          class="header__link"
+          @click.prevent="logout"
+        >
+          <font-awesome-icon icon="power-off" />
+        </a>
+      </nav>
+
     </div>
 
-    <nav class="header__nav">
-      <router-link
-        to="/home"
-        class="header__link"
-        :class="{ active : selectedPage == 'home' }"
-      >
-        <font-awesome-icon icon="home" @click="setActive('home')"/>
-      </router-link> 
-
-      <router-link
-        to="/users"
-        class="header__link"
-        :class="{ active : selectedPage == 'users' }"
-      >
-        <font-awesome-icon icon="users" @click="setActive('users')"/>
-      </router-link>
-
-      <router-link
-        :to="{ name: 'Profil', params: { id: currentUser.id } }"
-        class="header__link"
-        :class="{ active : selectedPage == 'profil' }"
-      >
-        <font-awesome-icon icon="user-circle" @click="setActive('profil')"/>
-      </router-link>
-
-      <a
-        href="#"
-        class="header__link"
-        @click.prevent="logout"
-      >
-        <font-awesome-icon icon="power-off" />
-      </a>
-    </nav>
 
   </div>
 </template>
@@ -81,13 +85,16 @@ export default {
 <style scoped lang="scss">
 .header {
   width: 100%;
-  @include flexbox(space-around, row, center);
-
   background-color: lighten($color: $primary-color, $amount: 10);
   color: $clear-color;
 
-  @media screen and (max-width: $small) {
-    @include flexbox(flex-start, column, center);
+
+  &__content {
+    @include flexbox(space-between, row, center);
+
+    @media screen and (max-width: $break-small) {
+      @include flexbox(flex-start, column, center);
+    }
   }
 
   &__welcome {
@@ -97,7 +104,7 @@ export default {
   &__nav {
     @include flexbox(space-between, row, center);
 
-    @media screen and (max-width: $small) {
+    @media screen and (max-width: $break-small) {
       margin-bottom: 1.5rem;
     }
   }
@@ -106,7 +113,6 @@ export default {
     width: 3.5rem;
     height: 3.5rem;
     @include flexbox(center, row, center);
-    margin: 0 1.5rem;
 
     color: $clear-color;
 
@@ -116,7 +122,12 @@ export default {
     text-decoration: none;
 
     cursor: pointer;
+    // outline: none;
     transition: all .2s;
+
+    &:not(:first-child) {
+      margin-left: 3rem;
+    }
 
     &:hover {
       transform: translateY(-0.3rem);

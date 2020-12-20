@@ -23,7 +23,6 @@ export default {
 
 <template>
     <router-link :to="{ name: 'Profil', params: { id: user.id } }" class="user">
-      <!-- <img :src="currentUser.imageUrl" alt="currentUser.username" class="avatar"> -->
       <BaseAvatar :user="user" origin="comment" />
       {{ user.firstname }} {{ user.lastname }}
     </router-link>

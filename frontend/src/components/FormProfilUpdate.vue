@@ -25,7 +25,7 @@ export default {
         this.user.lastname == ""
       ) {
         const contexte = {
-          intention: "notification",
+          intention: "alert",
           message:
             "Vous devez renseigner une adresse mail, un nom et un prénom !",
         };
@@ -60,11 +60,13 @@ export default {
     />
 
     <h2 class="form__title">Modifiez votre profil :</h2>
+
     <div class="form__group">
       <input
         type="email"
         id="email"
         name="email"
+        placeholder="Mon adresse email..."
         required
         v-model="user.email"
         class="form__field"
@@ -77,6 +79,7 @@ export default {
         type="text"
         id="firstname"
         name="firstname"
+        placeholder="Mon prenom..."
         required
         v-model="user.firstname"
         class="form__field"
@@ -89,6 +92,7 @@ export default {
         type="text"
         id="lastname"
         name="lastname"
+        placeholder="Mon nom..."
         required
         v-model="user.lastname"
         class="form__field"
@@ -100,7 +104,7 @@ export default {
       <textarea
         id="bio"
         name="bio"
-       
+        placeholder="Ma biographie..."
         v-model="user.bio"
         class="form__field"
       ></textarea>

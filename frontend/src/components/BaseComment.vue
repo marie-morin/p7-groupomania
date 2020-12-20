@@ -81,7 +81,7 @@ export default {
     updateComment() {
       if (this.updatedComment == "") {
         const contexte = {
-          intention: "notification",
+          intention: "alert",
           message: "Votre commentaire est vide !",
         };
         this.$store.commit("displayPopup", contexte);
@@ -131,8 +131,8 @@ export default {
     </div>
 
 
-    <div class="options">
-        <div @click="displayOptions" class="options__dots">
+    <div  class="options">
+        <div @click="displayOptions" @keydown.enter="displayOptions" class="options__dots" tabindex="0">
           <font-awesome-icon icon="ellipsis-h" />
         </div>
 

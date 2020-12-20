@@ -51,6 +51,7 @@ export default {
     height: 3.5rem;
     margin-right: 1rem;
     border-radius: $round-radius;
+    object-fit: cover;
 
     &--empty {
       @include flexbox(center, row, center);

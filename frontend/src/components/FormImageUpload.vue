@@ -38,8 +38,6 @@ export default {
         "image/gif",
       ];
       this.file = event.target.files[0] || event.dataTransfer.files;
-      // console.log("file : ", this.file);
-      // console.log("size : ", this.file.size);
 
       if (
         !event.target ||
@@ -47,7 +45,7 @@ export default {
         this.file.size > 104857600
       ) {
         const contexte = {
-          intention: "notification",
+          intention: "alert",
           message:
             "Vous devez selectionner une image (.jpeg, .jpg ou .png) ou un gif (.gif) de moins de 100 Mo !",
         };
@@ -84,6 +82,7 @@ export default {
       ref="inputFile"
       accept="image/png, image/jpg, image/jpeg, image/gif"
       @change="selectFile($event)"
+      tabindex="0"
     />
 
     <div v-show="imagePreview" class="imageSelection__preview">

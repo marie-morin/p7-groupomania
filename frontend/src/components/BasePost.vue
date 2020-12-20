@@ -99,7 +99,7 @@ export default {
 
         if (this.updatedPost.title == "" || formData.get("file") == null) {
           const contexte = {
-            intention: "notification",
+            intention: "alert",
             message: "Votre publication doit contenir un titre et une image !",
           };
           this.$store.commit("displayPopup", contexte);
@@ -108,7 +108,7 @@ export default {
       } else {
         if (this.updatedPost.title == "") {
           const contexte = {
-            intention: "notification",
+            intention: "alert",
             message: "Votre publication doit contenir un titre et une image !",
           };
           this.$store.commit("displayPopup", contexte);
@@ -143,7 +143,7 @@ export default {
       </div>
 
       <div class="options">
-        <div class="options__dots" @click="displayOptions">
+        <div class="options__dots" @click="displayOptions" @keydown.enter="displayOptions" tabindex="0">
           <font-awesome-icon icon="ellipsis-h" />
         </div>
 
@@ -201,7 +201,7 @@ export default {
 
 <style scope lang="scss">
 .post {
-  width: 70%;
+  // width: 70%;
   margin: $marged-centered-margin;
 
   background-color: $clear-color;

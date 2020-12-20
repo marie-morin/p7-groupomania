@@ -12,11 +12,11 @@
 
     text-align: center;
 
-    @media screen and (max-width: $small + 100) {
+    @media screen and (max-width: $break-small) {
       width: 85%
     }
 
-    @media screen and (max-width: $x-small + 100) {
+    @media screen and (max-width: $break-small) {
       width: 90%;
       padding: 5rem 2rem;
     }
@@ -76,10 +76,10 @@
         cursor: text;
       }
   
-      // &:required,
-      // &:invalid { 
-      //   box-shadow:none;
-      // }
+      &:required,
+      &:invalid { 
+        box-shadow:none;
+      }
       
       &:focus {
         padding-bottom: 1rem;  
@@ -111,6 +111,7 @@
   font-size: 1.9rem;
   text-align: center;
   text-transform: uppercase;
+  text-decoration: none;
 
   cursor: pointer;
   transition: all .2s;
@@ -216,5 +217,25 @@
 
   &__form {
     background-color: $clear-color;
+  }
+}
+
+.container {
+  max-width: 110rem;
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 4rem;
+  padding-left: 4rem;
+  
+  @media screen and (max-width: $break-tablet) {
+    // max-width: 95%;
+    padding-right: 2rem;
+    padding-left: 2rem;
+  }
+
+  @media screen and (max-width: $break-small) {
+    padding-right: 1rem;
+    padding-left: 1rem;
   }
 }

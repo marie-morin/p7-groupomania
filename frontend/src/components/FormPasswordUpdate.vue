@@ -37,7 +37,7 @@ export default {
         this.updatedPassword.newMdpConf == ""
       ) {
         const contexte = {
-          intention: "notification",
+          intention: "alert",
           message:
             "Vous devez renseigner votre mot de passe actuel, votre nouveau mot de passe, et la confirmation de votre nouveau mot de passe !",
         };
@@ -47,7 +47,7 @@ export default {
 
       if (this.updatedPassword.newMdp !== this.updatedPassword.newMdpConf) {
         const contexte = {
-          intention: "notification",
+          intention: "alert",
           message:
             "La confirmation du mot de passe doit être identique au nouveau mot de passe !",
         };
@@ -88,6 +88,7 @@ export default {
         type="password"
         id="initialMdp"
         name="initialMdp"
+        placeholder="Mon mot de passe actuel..."
         required
         v-model="updatedPassword.initialMdp"
         class="form__field"
@@ -100,6 +101,7 @@ export default {
         type="password"
         id="newMdp"
         name="newMdp"
+        placeholder="Mon nouveau mot de passe..."
         required
         v-model="updatedPassword.newMdp"
         class="form__field"
@@ -112,6 +114,7 @@ export default {
         type="password"
         id="newMdpConf"
         name="newMdpConf"
+        placeholder="Confirmation de mon nouveau mot de passe..."
         required
         v-model="updatedPassword.newMdpConf"
         class="form__field"

@@ -25,8 +25,9 @@ $round-radius: 50%;
 $shadow: 0 0.3rem 1.5rem rgba(0,0,0,0.2);
 
 // -------------- Break Points
-$x-small: 400px;
-$small: 650px;
-$medium: 900px;
-$large: 1100px;
-$x-large: 1500px;
+$break-mini: 375px;
+$break-small: 425px;
+$break-tablet: 768px;
+$break-medium: 1024px;
+$break-large: 1210px;
+$break-header: 1500px;

@@ -72,8 +72,10 @@ export default {
     <font-awesome-icon
       icon="thumbs-up"
       @click="like()"
+      @keydown.enter="like()"
       class="likes__icon"
       :class="{ liked: wasLiked }"
+      tabindex="0"
     />
 
     <p

@@ -76,7 +76,7 @@ export default {
 
       if (formData.get("file") == null) {
         const contexte = {
-          intention: "notification",
+          intention: "alert",
           message: "Vous devez selectionner une image !",
         };
         this.$store.commit("displayPopup", contexte);
@@ -184,7 +184,12 @@ export default {
       </div>
 
       <div class="options">
-        <div class="options__dots" @click="displayOptions">
+        <div
+          class="options__dots"
+          @click="displayOptions"
+          @keydown.enter="displayOptions"
+          tabindex="0"
+        >
           <font-awesome-icon icon="ellipsis-h" />
         </div>
 
@@ -222,7 +227,7 @@ export default {
 
 <style scope lang="scss">
 .userinfos {
-  width: 70%;
+  // width: 70%;
   @include flexbox(space-between, row, flex-start);
   margin: $marged-centered-margin;
   padding: 3rem;
@@ -231,12 +236,24 @@ export default {
   box-shadow: $shadow;
   border-radius: $small-radius;
 
+  @media screen and (max-width: $break-tablet) {
+      @include flexbox(center, column, center);
+    }
+
   &__content {
     @include flexbox(flex-start, row, center);
+
+    @media screen and (max-width: $break-tablet) {
+      @include flexbox(center, column, center);
+    }
   }
 
   &__meta {
     text-align: left;
+    
+    @media screen and (max-width: $break-tablet) {
+      text-align: center;
+    }
   }
 
   &__name {

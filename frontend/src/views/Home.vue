@@ -37,7 +37,7 @@ export default {
 </script>
 
 <template>
-  <div class="home">
+  <div class="home container">
 
     <BaseButton :onClick="displayPostCreationForm">Créer une publication</BaseButton>
 
@@ -50,12 +50,11 @@ export default {
         @display-form="displayPostCreationForm()"
       />
     </div>
-
-    <BasePost
-      :post="post"
-      v-for="post in allPosts"
-      :key="post.id"
-    />
+      <BasePost
+        :post="post"
+        v-for="post in allPosts"
+        :key="post.id"
+      />
   </div>
 </template>
 

@@ -28,7 +28,7 @@ const actions = {
       .catch((error) => {
         if (error.response) {
           const contexte = {
-            intention: "notification",
+            intention: "alert",
             message: "",
           };
           if (error.response.status === 400) {
@@ -61,7 +61,7 @@ const actions = {
     commit("setUser", response.data);
     router.push("Home");
     const contexte = {
-      intention: "notification",
+      intention: "success",
       message: `Bienvenue ${state.user.username} !`,
     };
     commit("displayPopup", contexte);

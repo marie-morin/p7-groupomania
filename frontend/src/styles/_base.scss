@@ -1,5 +1,12 @@
 html {
     font-size: 10px;
+
+    @media screen and (max-width: 1024px) {
+        font-size: 9px;
+    }
+    @media screen and (max-width: 768px) {
+        font-size: 8px;
+    }
 }
 body {
     margin: 0;
@@ -11,4 +18,5 @@ body {
 
 * {
     box-sizing: border-box;
+    // outline: none;
 }

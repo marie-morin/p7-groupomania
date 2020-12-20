@@ -34,7 +34,7 @@ export default {
         formData.get("title") == "null"
       ) {
         const contexte = {
-          intention: "notification",
+          intention: "alert",
           message: "Votre publication doit contenir un titre et une image !",
         };
         this.$store.commit("displayPopup", contexte);

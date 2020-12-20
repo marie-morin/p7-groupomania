@@ -31,7 +31,7 @@ export default {
   &__directions {
     @include flexbox(center, row, center);
 
-    @media screen and (max-width: $x-small + 100) {
+    @media screen and (max-width: $break-small) {
       @include flexbox(center, column, center);
     }
   }

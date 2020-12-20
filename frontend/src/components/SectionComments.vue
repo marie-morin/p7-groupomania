@@ -44,7 +44,7 @@ export default {
     addComment() {
       if (this.newComment == "") {
         const contexte = {
-          intention: "notification",
+          intention: "alert",
           message: "Votre commentaire est vide !",
         };
         this.$store.commit("displayPopup", contexte);
@@ -71,7 +71,12 @@ export default {
 <template>
   <div class="comment-section">
 
-    <div @click="displayComment()" class="comment-section__preview">
+    <div
+      @click="displayComment()"
+      @keydown.enter="displayComment()"
+      class="comment-section__preview"
+      tabindex="0"
+    >
       <font-awesome-icon icon="comment" class="comment-section__icon" />
       <p class="comment-section__amout">{{ post.comments.length }} commentaires</p>
     </div>

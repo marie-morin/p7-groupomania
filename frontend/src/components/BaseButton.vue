@@ -37,14 +37,21 @@ export default {
     <component
       :is="type"
       v-if="!onClick"
-      :href="href"
+      :href="to"
       :to="to"
       class="global-btn"
+      tabindex="0"
     >
       <slot />
     </component>
 
-    <button v-else @click.prevent.stop="onClick" class="global-btn">
+    <button
+      v-else
+      @click.prevent.stop="onClick"
+      @keydown.enter="onClick"
+      class="global-btn"
+      tabindex="0"
+    >
       <slot />
     </button>    
   </div>

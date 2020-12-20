@@ -106,7 +106,7 @@ export default {
 </script>
 
 <template>
-  <div class="profil">
+  <div class="profil container">
     <InfosUser v-if="isOwner" :is-owner="isOwner" :user="currentUser" />
     <InfosUser v-else :is-owner="isOwner" :user="guest" />
 
