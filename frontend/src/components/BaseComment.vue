@@ -18,7 +18,10 @@ export default {
 
   data() {
     return {
-      updatedComment: "",
+      updatedComment: {
+        content: this.comment.content,
+        id: this.comment.id,
+      },
       editing: false,
       optionsDisplayed: false,
     };
@@ -80,7 +83,15 @@ export default {
 
 
     updateComment() {
-      if (this.updatedComment == "") {
+      // console.log("updatedComment : ", this.updatedComment);
+      // console.log("JSON.stringify(this.updatedComment) : ", JSON.stringify(this.updatedComment));
+      // let formData = new FormData();
+
+      // formData.append("content", JSON.stringify(this.updatedComment));
+
+      
+
+      if (this.updatedComment.content == "") {
         const contexte = {
           intention: "alert",
           message: "Votre commentaire est vide !",
@@ -95,8 +106,9 @@ export default {
         data: this.updatedComment,
       };
       this.update(options);
-      this.updatedComment = "";
-    },
+      this.editComment();
+      this.updatedComment.content = "";
+    }
   },
 };
 </script>
@@ -107,7 +119,7 @@ export default {
     <!-- <img :src="currentUser.imageUrl" alt="currentUser.username" class="avatar"> -->
     <BaseAvatar :user="comment.User" origin="post" />
 
-    <div class="comment__main">
+    <div class="comment__main" :class="{ hide : editing }">
 
       <div class="comment__content">
         <p class="comment__meta">
@@ -139,10 +151,10 @@ export default {
     </div>
 
 
-    <div  class="options">
+    <div  class="options" :class="{ hide : editing }">
         <BaseButton
           tag="button"
-          @click="displayOptions"
+          @click="displayOptions()"
           isDotsBtn
         >
           <font-awesome-icon icon="ellipsis-h" />
@@ -153,6 +165,7 @@ export default {
         </div> -->
 
         <div v-show="optionsDisplayed" class="options__dropdown">
+
           <BaseButton
             v-if="isAllowed"
             tag="button"
@@ -184,15 +197,30 @@ export default {
         </div>
       </div>
 
-      <!-- <div v-if="editing">
+      <form
+        v-if="editing"
+        class="comment__edit">
+        
         <input
           type="text"
           required
-          v-model="updatedComment"
-          @keyup.enter="updateComment()"
+          v-model="updatedComment.content"
+          @keydown.enter="updateComment"
+          placeholder="Modifier votre commentaire..."
+          class="comment__edit"
         />
-        <button @click="editComment()">Annuler</button>
-      </div> -->
+
+        <BaseButton
+          v-if="isCreator"
+          tag="button"
+          @click.prevent="editComment()"
+          isLink
+        >
+          Annuler
+        </BaseButton>
+
+        <!-- <button @click="editComment()">Annuler</button> -->
+      </form>
   </div>
 </template>
 
@@ -229,5 +257,24 @@ export default {
     max-width: 90%;
     word-wrap: break-word ;
   }
+
+  &__edit {
+    width: 100%;
+    @include flexbox(flex-end, row, center);
+    color: inherit;
+    font-size: inherit;
+    font-family: inherit;
+
+    input {
+      background-color: $base-color;
+      border-radius: $medium-radius;
+      border: none;
+      padding: $base-padding;
+    }
+  }
+}
+
+.hide {
+  display: none;
 }
 </style>

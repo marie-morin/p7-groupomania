@@ -85,6 +85,9 @@ const actions = {
 
   async update({ commit }, item) {
     console.log("sotre item : ", item.data);
+    // for (var pair of item.data.entries()) {
+    //   console.log(pair[0] + ", " + pair[1]);
+    // }
 
     const response = await axios.put(
       item.url,

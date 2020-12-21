@@ -176,6 +176,7 @@ export default {
             <FormImageUpload
               v-on:send-imagefile="setFile"
               :wasPosted="wasPosted"
+              inputfile="profilPictureUpdate"
             />
 
             <!-- <BaseButton>Enregistrer</BaseButton> -->

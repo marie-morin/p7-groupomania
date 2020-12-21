@@ -78,16 +78,17 @@ exports.getCommentsFromPost = (req, res, next) => {
 exports.modifyComment = (req, res) => {
   console.log("---------- modifyComment");
 
-  console.log("req : ", req);
-  console.log("req.body : ", req.body);
-  console.log("req.content : ", req.content);
+  // console.log("req : ", req);
+  // console.log("req.body : ", req.body);
+  console.log("req.body.content : ", req.body.content); // undefined
+  // console.log("req.content : ", req.content);
 
-  const data = JSON.parse(req.body);
+  const data = req.body;
   if (
     !data ||
     !req.params.id ||
     !req.headers.authorization ||
-    !regex.test(data)
+    !regex.test(data.content)
   ) {
     res.status(400).json({ message: "Requête erronée." });
   } else {
@@ -99,7 +100,7 @@ exports.modifyComment = (req, res) => {
       .then((comment) => {
         if (comment.userId == userId) {
           models.Comment.update(
-            { content: data, updatedAt: new Date() },
+            { content: data.content, updatedAt: new Date() },
             { where: { id: comment.id } }
           )
             .then(() => {

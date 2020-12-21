@@ -87,7 +87,11 @@ export default {
       <label for="title" class="form__label">Titre</label>
     </div>
 
-    <FormImageUpload v-on:send-imagefile="setFile" :wasPosted="wasPosted" />
+    <FormImageUpload
+      v-on:send-imagefile="setFile"
+      :wasPosted="wasPosted"
+      inputfile="postCreation"
+    />
 
     <!-- <BaseButton>Publier</BaseButton> -->
 

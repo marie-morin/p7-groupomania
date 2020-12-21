@@ -103,6 +103,7 @@ export default {
         { "btn--down": this.isOptionBtn },
 
         { "btn--close": this.isCloseBtn },
+
         { "btn--link": this.isLink },
       ];
       return btnClasses;
@@ -209,6 +210,7 @@ export default {
 
   &--link {
     color: $success-color;
+    background-color: transparent;
       
     &:hover {
       color: darken($color: $success-color, $amount: 10);

@@ -29,6 +29,7 @@ export default {
       editing: false,
       file: null,
       optionsDisplayed: false,
+      wasPosted: false,
       updatedPost: {
         title: this.post.title,
         imageUrl: this.post.imageUrl,
@@ -123,6 +124,7 @@ export default {
         data: formData,
       };
       this.update(options);
+      this.wasPosted = true;
       this.editing = false;
     },
   },
@@ -133,6 +135,7 @@ export default {
   <div class="post">
 
     <div class="post__header">
+      
       <div class="post__meta">
         <!-- <img :src="post.imageUrl" alt="currentUser.username" class="avatar"> -->
         <BaseAvatar :user="post.User" origin="post" />
@@ -151,8 +154,6 @@ export default {
         </p>
       </div>
 
-
-
       <div class="options">
 
         <BaseButton
@@ -163,7 +164,7 @@ export default {
           <font-awesome-icon icon="ellipsis-h" />
         </BaseButton>
         
-<!-- 
+        <!-- 
         <div class="options__dots" @click="displayOptions" @keydown.enter="displayOptions" tabindex="0">
           <font-awesome-icon icon="ellipsis-h" />
         </div> -->
@@ -222,22 +223,57 @@ export default {
     <SectionComments :post="post" />
 
     <!-- Formulaire de modification du post -->
-      <form v-if="editing" enctype="multipart/form-data" @submit.prevent="updatePost">
-        <label for="title">Nouveau titre</label>
-        <input
-          type="text"
-          name="title"
-          required
-          v-model="updatedPost.title"
-          @keyup.enter="updatePost()"
-        />
+    <div
+      v-show="editing"
+      class="popupform"
+    >
+      <form
+        v-if="editing"
+        enctype="multipart/form-data"
+        @submit.prevent="updatePost"
+        class="popup-form__form form"
+      >
+        <div class="form__group">
+          <input
+            type="text"
+            name="title"
+            required
+            v-model="updatedPost.title"
+            @keyup.enter="updatePost()"
+            placeholder="Modifier votre title"
+            class="form__field"
+          />
+          <label for="title" class="form__label">Modifier votre title</label>
+        </div>
+
 
         <label for="upload">Nouvelle image</label>
-        <FormImageUpload v-on:send-imagefile="setFile" />
 
-        <button>Valider la modification</button>
-        <button @click="editPost()">Annuler</button>
-      </form>      
+        <FormImageUpload
+          v-on:send-imagefile="setFile"
+          :wasPosted="wasPosted"
+          inputfile="postUpdate"
+        />
+
+        <BaseButton
+          tag="button"
+          nativeType="submit"
+          isGenericBtn
+        >
+          Valider la modification
+        </BaseButton>
+
+        <BaseButton
+          tag="button"
+          @click="editPost()"
+          isCancelBtn
+        >
+          Annuler
+        </BaseButton>
+      </form>   
+    </div>
+
+       
   </div>
 </template>
 

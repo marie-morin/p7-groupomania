@@ -7,6 +7,10 @@ export default {
       type: Boolean,
       required: true,
     },
+    inputfile: {
+      type: String,
+      required: true
+    }
   },
 
   data() {
@@ -18,9 +22,8 @@ export default {
 
   watch: {
     wasPosted() {
-      console.log(this.wasPosted);
       this.imagePreview = null;
-      this.$refs.inputFile.value = "";
+      this.$refs.this.inputfile.value = "";
     },
   },
 
@@ -37,6 +40,7 @@ export default {
         "image/png",
         "image/gif",
       ];
+
       this.file = event.target.files[0] || event.dataTransfer.files;
 
       if (
@@ -72,14 +76,14 @@ export default {
 <template>
   <div class="imageSelection">
 
-    <label for="file-input" class="imageSelection__label">
+    <label :for="inputfile" class="imageSelection__label">
       Choisez une image ou un gif
     </label>
 
     <input
       type="file"
-      id="file-input"
-      ref="inputFile"
+      :id="inputfile"
+      :ref="inputfile"
       accept="image/png, image/jpg, image/jpeg, image/gif"
       @change="selectFile($event)"
       tabindex="0"
