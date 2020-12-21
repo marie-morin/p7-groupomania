@@ -177,6 +177,7 @@ export default {
   }
 
   &--nav {
+    background-color: transparent;
     color: $clear-color;
     border-radius: $round-radius;
     font-size: 2.3rem;
@@ -187,10 +188,15 @@ export default {
   }
 
   &--option {
+    @include flexbox(flex-start, row, center);
     padding: 1rem 2rem;
     background-color: transparent;
     color: $police-color;
     text-transform: uppercase;
+
+    svg {
+      margin-right: 1rem;
+    }
   }
 
   &--close {

@@ -128,14 +128,23 @@ export default {
   }
 
   &__preview {
-    height: 50rem;
+    // height: 50rem;
+    // background-color: $secondary-color;
+
+    max-height: 50rem;
+    @include flexbox(center, row, center);
     background-color: $secondary-color;
+    text-align: center;
 
     img {
+      // max-width: 100%;
+      // height: 100%;
+      // display: block;
+      // margin: $centered-margin;
+
       max-width: 100%;
-      height: 100%;
-      display: block;
-      margin: $centered-margin;
+      max-height: 50rem;
+      object-fit: cover;
     }
   }
 }

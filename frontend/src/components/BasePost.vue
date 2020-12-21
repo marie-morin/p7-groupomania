@@ -1,5 +1,6 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
+import formValidation from "../mixins/formValidation"
 import FormImageUpload from "@/components/FormImageUpload";
 import SectionComments from "@/components/SectionComments";
 import BaseLike from "@/components/BaseLike";
@@ -8,6 +9,8 @@ import BaseAvatar from "@/components/BaseAvatar";
 
 export default {
   name: "BasePost",
+
+  mixins: [formValidation],
 
   components: {
     BaseLike,
@@ -116,8 +119,13 @@ export default {
           };
           this.$store.commit("displayPopup", contexte);
           return;
-        }
+        } 
       }
+
+      if (!this.contentValidation(this.updatedPost.title)) {
+        return;
+      }
+
       const options = {
         url: process.env.VUE_APP_LOCALHOST_URL + `posts/${this.updatedPost.id}`,
         mutation: "updatePost",
@@ -155,10 +163,10 @@ export default {
       </div>
 
       <div class="options">
-
         <BaseButton
           tag="button"
           @click="displayOptions()"
+          @keydown.enter="displayOptions()"
           isDotsBtn
         >
           <font-awesome-icon icon="ellipsis-h" />
@@ -173,7 +181,7 @@ export default {
           <BaseButton
             v-if="isAllowed"
             tag="button"
-            @click="deletePost(post.id)"
+            @click="deletePost(post.id), displayOptions()"
             isOptionBtn
           >
             <font-awesome-icon icon="trash-alt" />
@@ -188,7 +196,7 @@ export default {
           <BaseButton
             v-if="isCreator"
             tag="button"
-            @click="editPost()"
+            @click="editPost(), displayOptions()"
             isOptionBtn
           >
             <font-awesome-icon icon="pencil-alt" />
@@ -279,7 +287,7 @@ export default {
 
 <style scope lang="scss">
 .post {
-  // width: 70%;
+  position: relative;
   margin: $marged-centered-margin;
 
   background-color: $clear-color;
@@ -316,14 +324,15 @@ export default {
   }
 
   &__image {
-    height: 50rem;
+    max-height: 50rem;
+    @include flexbox(center, row, center);
     background-color: $secondary-color;
+    text-align: center;
 
     img {
       max-width: 100%;
-      height: 100%;
-      display: block;
-      margin: $centered-margin;
+      max-height: 50rem;
+      object-fit: cover;
     }
   }
 }

@@ -10,8 +10,8 @@ export default {
   computed: { ...mapGetters(["popup", "currentUser"]) },
 
   mounted() {
-    if (this.popup.intention === "notification") {
-      setTimeout(() => this.$store.commit("hidePopup"), 6000);
+    if (this.popup.intention === "alert" || this.popup.intention === "success") {
+      setTimeout(() => this.$store.commit("hidePopup"), 5000);
     }
   },
 
@@ -23,6 +23,8 @@ export default {
     },
 
     confirm() {
+      console.log("passitototo");
+
       const origin = this.popup.origin;
 
       let notifyContexte = {
@@ -69,8 +71,9 @@ export default {
           console.log(`Error`);
       }
 
+
       this.$store.commit("displayPopup", notifyContexte);
-      setTimeout(() => this.$store.commit("hidePopup"), 7000);
+      setTimeout(() => this.$store.commit("hidePopup"), 5000);
     },
   },
 };
@@ -137,6 +140,8 @@ export default {
 
   box-shadow: $shadow;
   border-radius: $small-radius;
+
+  z-index: 3;
 
   &__icon {
     display: block;

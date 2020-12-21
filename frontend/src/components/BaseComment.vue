@@ -1,11 +1,14 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
+import formValidation from "../mixins/formValidation"
 import BaseLike from "@/components/BaseLike";
 import BaseAvatar from "@/components/BaseAvatar";
 import BaseButton from "@/components/BaseButton";
 
 export default {
   name: "BaseComment",
+
+  mixins: [formValidation],
 
   components: { BaseLike, BaseAvatar, BaseButton },
 
@@ -81,16 +84,8 @@ export default {
 
     displayOptions() { this.optionsDisplayed = !this.optionsDisplayed },
 
-
-    updateComment() {
-      // console.log("updatedComment : ", this.updatedComment);
-      // console.log("JSON.stringify(this.updatedComment) : ", JSON.stringify(this.updatedComment));
-      // let formData = new FormData();
-
-      // formData.append("content", JSON.stringify(this.updatedComment));
-
-      
-
+    updateComment(e) {
+      e.preventDefault();
       if (this.updatedComment.content == "") {
         const contexte = {
           intention: "alert",
@@ -100,6 +95,10 @@ export default {
         return;
       }
 
+      if (this.contentValidation(this.updatedComment.content)) {
+        return;
+      }
+      
       const options = {
         url: process.env.VUE_APP_LOCALHOST_URL + `comments/${this.comment.id}`,
         mutation: "updateComment",
@@ -151,7 +150,7 @@ export default {
     </div>
 
 
-    <div  class="options" :class="{ hide : editing }">
+    <div  class="options relative" :class="{ hide : editing }">
         <BaseButton
           tag="button"
           @click="displayOptions()"
@@ -169,7 +168,7 @@ export default {
           <BaseButton
             v-if="isAllowed"
             tag="button"
-            @click="deleteComment(comment.id)"
+            @click="deleteComment(comment.id), displayOptions()"
             isOptionBtn
           >
             <font-awesome-icon icon="trash-alt" />
@@ -184,7 +183,7 @@ export default {
           <BaseButton
             v-if="isCreator"
             tag="button"
-            @click="editComment()"
+            @click="editComment(), displayOptions()"
             isOptionBtn
           >
             <font-awesome-icon icon="pencil-alt" />
@@ -233,12 +232,14 @@ export default {
   &__main {
     max-width: 90%;
     @include flexbox(space-between, row, center);
+    margin-right: 0.5rem;
     padding: $base-padding;
     background-color: $base-color;
     border-radius: $medium-radius;
   }
 
   &__meta {
+    // position: relative;
     margin: 0;
     color: $police-color;
 
@@ -276,5 +277,9 @@ export default {
 
 .hide {
   display: none;
+}
+
+.relative {
+  position: relative;
 }
 </style>

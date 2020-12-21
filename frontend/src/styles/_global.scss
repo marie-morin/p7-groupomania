@@ -64,6 +64,8 @@
       outline: 0;
 
       font-size: 1.8rem;
+    font-family: inherit;
+
 
       transition: border-color 0.2s;
   
@@ -127,7 +129,7 @@
 // }
 
 .options {
-  position: relative;
+  // position: relative;
 
   &__dots {
     width: 3.5rem;
@@ -149,12 +151,14 @@
   }
 
   &__dropdown {
-    // @include flexbox(flex-start, column, flex-start);
+    @include flexbox(flex-start, column, flex-start);
 
-    width: 35rem;
+    // width: 35rem;
     position: absolute;
-    left: -16.5rem;
-    top: 4rem;
+    // left: -16.5rem;
+    // top: 4rem;
+    top: 7rem;
+    right: 0;
     padding: $base-padding;
 
     background-color: $clear-color;

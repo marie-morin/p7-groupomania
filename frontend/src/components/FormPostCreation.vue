@@ -1,10 +1,13 @@
 <script>
 import { mapActions } from "vuex";
+import formValidation from "../mixins/formValidation"
 import BaseButton from "@/components/BaseButton";
 import FormImageUpload from "@/components/FormImageUpload";
 
 export default {
   name: "FormPostCreation",
+
+  mixins: [formValidation],
 
   components: { BaseButton, FormImageUpload },
 
@@ -39,17 +42,21 @@ export default {
         };
         this.$store.commit("displayPopup", contexte);
         return;
-      } else {
-        const options = {
-          url: process.env.VUE_APP_LOCALHOST_URL + "posts/",
-          mutation: "newPost",
-          data: formData,
-        };
-        this.add(options);
-        this.newPostTitle = "";
-        this.wasPosted = true;
-        this.$emit("display-form");
       }
+
+      if (!this.contentValidation(this.newPostTitle)) {
+        return;
+      }
+
+      const options = {
+        url: process.env.VUE_APP_LOCALHOST_URL + "posts/",
+        mutation: "newPost",
+        data: formData,
+      };
+      this.add(options);
+      this.newPostTitle = "";
+      this.wasPosted = true;
+      this.$emit("display-form");
     },
   },
 };

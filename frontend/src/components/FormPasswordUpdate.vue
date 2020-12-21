@@ -45,13 +45,11 @@ export default {
         return;
       }
 
-      if (this.updatedPassword.newMdp !== this.updatedPassword.newMdpConf) {
-        const contexte = {
-          intention: "alert",
-          message:
-            "La confirmation du mot de passe doit être identique au nouveau mot de passe !",
-        };
-        this.$store.commit("displayPopup", contexte);
+      if (
+        this.passwordValidation(this.updatedPassword.initialMdp) ||
+        this.passwordValidation(this.updatedPassword.newMdp) ||
+        this.passwordConfirmation(this.updatedPassword.newMdp, this.updatedPassword.newMdpConf)
+      ) {
         return;
       }
 
@@ -69,6 +67,16 @@ export default {
       };
       this.$store.commit("displayPopup", contexte);
       this.$emit("display-form");
+
+      // if (this.updatedPassword.newMdp !== this.updatedPassword.newMdpConf) {
+      //   const contexte = {
+      //     intention: "alert",
+      //     message:
+      //       "La confirmation du mot de passe doit être identique au nouveau mot de passe !",
+      //   };
+      //   this.$store.commit("displayPopup", contexte);
+      //   return;
+      // }
     },
   },
 };

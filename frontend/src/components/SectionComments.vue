@@ -1,10 +1,13 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
+import formValidation from "../mixins/formValidation";
 import BaseComment from "@/components/BaseComment";
 import BaseAvatar from "@/components/BaseAvatar";
 
 export default {
   name: "SectionComments",
+
+  mixins: [formValidation],
 
   components: { BaseComment, BaseAvatar },
 
@@ -27,6 +30,7 @@ export default {
   },
 
   created() {
+    console.log("papasitoto");
     const commentOptions = {
       url: process.env.VUE_APP_LOCALHOST_URL + `comments/from/${this.post.id}`,
       mutation: "setComments",
@@ -48,6 +52,10 @@ export default {
           message: "Votre commentaire est vide !",
         };
         this.$store.commit("displayPopup", contexte);
+        return;
+      }
+
+      if (!this.contentValidation(this.newComment)) {
         return;
       }
 

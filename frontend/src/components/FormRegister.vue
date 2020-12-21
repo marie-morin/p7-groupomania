@@ -1,12 +1,16 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
+import formValidation from "../mixins/formValidation";
 import BaseButton from "@/components/BaseButton";
-const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%?]{6,}$/;
-// // const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+// import formValidation from "../mixins/formValidation"
+// const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%?]{6,}$/;
+// const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 // // const regex = /^[a-zA-Z0-9\s-_.,!?()"]+$/;
 
 export default {
   name: "FormRegister",
+
+  mixins: [formValidation],
 
   components: { BaseButton },
 
@@ -35,8 +39,6 @@ export default {
 
     submitUser() {
       if (this.settings.destination == "signup") {
-        //login
-
         this.passwordConfirmed = true;
         if (this.user.email == "" || this.user.password == "") {
           const contexte = {
@@ -48,8 +50,6 @@ export default {
           return;
         }
       } else {
-        //signup
-
         if (
           this.user.email == "" ||
           this.user.password == "" ||
@@ -67,33 +67,79 @@ export default {
           return;
         }
 
-        if (!passwordRegex.test(this.user.password)) {
-          const contexte = {
-            intention: "alert",
-            message: `Le mot de passe doit comporter au moins 8 caractères, une majuscule, une minuscule, une lettre et un chiffre. Seuls les caractères spéciaux suivants sont autorisée : @ $ ! % ?`,
-          };
-          this.$store.commit("displayPopup", contexte);
+        if (
+          !this.passwordValidation(this.user.passwordConf) ||
+          !this.contentValidation(this.user.firstname) ||
+          !this.contentValidation(this.user.lastname)
+        ) {
           return;
         }
 
-        if (this.user.password === this.user.passwordConf) {
-          this.passwordConfirmed = true;
-        } else {
-          this.passwordConfirmed = false;
-          const contexte = {
-            intention: "alert",
-            message:
-              "La confirmation du mot de passe doit être identique au mot de passe !",
-          };
-          this.$store.commit("displayPopup", contexte);
+        if ( !this.passwordConfirmation(this.user.password, this.user.passwordConf)) {
+          this.passwordConfirmed == false;
           return;
+        }
+
+        if (this.user.bio != "") {
+          if (!this.contentValidation(this.user.bio)) {
+            return;
+          }
         }
       }
 
+      if (
+        !this.emailValidation(this.user.email) ||
+        !this.passwordValidation(this.user.password)
+      ) {
+        return;
+      }
+      
       if (this.passwordConfirmed) {
         const data = { user: this.user, url: this.settings.urlPost };
         this.registerUser(data);
       }
+
+       // Vérification de la confirmité de l'adresse email avec la regex email
+      // if (!emailRegex.test(this.user.email)) {
+      //   const contexte = {
+      //     intention: "alert",
+      //     message: `Le mot de passe doit comporter au moins 8 caractères, une majuscule, une minuscule, une lettre et un chiffre. Seuls les caractères spéciaux suivants sont autorisée : @ $ ! % ?`,
+      //   };
+      //   this.$store.commit("displayPopup", contexte);
+      //   return;
+      // }
+
+      // Vérification de la confirmité du mot de passe avec la regex mot de passe
+      // if (!passwordRegex.test(this.user.password)) {
+      //   const contexte = {
+      //     intention: "alert",
+      //     message: `Le mot de passe doit comporter au moins 8 caractères, une majuscule, une minuscule, une lettre et un chiffre. Seuls les caractères spéciaux suivants sont autorisée : @ $ ! % ?`,
+      //   };
+      //   this.$store.commit("displayPopup", contexte);
+      //   return;
+      // }
+
+      // if (!emailRegex.test(this.user.firstname)) {
+      //   const contexte = {
+      //     intention: "alert",
+      //     message: `Le mot de passe doit comporter au moins 8 caractères, une majuscule, une minuscule, une lettre et un chiffre. Seuls les caractères spéciaux suivants sont autorisée : @ $ ! % ?`,
+      //   };
+      //   this.$store.commit("displayPopup", contexte);
+      //   return;
+      // }
+
+      // if (this.user.password === this.user.passwordConf) {
+      //   this.passwordConfirmed = true;
+      // } else {
+      //   this.passwordConfirmed = false;
+      //   const contexte = {
+      //     intention: "alert",
+      //     message:
+      //       "La confirmation du mot de passe doit être identique au mot de passe !",
+      //   };
+      //   this.$store.commit("displayPopup", contexte);
+      //   return;
+      // }
     },
   },
 };

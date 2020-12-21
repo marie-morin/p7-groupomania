@@ -1,9 +1,12 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
+import formValidation from "../mixins/formValidation";
 import BaseButton from "@/components/BaseButton";
 
 export default {
   name: "FormProfilUpdate",
+
+  mixins: [formValidation],
 
   components: { BaseButton },
 
@@ -33,6 +36,20 @@ export default {
         return;
       }
 
+      if (
+        !this.emailValidation(this.user.email) ||
+        !this.contentValidation(this.user.firstname) ||
+        !this.contentValidation(this.user.lastname)
+      ) {
+        return;
+      }
+
+      if (this.user.bio != "") {
+        if (!this.contentValidation(this.user.bio)) {
+          return;
+        }
+      }
+
       const contexte = {
         origin: "updateUser",
         intention: "confirmation",
@@ -44,7 +61,6 @@ export default {
         },
       };
       this.$store.commit("displayPopup", contexte);
-
       this.$emit("display-form");
     },
   },

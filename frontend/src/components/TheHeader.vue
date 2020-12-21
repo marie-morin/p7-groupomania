@@ -104,8 +104,7 @@ export default {
         </router-link> -->
 
         <BaseButton
-          tag="a"
-          href="#"
+          tag="button"
           @click="logout"
           isNavBtn
         >

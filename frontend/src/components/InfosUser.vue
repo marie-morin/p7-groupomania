@@ -32,7 +32,6 @@ export default {
     return {
       isAdmin: false,
       file: null,
-
       optionsDisplayed: false,
       imageUploadDisplayed: false,
       profilFormDisplayed: false,
@@ -231,8 +230,8 @@ export default {
       <div class="options">
         <BaseButton
           tag="button"
-          @click="displayOptions"
-          @keydown.enter="displayOptions"
+          @click="displayOptions()"
+          @keydown.enter="displayOptions()"
           isDotsBtn
         >
           <font-awesome-icon icon="ellipsis-h" />
@@ -248,11 +247,10 @@ export default {
         </div> -->
 
         <div v-show="optionsDisplayed" class="options__dropdown">
-
           <BaseButton
             v-if="user.imageUrl"
             tag="button"
-            @click="displayImageUpload"
+            @click="displayImageUpload(), displayOptions()"
             isOptionBtn
           >
             <font-awesome-icon icon="camera" />
@@ -266,7 +264,7 @@ export default {
           <BaseButton
             v-else
             tag="button"
-            @click="displayImageUpload"
+            @click="displayImageUpload(), displayOptions()"
             isOptionBtn
           >
             <font-awesome-icon icon="camera" />
@@ -280,7 +278,7 @@ export default {
           <BaseButton
             v-if="user.imageUrl"
             tag="button"
-            @click="deleteProfilPicture"
+            @click="deleteProfilPicture(), displayOptions()"
             isOptionBtn
           >
             <font-awesome-icon icon="trash-alt" />
@@ -294,7 +292,7 @@ export default {
           <BaseButton
             v-if="isOwner"
             tag="button"
-            @click="displayProfilForm"
+            @click="displayProfilForm(), displayOptions()"
             isOptionBtn
           >
             <font-awesome-icon icon="pencil-alt" />
@@ -308,7 +306,7 @@ export default {
           <BaseButton
             v-if="isOwner"
             tag="button"
-            @click="displayPasswordFrom"
+            @click="displayPasswordFrom(), displayOptions()"
             isOptionBtn
           >
             <font-awesome-icon icon="lock" />
@@ -322,7 +320,7 @@ export default {
           <BaseButton
             v-if="isOwner || isAdmin"
             tag="button"
-            @click="deleteProfil"
+            @click="deleteProfil(), displayOptions()"
             isOptionBtn
           >
             <font-awesome-icon icon="trash-alt" />
@@ -342,6 +340,7 @@ export default {
 
 <style scope lang="scss">
 .userinfos {
+  position: relative;
   // width: 70%;
   @include flexbox(space-between, row, flex-start);
   margin: $marged-centered-margin;
