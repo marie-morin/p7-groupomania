@@ -211,6 +211,59 @@ exports.updateProfilPicture = (req, res, next) => {
   } else {
     const token = jwt.getUserId(req.headers.authorization);
     const userId = token.userId;
+    console.log("userId : ", userId);
+
+    models.User.findOne({ where: { id: userId } })
+      .then((user) => {
+        console.log("users : ", user);
+        if (user.id === userId) {
+          console.log("user identifié");
+
+          if (user.imageUrl != null) {
+            const filename = user.imageUrl.split("/images/")[1];
+            console.log(filename);
+            fs.unlink(`images/${filename}`, (err) => {
+              if (err) throw err;
+              console.log(`images/${filename} was deleted`);
+            });
+          }
+
+          models.User.update(
+            {
+              imageUrl: `${req.protocol}://${req.get("host")}/images/${
+                req.file.filename
+              }`,
+              updatedAt: new Date(),
+            },
+            { where: { id: user.id } }
+          )
+            .then(() => {
+              models.User.findOne({ where: { id: userId } })
+                .then((user) => res.status(200).json(user))
+                .catch((error) => res.status(404).json(error));
+            })
+            .catch((error) => res.status(501).json(error));
+        } else {
+          res.status(403).json({ message: "Action non autorisée." });
+        }
+      })
+      .catch((error) => res.status(500).json(error));
+  }
+};
+
+// Delete user profil picture
+exports.deleteProfilPicture = (req, res, next) => {
+  console.log("------------ ");
+  console.log("------------ ");
+  console.log("------------ ");
+  console.log("------------ ");
+  console.log("------------ deleteProfilPicture");
+
+  if (!req.params.id || !req.headers.authorization) {
+    res.status(400).json({ message: "Requête erronée." });
+  } else {
+    const token = jwt.getUserId(req.headers.authorization);
+    const userId = token.userId;
 
     models.User.findOne({ where: { id: userId } })
       .then((user) => {
@@ -223,9 +276,7 @@ exports.updateProfilPicture = (req, res, next) => {
           });
           models.User.update(
             {
-              imageUrl: `${req.protocol}://${req.get("host")}/images/${
-                req.file.filename
-              }`,
+              imageUrl: null,
               updatedAt: new Date(),
             },
             { where: { id: user.id } }

@@ -181,13 +181,29 @@ export default {
       <label for="bio" class="form__label">Biographie</label>
     </div>    
 
-    <BaseButton>{{ settings.title }}</BaseButton>
+    <!-- <BaseButton>{{ settings.title }}</BaseButton> -->
+
+    <BaseButton
+        tag="button"
+        nativeType="sumbit"
+        isBigGreenBtn
+    >
+      {{ settings.title }}
+    </BaseButton>
 
     <p>
       {{ settings.question }} ?
-      <router-link :to="'/' + settings.destination"
+      <BaseButton
+        tag="router-link"
+        :to="'/' + settings.destination"
+        isLink
+      >
+        {{ settings.option }}
+      </BaseButton>
+      
+      <!-- <router-link :to="'/' + settings.destination"
         >{{ settings.option }}
-      </router-link>
+      </router-link> -->
       !
     </p>
   </form>

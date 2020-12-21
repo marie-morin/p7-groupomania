@@ -71,6 +71,7 @@ export default {
     },
 
     addPicture() {
+      console.log("pass");
       let formData = new FormData();
       formData.append("file", this.file);
 
@@ -84,7 +85,7 @@ export default {
       } else {
         const options = {
           url:
-            process.env.VUE_APP_LOCALHOST_URL + `users/${this.user.id}/picture`,
+            process.env.VUE_APP_LOCALHOST_URL + `users/${this.user.id}/updatePicture`,
           mutation: "setUser",
           data: formData,
         };
@@ -104,6 +105,21 @@ export default {
             process.env.VUE_APP_LOCALHOST_URL +
             `users/${this.$route.params.id}`,
           mutation: "removeUser",
+          id: this.$route.params.id,
+        },
+      };
+      this.$store.commit("displayPopup", contexte);
+    },
+
+    deleteProfilPicture() {
+      const contexte = {
+        origin: "deleteProfilPicture",
+        intention: "confirmation",
+        message: "Voulez-vous vraiment supprimer votre photo de profil ?",
+        options: {
+          url:
+            process.env.VUE_APP_LOCALHOST_URL + `users/${this.user.id}/deletePicture`,
+          mutation: "setUser",
           id: this.$route.params.id,
         },
       };
@@ -141,18 +157,46 @@ export default {
           class="popupform"
         >
           <form class="form popupform__form">
-            <font-awesome-icon
+
+            <BaseButton
+              tag="button"
+              @click="displayImageUpload"
+              isCloseBtn
+            >
+              <font-awesome-icon icon="times" />
+            </BaseButton>
+
+            <!-- <font-awesome-icon
               icon="times"
               @click="displayImageUpload"
               class="close-cross"
-            />
+            /> -->
+
             <h2 class="form__title">Modifiez votre photo de profil :</h2>
             <FormImageUpload
               v-on:send-imagefile="setFile"
               :wasPosted="wasPosted"
             />
-            <BaseButton>Enregistrer</BaseButton>
-            <BaseButton @click="displayImageUpload">Annuler</BaseButton>
+
+            <!-- <BaseButton>Enregistrer</BaseButton> -->
+
+            <BaseButton
+              tag="button"
+              nativeType="submit"
+              isGenericBtn
+            >
+              Enregistrer
+            </BaseButton>
+
+            <!-- <BaseButton @click="displayImageUpload">Annuler</BaseButton> -->
+
+            <BaseButton
+              tag="button"
+              @click="displayImageUpload"
+              isCancelBtn
+            >
+              Annuler
+            </BaseButton>
           </form>
         </div>
 
@@ -184,40 +228,110 @@ export default {
       </div>
 
       <div class="options">
-        <div
-          class="options__dots"
+        <BaseButton
+          tag="button"
           @click="displayOptions"
           @keydown.enter="displayOptions"
+          isDotsBtn
+        >
+          <font-awesome-icon icon="ellipsis-h" />
+        </BaseButton>
+
+        <!-- <div
+          class="options__dots"
+          @keydown.enter="displayOptions"
+          @click="displayOptions"
           tabindex="0"
         >
           <font-awesome-icon icon="ellipsis-h" />
-        </div>
+        </div> -->
 
         <div v-show="optionsDisplayed" class="options__dropdown">
-          <button v-if="user.imageUrl" @click="displayImageUpload" class="options__button">
+
+          <BaseButton
+            v-if="user.imageUrl"
+            tag="button"
+            @click="displayImageUpload"
+            isOptionBtn
+          >
             <font-awesome-icon icon="camera" />
             Modifier la photo de profil
-          </button>
-          <button v-else @click="displayImageUpload" class="options__button">
+          </BaseButton>
+          <!-- <button v-if="user.imageUrl" @click="displayImageUpload" class="options__button">
+            <font-awesome-icon icon="camera" />
+            Modifier la photo de profil
+          </button> -->
+
+          <BaseButton
+            v-else
+            tag="button"
+            @click="displayImageUpload"
+            isOptionBtn
+          >
             <font-awesome-icon icon="camera" />
             Ajouter une photo de profil
-          </button>
-          <button v-if="user.imageUrl" class="options__button">
+          </BaseButton>
+          <!-- <button v-else @click="displayImageUpload" class="options__button">
+            <font-awesome-icon icon="camera" />
+            Ajouter une photo de profil
+          </button> -->
+
+          <BaseButton
+            v-if="user.imageUrl"
+            tag="button"
+            @click="deleteProfilPicture"
+            isOptionBtn
+          >
             <font-awesome-icon icon="trash-alt" />
             Supprimer ma photo de profil
-          </button>
-          <button v-if="isOwner" @click="displayProfilForm" class="options__button">
+          </BaseButton>
+          <!-- <button v-if="user.imageUrl" class="options__button">
+            <font-awesome-icon icon="trash-alt" />
+            Supprimer ma photo de profil
+          </button> -->
+
+          <BaseButton
+            v-if="isOwner"
+            tag="button"
+            @click="displayProfilForm"
+            isOptionBtn
+          >
             <font-awesome-icon icon="pencil-alt" />
             Modifier mon profil
-          </button>
-          <button v-if="isOwner" @click="displayPasswordFrom" class="options__button">
+          </BaseButton>
+          <!-- <button v-if="isOwner" @click="displayProfilForm" class="options__button">
+            <font-awesome-icon icon="pencil-alt" />
+            Modifier mon profil
+          </button> -->
+
+          <BaseButton
+            v-if="isOwner"
+            tag="button"
+            @click="displayPasswordFrom"
+            isOptionBtn
+          >
             <font-awesome-icon icon="lock" />
             Modifier mon mot de passe
-          </button>
-          <button v-if="isOwner || isAdmin" @click="deleteProfil" class="options__button">
+          </BaseButton>
+          <!-- <button v-if="isOwner" @click="displayPasswordFrom" class="options__button">
+            <font-awesome-icon icon="lock" />
+            Modifier mon mot de passe
+          </button> -->
+
+          <BaseButton
+            v-if="isOwner || isAdmin"
+            tag="button"
+            @click="deleteProfil"
+            isOptionBtn
+          >
+            <font-awesome-icon icon="trash-alt" />
+            Supprimer le profil
+          </BaseButton>
+          <!-- <button v-if="isOwner || isAdmin" @click="deleteProfil" class="options__button">
             <font-awesome-icon icon="trash-alt" />
             Supprimer mon profil
-          </button>
+          </button> -->
+
         </div>
       </div>
 

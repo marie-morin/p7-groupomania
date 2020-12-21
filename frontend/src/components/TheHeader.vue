@@ -2,11 +2,13 @@
 import { mapGetters } from "vuex";
 import store from "../store";
 import BaseAvatar from "@/components/BaseAvatar";
+import BaseButton from "@/components/BaseButton";
+
 
 export default {
   name: "TheHeader",
 
-  components: { BaseAvatar },
+  components: { BaseAvatar, BaseButton },
 
   data() {
     return {
@@ -43,37 +45,80 @@ export default {
       </div>
 
       <nav class="header__nav">
-        <router-link
+
+        <BaseButton
+          tag="router-link"
+          to="/home"
+          @click="setActive('home')"
+          isNavBtn
+          :class="{ active : selectedPage == 'home' }"
+        >
+           <font-awesome-icon icon="home" />
+        </BaseButton>
+
+        <!-- <router-link
           to="/home"
           class="header__link"
           :class="{ active : selectedPage == 'home' }"
         >
           <font-awesome-icon icon="home" @click="setActive('home')"/>
-        </router-link> 
+        </router-link>  -->
 
-        <router-link
+
+        <BaseButton
+          tag="router-link"
+          to="/users"
+          @click="setActive('users')"
+          isNavBtn
+          :class="{ active : selectedPage == 'users' }"
+        >
+           <font-awesome-icon icon="users" />
+        </BaseButton>
+        
+        <!-- <router-link
           to="/users"
           class="header__link"
           :class="{ active : selectedPage == 'users' }"
         >
           <font-awesome-icon icon="users" @click="setActive('users')"/>
-        </router-link>
+        </router-link> -->
 
-        <router-link
+
+
+        <BaseButton
+          tag="router-link"
+          :to="{ name: 'Profil', params: { id: currentUser.id } }"
+          @click="setActive('profil')"
+          isNavBtn
+          :class="{ active : selectedPage == 'profil' }"
+        >
+           <font-awesome-icon icon="user-circle" />
+        </BaseButton>
+
+        <!-- <router-link
           :to="{ name: 'Profil', params: { id: currentUser.id } }"
           class="header__link"
           :class="{ active : selectedPage == 'profil' }"
         >
           <font-awesome-icon icon="user-circle" @click="setActive('profil')"/>
-        </router-link>
+        </router-link> -->
 
-        <a
+        <BaseButton
+          tag="a"
+          href="#"
+          @click="logout"
+          isNavBtn
+        >
+           <font-awesome-icon icon="power-off" />
+        </BaseButton>
+
+        <!-- <a
           href="#"
           class="header__link"
           @click.prevent="logout"
         >
           <font-awesome-icon icon="power-off" />
-        </a>
+        </a> -->
       </nav>
 
     </div>
@@ -110,33 +155,33 @@ export default {
   }
 
   &__link {
-    width: 3.5rem;
-    height: 3.5rem;
-    @include flexbox(center, row, center);
+    // width: 3.5rem;
+    // height: 3.5rem;
+    // @include flexbox(center, row, center);
 
-    color: $clear-color;
+    // color: $clear-color;
 
-    border-radius: $round-radius;
+    // border-radius: $round-radius;
 
-    font-size: 2.3rem;
-    text-decoration: none;
+    // font-size: 2.3rem;
+    // text-decoration: none;
 
-    cursor: pointer;
-    // outline: none;
-    transition: all .2s;
+    // cursor: pointer;
+    // // outline: none;
+    // transition: all .2s;
 
-    &:not(:first-child) {
-      margin-left: 3rem;
-    }
+    // &:not(:first-child) {
+    //   margin-left: 3rem;
+    // }
 
-    &:hover {
-      transform: translateY(-0.3rem);
-    }
+    // &:hover {
+    //   transform: translateY(-0.3rem);
+    // }
 
-    &:active {
-      box-shadow: $shadow;
-      transform: translateY(-0.1rem);
-    }
+    // &:active {
+    //   box-shadow: $shadow;
+    //   transform: translateY(-0.1rem);
+    // }
   }
 }
 

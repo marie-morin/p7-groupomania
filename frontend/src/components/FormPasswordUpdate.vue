@@ -75,12 +75,21 @@ export default {
 </script>
 
 <template>
-  <form class="form">
-    <font-awesome-icon
+  <form @submit.prevent="updatePassword" class="form">
+
+     <BaseButton
+      tag="button"
+      @click.prevent.stop="$emit('display-form')"
+      isCloseBtn
+    >
+      <font-awesome-icon icon="times" />
+    </BaseButton>
+
+    <!-- <font-awesome-icon
       icon="times"
       @click.prevent.stop="$emit('display-form')"
       class="close-cross"
-    />
+    /> -->
 
     <h2 class="form__title">Modifiez votre mot de passe :</h2>
     <div class="form__group">
@@ -122,14 +131,31 @@ export default {
       <label for="newMdpConf" class="form__label">Confirmation de votre nouveau mot de passe :</label>
     </div>
 
-    <BaseButton :onClick="updatePassword">Modifier</BaseButton>
+    <!-- <BaseButton :onClick="updatePassword">Modifier</BaseButton> -->
 
-    <input
+    <BaseButton
+      tag="button"
+      nativeType="submit"
+      isGenericBtn
+    >
+      Modifier le mot de passe
+    </BaseButton>
+
+    <!-- <input
       type="submit"
       value="Annuler"
       @click.prevent.stop="$emit('display-form')"
       class="global-btn"
-    />
+    /> -->
+
+    <BaseButton
+      tag="button"
+      @click.prevent.stop="$emit('display-form')"
+      isCancelBtn
+    >
+      Annuler
+    </BaseButton>
+    
   </form>
 </template>
 

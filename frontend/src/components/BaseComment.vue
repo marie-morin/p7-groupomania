@@ -2,11 +2,12 @@
 import { mapGetters, mapActions } from "vuex";
 import BaseLike from "@/components/BaseLike";
 import BaseAvatar from "@/components/BaseAvatar";
+import BaseButton from "@/components/BaseButton";
 
 export default {
   name: "BaseComment",
 
-  components: { BaseLike, BaseAvatar },
+  components: { BaseLike, BaseAvatar, BaseButton },
 
   props: {
     comment: {
@@ -110,10 +111,17 @@ export default {
 
       <div class="comment__content">
         <p class="comment__meta">
-          <router-link :to="{ name: 'Profil', params: { id: comment.UserId } }">{{
+          <!-- <router-link :to="{ name: 'Profil', params: { id: comment.UserId } }">{{
             comment.User.username
-          }}</router-link
-          >, {{ wasPublished }}.
+          }}</router-link> -->
+          <BaseButton
+            tag="router-link"
+            :to="{ name: 'Profil', params: { id: comment.UserId } }"
+            isLink
+          >
+            {{ comment.User.username }}
+          </BaseButton>
+          , {{ wasPublished }}.
         </p>
 
         {{ comment.content }}
@@ -132,19 +140,47 @@ export default {
 
 
     <div  class="options">
-        <div @click="displayOptions" @keydown.enter="displayOptions" class="options__dots" tabindex="0">
+        <BaseButton
+          tag="button"
+          @click="displayOptions"
+          isDotsBtn
+        >
           <font-awesome-icon icon="ellipsis-h" />
-        </div>
+        </BaseButton>
+
+        <!-- <div @click="displayOptions" @keydown.enter="displayOptions" class="options__dots" tabindex="0">
+          <font-awesome-icon icon="ellipsis-h" />
+        </div> -->
 
         <div v-show="optionsDisplayed" class="options__dropdown">
-          <button @click="deleteComment(comment.id)" v-if="isAllowed" class="options__button">
+          <BaseButton
+            v-if="isAllowed"
+            tag="button"
+            @click="deleteComment(comment.id)"
+            isOptionBtn
+          >
             <font-awesome-icon icon="trash-alt" />
             Supprimer le commentaire
-          </button>
-          <button @click="editComment()" v-if="isCreator" class="options__button">
+          </BaseButton>
+
+          <!-- <button @click="deleteComment(comment.id)" v-if="isAllowed" class="options__button">
+            <font-awesome-icon icon="trash-alt" />
+            Supprimer le commentaire
+          </button> -->
+
+          <BaseButton
+            v-if="isCreator"
+            tag="button"
+            @click="editComment()"
+            isOptionBtn
+          >
             <font-awesome-icon icon="pencil-alt" />
             Modifier votre commentaire
-          </button>
+          </BaseButton>
+          <!-- <button @click="editComment()" v-if="isCreator" class="options__button">
+            <font-awesome-icon icon="pencil-alt" />
+            Modifier votre commentaire
+          </button> -->
         </div>
       </div>
 

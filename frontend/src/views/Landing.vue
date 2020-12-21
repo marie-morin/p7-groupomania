@@ -11,8 +11,21 @@ export default {
   <div class="landing">
     <h1>Bienvenue sur votre réseau interne Groupomania</h1>
     <div class="landing__directions">
-      <BaseButton to="/signup" class="btns__unit">S'inscrire</BaseButton>
-      <BaseButton to="/login" class="btns__unit">Se connecter</BaseButton>
+      <BaseButton
+        tag="router-link"
+        to="/signup"
+        isBigGreenBtn
+      >
+        S'inscrire
+      </BaseButton>
+
+      <BaseButton
+        tag="router-link"
+        to="/login"
+        isBigGreenBtn
+      >
+        Se connecter
+      </BaseButton>
     </div>
   </div>
 </template>

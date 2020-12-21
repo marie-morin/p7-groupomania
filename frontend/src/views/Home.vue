@@ -38,8 +38,13 @@ export default {
 
 <template>
   <div class="home container">
-
-    <BaseButton :onClick="displayPostCreationForm">Créer une publication</BaseButton>
+    <BaseButton
+      tag="button"
+      @click="displayPostCreationForm"
+      isGenericBtn
+    >
+      Créer une publication
+    </BaseButton>
 
     <div
       v-show="postCreationFormDisplayed"
@@ -50,11 +55,12 @@ export default {
         @display-form="displayPostCreationForm()"
       />
     </div>
-      <BasePost
-        :post="post"
-        v-for="post in allPosts"
-        :key="post.id"
-      />
+
+    <BasePost
+      :post="post"
+      v-for="post in allPosts"
+      :key="post.id"
+    />
   </div>
 </template>
 

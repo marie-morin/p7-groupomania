@@ -19,7 +19,9 @@ router.get("/:id", auth, userCtrl.getOneUser);
 // Update user acount
 router.put("/:id", auth, userCtrl.updateUser);
 // Update user picture
-router.put("/:id/picture", auth, multer, userCtrl.updateProfilPicture);
+router.put("/:id/updatePicture", auth, multer, userCtrl.updateProfilPicture);
+// Delete user picture
+router.put("/:id/deletePicture", auth, userCtrl.deleteProfilPicture);
 // Update user password
 router.put("/:id/password", auth, userCtrl.updatePassword);
 // Delete an acount

@@ -53,11 +53,20 @@ export default {
 
 <template>
   <form @submit.prevent="updateUser" class="form">
-    <font-awesome-icon
+
+    <BaseButton
+      tag="button"
+      @click.prevent.stop="$emit('display-form')"
+      isCloseBtn
+    >
+      <font-awesome-icon icon="times" />
+    </BaseButton>
+
+    <!-- <font-awesome-icon
       icon="times"
       @click.prevent.stop="$emit('display-form')"
       class="close-cross"
-    />
+    /> -->
 
     <h2 class="form__title">Modifiez votre profil :</h2>
 
@@ -111,14 +120,30 @@ export default {
       <label for="bio" class="form__label">Biographie</label>
     </div>
 
-    <BaseButton>Enregistrer</BaseButton>
+    <!-- <BaseButton>Enregistrer</BaseButton> -->
 
-    <input
+    <BaseButton
+      tag="button"
+      nativeType="submit"
+      isGenericBtn
+    >
+      Enregistrer
+    </BaseButton>
+
+    <!-- <input
       type="submit"
       value="Annuler"
       @click.prevent.stop="$emit('display-form')"
       class="global-btn"
-    />
+    /> -->
+
+    <BaseButton
+      tag="button"
+      @click.prevent.stop="$emit('display-form')"
+      isCancelBtn
+    >
+      Annuler
+    </BaseButton>
   </form>
 </template>
 

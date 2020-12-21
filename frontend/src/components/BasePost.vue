@@ -3,6 +3,7 @@ import { mapGetters, mapActions } from "vuex";
 import FormImageUpload from "@/components/FormImageUpload";
 import SectionComments from "@/components/SectionComments";
 import BaseLike from "@/components/BaseLike";
+import BaseButton from "@/components/BaseButton";
 import BaseAvatar from "@/components/BaseAvatar";
 
 export default {
@@ -13,6 +14,7 @@ export default {
     FormImageUpload,
     SectionComments,
     BaseAvatar,
+    BaseButton
   },
 
   props: {
@@ -135,27 +137,67 @@ export default {
         <!-- <img :src="post.imageUrl" alt="currentUser.username" class="avatar"> -->
         <BaseAvatar :user="post.User" origin="post" />
         <p>
-          <router-link :to="{ name: 'Profil', params: { id: post.UserId } }">{{
+          <!-- <router-link :to="{ name: 'Profil', params: { id: post.UserId } }">{{
             post.User.username
-          }}</router-link
-          >, {{ wasPublished }}.
+          }}</router-link> -->
+          <BaseButton
+            tag="router-link"
+            :to="{ name: 'Profil', params: { id: post.UserId } }"
+            isLink
+          >
+            {{ post.User.username }}
+          </BaseButton>
+          , {{ wasPublished }}.
         </p>
       </div>
 
+
+
       <div class="options">
+
+        <BaseButton
+          tag="button"
+          @click="displayOptions()"
+          isDotsBtn
+        >
+          <font-awesome-icon icon="ellipsis-h" />
+        </BaseButton>
+        
+<!-- 
         <div class="options__dots" @click="displayOptions" @keydown.enter="displayOptions" tabindex="0">
           <font-awesome-icon icon="ellipsis-h" />
-        </div>
+        </div> -->
 
         <div v-show="optionsDisplayed" class="options__dropdown">
-          <button v-if="isAllowed" @click="deletePost(post.id)" class="options__button">
+          <BaseButton
+            v-if="isAllowed"
+            tag="button"
+            @click="deletePost(post.id)"
+            isOptionBtn
+          >
             <font-awesome-icon icon="trash-alt" />
             Supprimer le post
-          </button>
-          <button v-if="isCreator" @click="editPost()" class="options__button">
+          </BaseButton>
+
+          <!-- <button v-if="isAllowed" @click="deletePost(post.id)" class="options__button">
+            <font-awesome-icon icon="trash-alt" />
+            Supprimer le post
+          </button> -->
+
+          <BaseButton
+            v-if="isCreator"
+            tag="button"
+            @click="editPost()"
+            isOptionBtn
+          >
             <font-awesome-icon icon="pencil-alt" />
             Modifier votre post
-          </button>
+          </BaseButton>
+
+          <!-- <button v-if="isCreator" @click="editPost()" class="options__button">
+            <font-awesome-icon icon="pencil-alt" />
+            Modifier votre post
+          </button> -->
         </div>
       </div>
     </div>

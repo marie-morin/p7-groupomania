@@ -57,11 +57,21 @@ export default {
 
 <template>
   <form enctype="multipart/form-data" @submit.prevent="addPost" class="form postcreation">
-    <font-awesome-icon
+
+    <BaseButton
+      tag="button"
+      @click.prevent.stop="$emit('display-form')"
+      isCloseBtn
+    >
+      <font-awesome-icon icon="times" />
+    </BaseButton>
+
+    <!-- <font-awesome-icon
       icon="times"
       @click.prevent.stop="$emit('display-form')"
       class="close-cross"
-    />
+    /> -->
+
     <h2 class="form__title">Partager avec vos collègues :</h2>
 
     <div class="form__group">
@@ -79,13 +89,30 @@ export default {
 
     <FormImageUpload v-on:send-imagefile="setFile" :wasPosted="wasPosted" />
 
-    <BaseButton>Publier</BaseButton>
-    <input
+    <!-- <BaseButton>Publier</BaseButton> -->
+
+    <BaseButton
+      tag="button"
+      nativeType="submit"
+      isGenericBtn
+    >
+      Publier
+    </BaseButton>
+
+    <!-- <input
       type="submit"
       value="Annuler"
       @click.prevent.stop="$emit('display-form')"
       class="global-btn"
-    />
+    /> -->
+
+    <BaseButton
+      tag="button"
+      @click.prevent.stop="$emit('display-form')"
+      isCancelBtn
+    >
+      Annuler
+    </BaseButton>
   </form>
 </template>
 
