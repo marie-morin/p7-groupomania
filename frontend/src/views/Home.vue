@@ -10,14 +10,13 @@ export default {
   components: { FormPostCreation, BasePost, BaseButton },
 
   data() {
-    return {
-      postCreationFormDisplayed: false,
-    };
+    return { postCreationFormDisplayed: false };
   },
 
   computed: mapGetters(["allPosts"]),
 
   created() {
+    // Récupération de tous les posts
     const options = {
       url: process.env.VUE_APP_LOCALHOST_URL + "posts",
       mutation: "setPosts",
@@ -28,40 +27,28 @@ export default {
   methods:  {
     ...mapActions(["fetch"]),
 
-    displayPostCreationForm() {
-      this.postCreationFormDisplayed = !this.postCreationFormDisplayed;
-    },
-
+    displayPostCreationForm() { this.postCreationFormDisplayed = !this.postCreationFormDisplayed }
   }
 };
 </script>
 
+
 <template>
   <div class="home container">
-    <BaseButton
-      tag="button"
-      @click="displayPostCreationForm"
-      isGenericBtn
-    >
+    <BaseButton @click="displayPostCreationForm" tag="button" isGenericBtn>
       Créer une publication
     </BaseButton>
 
-    <div
-      v-show="postCreationFormDisplayed"
-      class="popupform"
-    >
+    <div v-show="postCreationFormDisplayed" class="popupform">
       <FormPostCreation
-        class="popup-form__form"
         @display-form="displayPostCreationForm()"
+        class="popup-form__form"
       />
     </div>
 
-    <BasePost
-      :post="post"
-      v-for="post in allPosts"
-      :key="post.id"
-    />
+    <BasePost v-for="post in allPosts" :key="post.id" :post="post" />
   </div>
 </template>
+
 
 <style scope lang="scss"></style>

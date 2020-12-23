@@ -3,6 +3,7 @@ import BaseButton from "@/components/BaseButton";
 
 export default {
   name: "Landing",
+
   components: { BaseButton },
 };
 </script>
@@ -10,20 +11,12 @@ export default {
 <template>
   <div class="landing">
     <h1>Bienvenue sur votre réseau interne Groupomania</h1>
+
     <div class="landing__directions">
-      <BaseButton
-        tag="router-link"
-        to="/signup"
-        isBigGreenBtn
-      >
+      <BaseButton tag="router-link" to="/signup" isBigGreenBtn>
         S'inscrire
       </BaseButton>
-
-      <BaseButton
-        tag="router-link"
-        to="/login"
-        isBigGreenBtn
-      >
+      <BaseButton tag="router-link" to="/login" isBigGreenBtn>
         Se connecter
       </BaseButton>
     </div>

@@ -67,39 +67,23 @@ export default {
       };
       this.$store.commit("displayPopup", contexte);
       this.$emit("display-form");
-
-      // if (this.updatedPassword.newMdp !== this.updatedPassword.newMdpConf) {
-      //   const contexte = {
-      //     intention: "alert",
-      //     message:
-      //       "La confirmation du mot de passe doit être identique au nouveau mot de passe !",
-      //   };
-      //   this.$store.commit("displayPopup", contexte);
-      //   return;
-      // }
     },
   },
 };
 </script>
 
+
 <template>
   <form @submit.prevent="updatePassword" class="form">
 
-     <BaseButton
-      tag="button"
-      @click.prevent.stop="$emit('display-form')"
-      isCloseBtn
-    >
+    <!-- Croix pour fermer le formulaire -->
+    <BaseButton @click.prevent.stop="$emit('display-form')" tag="button" isCloseBtn>
       <font-awesome-icon icon="times" />
     </BaseButton>
 
-    <!-- <font-awesome-icon
-      icon="times"
-      @click.prevent.stop="$emit('display-form')"
-      class="close-cross"
-    /> -->
-
     <h2 class="form__title">Modifiez votre mot de passe :</h2>
+
+    <!-- Ancien mot de passe -->
     <div class="form__group">
       <input
         type="password"
@@ -113,6 +97,7 @@ export default {
       <label for="initialMdp" class="form__label">Votre mot de passe actuel :</label> <br />
     </div>
 
+    <!-- Nouveau mot de passe -->
     <div class="form__group">
       <input
         type="password"
@@ -126,6 +111,7 @@ export default {
       <label for="newMdp" class="form__label">Votre nouveau mot de passe :</label><br />
     </div>
 
+    <!-- Confirmation du nouveau mot de passe -->
     <div class="form__group">
       <input
         type="password"
@@ -139,32 +125,14 @@ export default {
       <label for="newMdpConf" class="form__label">Confirmation de votre nouveau mot de passe :</label>
     </div>
 
-    <!-- <BaseButton :onClick="updatePassword">Modifier</BaseButton> -->
-
-    <BaseButton
-      tag="button"
-      nativeType="submit"
-      isGenericBtn
-    >
+    <BaseButton tag="button" nativeType="submit" isGenericBtn>
       Modifier le mot de passe
     </BaseButton>
-
-    <!-- <input
-      type="submit"
-      value="Annuler"
-      @click.prevent.stop="$emit('display-form')"
-      class="global-btn"
-    /> -->
-
-    <BaseButton
-      tag="button"
-      @click.prevent.stop="$emit('display-form')"
-      isCancelBtn
-    >
+    <BaseButton @click.prevent.stop="$emit('display-form')" tag="button" isCancelBtn>
       Annuler
     </BaseButton>
-    
   </form>
 </template>
+
 
 <style scoped lang="scss"></style>

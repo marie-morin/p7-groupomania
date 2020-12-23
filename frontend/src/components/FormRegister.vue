@@ -2,17 +2,13 @@
 import { mapGetters, mapActions } from "vuex";
 import formValidation from "../mixins/formValidation";
 import BaseButton from "@/components/BaseButton";
-// import formValidation from "../mixins/formValidation"
-// const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%?]{6,}$/;
-// const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-// // const regex = /^[a-zA-Z0-9\s-_.,!?()"]+$/;
 
 export default {
   name: "FormRegister",
 
-  mixins: [formValidation],
-
   components: { BaseButton },
+
+  mixins: [formValidation],
 
   props: {
     user: {
@@ -25,14 +21,10 @@ export default {
   },
 
   data() {
-    return {
-      passwordConfirmed: false,
-    };
+    return { passwordConfirmed: false };
   },
 
-  computed: {
-    ...mapGetters(["currentUser"]),
-  },
+  computed: mapGetters(["currentUser"]),
 
   methods: {
     ...mapActions(["registerUser"]),
@@ -71,9 +63,7 @@ export default {
           !this.passwordValidation(this.user.passwordConf) ||
           !this.contentValidation(this.user.firstname) ||
           !this.contentValidation(this.user.lastname)
-        ) {
-          return;
-        }
+        ) { return }
 
         if ( !this.passwordConfirmation(this.user.password, this.user.passwordConf)) {
           this.passwordConfirmed == false;
@@ -90,67 +80,24 @@ export default {
       if (
         !this.emailValidation(this.user.email) ||
         !this.passwordValidation(this.user.password)
-      ) {
-        return;
-      }
+      ) { return }
       
       if (this.passwordConfirmed) {
         const data = { user: this.user, url: this.settings.urlPost };
         this.registerUser(data);
       }
-
-       // Vérification de la confirmité de l'adresse email avec la regex email
-      // if (!emailRegex.test(this.user.email)) {
-      //   const contexte = {
-      //     intention: "alert",
-      //     message: `Le mot de passe doit comporter au moins 8 caractères, une majuscule, une minuscule, une lettre et un chiffre. Seuls les caractères spéciaux suivants sont autorisée : @ $ ! % ?`,
-      //   };
-      //   this.$store.commit("displayPopup", contexte);
-      //   return;
-      // }
-
-      // Vérification de la confirmité du mot de passe avec la regex mot de passe
-      // if (!passwordRegex.test(this.user.password)) {
-      //   const contexte = {
-      //     intention: "alert",
-      //     message: `Le mot de passe doit comporter au moins 8 caractères, une majuscule, une minuscule, une lettre et un chiffre. Seuls les caractères spéciaux suivants sont autorisée : @ $ ! % ?`,
-      //   };
-      //   this.$store.commit("displayPopup", contexte);
-      //   return;
-      // }
-
-      // if (!emailRegex.test(this.user.firstname)) {
-      //   const contexte = {
-      //     intention: "alert",
-      //     message: `Le mot de passe doit comporter au moins 8 caractères, une majuscule, une minuscule, une lettre et un chiffre. Seuls les caractères spéciaux suivants sont autorisée : @ $ ! % ?`,
-      //   };
-      //   this.$store.commit("displayPopup", contexte);
-      //   return;
-      // }
-
-      // if (this.user.password === this.user.passwordConf) {
-      //   this.passwordConfirmed = true;
-      // } else {
-      //   this.passwordConfirmed = false;
-      //   const contexte = {
-      //     intention: "alert",
-      //     message:
-      //       "La confirmation du mot de passe doit être identique au mot de passe !",
-      //   };
-      //   this.$store.commit("displayPopup", contexte);
-      //   return;
-      // }
     },
   },
 };
 </script>
 
+
 <template>
   <form @submit.prevent="submitUser" class="form">
-
     <h1 v-if="settings.destination === 'login'" class="form__title">Inscrivez-vous au reseau interne de Groupomania !</h1>
     <h1 v-else class="form__title">Connectez-vous à votre compte Groupomania !</h1>
 
+    <!-- Adresse email -->
     <div class="form__group">
       <input
         type="email"
@@ -164,6 +111,7 @@ export default {
       <label for="email" class="form__label">Adresse email</label>
     </div>
 
+    <!-- Prénom -->
     <div v-if="settings.destination === 'login'" class="form__group">
       <input
         type="text"
@@ -177,6 +125,7 @@ export default {
       <label for="firstname" class="form__label">Prénom</label>
     </div>
 
+    <!-- Nom -->
     <div v-if="settings.destination === 'login'" class="form__group">
       <input
         type="text"
@@ -190,6 +139,7 @@ export default {
       <label for="lastname" class="form__label">Nom</label>
     </div>
 
+    <!-- Mot de passe -->
     <div class="form__group">
       <input
         type="password"
@@ -203,6 +153,7 @@ export default {
       <label for="password" class="form__label">Mot de passe</label>
     </div>
 
+    <!-- Confirmation de mot de passe -->
     <div v-if="settings.destination === 'login'" class="form__group">
       <input
         type="password"
@@ -216,6 +167,7 @@ export default {
       <label for="passwordConf" class="form__label">Confirmation mot de passe</label>
     </div>
 
+    <!-- Biographie -->
     <div v-if="settings.destination === 'login'" class="form__group">
       <textarea
         id="bio"
@@ -224,33 +176,19 @@ export default {
         v-model="user.bio"
         class="form__field"
       ></textarea>
-      <label for="bio" class="form__label">Biographie</label>
+      <label for="bio" class="form__label">Biographie (optionnel)</label>
     </div>    
 
-    <!-- <BaseButton>{{ settings.title }}</BaseButton> -->
-
-    <BaseButton
-        tag="button"
-        nativeType="sumbit"
-        isBigGreenBtn
-    >
+    <BaseButton tag="button" nativeType="sumbit" isBigGreenBtn>
       {{ settings.title }}
     </BaseButton>
 
+    <!-- Rédirection vers login ou signup -->
     <p>
       {{ settings.question }} ?
-      <BaseButton
-        tag="router-link"
-        :to="'/' + settings.destination"
-        isLink
-      >
+      <BaseButton :to="'/' + settings.destination" tag="router-link" isLink>
         {{ settings.option }}
-      </BaseButton>
-      
-      <!-- <router-link :to="'/' + settings.destination"
-        >{{ settings.option }}
-      </router-link> -->
-      !
+      </BaseButton> !
     </p>
   </form>
 </template>

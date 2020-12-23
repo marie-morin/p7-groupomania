@@ -6,7 +6,6 @@ import userModule from "./modules/userModule";
 import postModule from "./modules/postModule";
 import commentModule from "./modules/commentModule";
 
-// Load Vuex
 Vue.use(Vuex);
 
 const state = {
@@ -38,20 +37,12 @@ const actions = {
   },
 
   async add({ commit }, item) {
-    console.log("store item : ", item);
-
-    const response = await axios.post(
-      item.url,
-      // { data: JSON.stringify(item.data) },
-      // { data: JSON.stringify(item.formData) },
-      item.data,
-      {
-        headers: {
-          Authorization:
-            "Bearer " + localStorage.getItem("jwt").replace(/['"']+/g, ""),
-        },
-      }
-    );
+    const response = await axios.post(item.url, item.data, {
+      headers: {
+        Authorization:
+          "Bearer " + localStorage.getItem("jwt").replace(/['"']+/g, ""),
+      },
+    });
     commit(item.mutation, response.data);
   },
 
@@ -81,28 +72,16 @@ const actions = {
       itemId: item.id,
       userId: item.user,
     };
-    console.log("rate : ", rate);
-    console.log("item.mutation : ", item.mutation);
     commit(item.mutation, rate);
   },
 
   async update({ commit }, item) {
-    console.log("sotre item : ", item.data);
-    // for (var pair of item.data.entries()) {
-    //   console.log(pair[0] + ", " + pair[1]);
-    // }
-
-    const response = await axios.put(
-      item.url,
-      item.data,
-      // { data: JSON.stringify(item.data) },
-      {
-        headers: {
-          Authorization:
-            "Bearer " + localStorage.getItem("jwt").replace(/['"']+/g, ""),
-        },
-      }
-    );
+    const response = await axios.put(item.url, item.data, {
+      headers: {
+        Authorization:
+          "Bearer " + localStorage.getItem("jwt").replace(/['"']+/g, ""),
+      },
+    });
     commit(item.mutation, response.data);
   },
 };
@@ -130,7 +109,6 @@ const modules = {
   commentModule,
 };
 
-// Create store
 export default new Vuex.Store({
   state,
   getters,

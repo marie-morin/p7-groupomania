@@ -1,22 +1,17 @@
-// Imports
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 const cors = require("cors");
 
-// Security Imports
 const helmet = require("helmet");
 // const rateLimit = require("express-rate-limit");
 const hpp = require("hpp");
-// Routes Imports
 const userRoutes = require("./routes/userRoutes");
 const postRoutes = require("./routes/postRoutes");
 const commentRoutes = require("./routes/commentRoutes");
 
-// Express app launching
 const app = express();
 
-// Helmet middlware for safe headers
 app.use(helmet());
 app.use(cors());
 
@@ -27,7 +22,6 @@ app.use(cors());
 // });
 // app.use(limiter);
 
-// Setting CORS headers
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -41,18 +35,14 @@ app.use((req, res, next) => {
   next();
 });
 
-// Parsing req
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// Security
-app.use(hpp()); // HPP middleware to protect against HTTP parameter pollution attacks
+app.use(hpp());
 
-// Setting routes
 app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/images", express.static(path.join(__dirname, "images")));
 
-// Exporting module
 module.exports = app;

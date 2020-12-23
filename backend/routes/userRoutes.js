@@ -6,30 +6,34 @@ const auth = require("../middleware/auth");
 const multer = require("../middleware/multer-config");
 // const bouncer = require("express-bouncer")(30000, 60000, 3); // Limitation du nombre de tentatives de connexion
 
-// Sign up
+// S'inscrire
 router.post("/signup", userCtrl.signup);
-// Login
+
+// Se connecter
 router.post("/login", userCtrl.login);
-// Get current user info
+
+// Route d'authentification
 router.post("/me", userCtrl.me);
-// Get all users
+
+// Récupérer tous les utilisateurs
 router.get("/", auth, userCtrl.getAllUsers);
-// Get One user
+
+// Récupérer un utilisateur
 router.get("/:id", auth, userCtrl.getOneUser);
-// Update user acount
+
+// Modifier un utilisateur
 router.put("/:id", auth, userCtrl.updateUser);
-// Update user picture
+
+// Modifier une photo de profil
 router.put("/:id/updatePicture", auth, multer, userCtrl.updateProfilPicture);
-// Delete user picture
+
+// Supprimer un photo de profil
 router.put("/:id/deletePicture", auth, userCtrl.deleteProfilPicture);
-// Update user password
+
+// Modifier un mot de passe
 router.put("/:id/password", auth, userCtrl.updatePassword);
-// Delete an acount
+
+// Supprimer un utilisateur
 router.delete("/:id", auth, userCtrl.deleteUser);
 
-// Requêtes incomplètes
-// router.post("/login", bouncer.block, userCtrl.login);
-// router.post("/me", bouncer.block, userCtrl.me);
-
-// Exporting Router
 module.exports = router;

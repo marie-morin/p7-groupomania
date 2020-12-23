@@ -8,9 +8,9 @@ import BaseButton from "@/components/BaseButton";
 export default {
   name: "BaseComment",
 
-  mixins: [formValidation],
-
   components: { BaseLike, BaseAvatar, BaseButton },
+
+  mixins: [formValidation],
 
   props: {
     comment: {
@@ -21,27 +21,25 @@ export default {
 
   data() {
     return {
+      editing: false,
+      optionsDisplayed: false,
       updatedComment: {
         content: this.comment.content,
         id: this.comment.id,
       },
-      editing: false,
-      optionsDisplayed: false,
     };
   },
 
   computed: {
     ...mapGetters(["currentUser"]),
 
+    isCreator() { return this.comment.userId == this.currentUser.id },
+
     isAllowed() {
       return (
         this.currentUser.isAdmin == true ||
         this.comment.userId == this.currentUser.id
       );
-    },
-
-    isCreator() {
-      return this.comment.userId == this.currentUser.id;
     },
 
     wasPublished() {
@@ -66,6 +64,10 @@ export default {
   methods: {
     ...mapActions(["fetch", "update"]),
 
+    editComment() { this.editing = !this.editing },
+
+    displayOptions() { this.optionsDisplayed = !this.optionsDisplayed },
+
     deleteComment(id) {
       const contexte = {
         origin: "deleteComment",
@@ -79,10 +81,6 @@ export default {
       };
       this.$store.commit("displayPopup", contexte);
     },
-
-    editComment() { this.editing = !this.editing },
-
-    displayOptions() { this.optionsDisplayed = !this.optionsDisplayed },
 
     updateComment(e) {
       e.preventDefault();
@@ -112,32 +110,20 @@ export default {
 };
 </script>
 
+
 <template>
   <div class="comment">
-
-    <!-- <img :src="currentUser.imageUrl" alt="currentUser.username" class="avatar"> -->
     <BaseAvatar :user="comment.User" origin="post" />
 
     <div class="comment__main" :class="{ hide : editing }">
-
       <div class="comment__content">
         <p class="comment__meta">
-          <!-- <router-link :to="{ name: 'Profil', params: { id: comment.UserId } }">{{
-            comment.User.username
-          }}</router-link> -->
-          <BaseButton
-            tag="router-link"
-            :to="{ name: 'Profil', params: { id: comment.UserId } }"
-            isLink
-          >
-            {{ comment.User.username }}
-          </BaseButton>
-          , {{ wasPublished }}.
+          <BaseButton :to="{ name: 'Profil', params: { id: comment.UserId } }" tag="router-link" isLink>
+          {{ comment.User.username }}
+          </BaseButton>, {{ wasPublished }}.
         </p>
-
         {{ comment.content }}
       </div>
-
       <div class="comment__likes">
         <BaseLike
           :item="comment"
@@ -146,82 +132,66 @@ export default {
           setMutation="setCommentLikes"
         />
       </div>
-
     </div>
 
+    <div class="options relative" :class="{ hide : editing }">
+      <!-- Bouton ... pour afficher les options -->
+      <BaseButton
+        @click="displayOptions()"
+        @keydown.enter="displayOptions()"
+        tag="button"
+        isDotsBtn
+      >
+        <font-awesome-icon icon="ellipsis-h" />
+      </BaseButton>
 
-    <div  class="options relative" :class="{ hide : editing }">
+      <!-- Div options -->
+      <div v-show="optionsDisplayed" class="options__dropdown options__comment">
         <BaseButton
+          v-if="isAllowed"
+          @click="deleteComment(comment.id), displayOptions()"
           tag="button"
-          @click="displayOptions()"
-          isDotsBtn
+          isOptionBtn
         >
-          <font-awesome-icon icon="ellipsis-h" />
+          <font-awesome-icon icon="trash-alt" />
+          Supprimer le commentaire
         </BaseButton>
-
-        <!-- <div @click="displayOptions" @keydown.enter="displayOptions" class="options__dots" tabindex="0">
-          <font-awesome-icon icon="ellipsis-h" />
-        </div> -->
-
-        <div v-show="optionsDisplayed" class="options__dropdown options__comment">
-
-          <BaseButton
-            v-if="isAllowed"
-            tag="button"
-            @click="deleteComment(comment.id), displayOptions()"
-            isOptionBtn
-          >
-            <font-awesome-icon icon="trash-alt" />
-            Supprimer le commentaire
-          </BaseButton>
-
-          <!-- <button @click="deleteComment(comment.id)" v-if="isAllowed" class="options__button">
-            <font-awesome-icon icon="trash-alt" />
-            Supprimer le commentaire
-          </button> -->
-
-          <BaseButton
-            v-if="isCreator"
-            tag="button"
-            @click="editComment(), displayOptions()"
-            isOptionBtn
-          >
-            <font-awesome-icon icon="pencil-alt" />
-            Modifier votre commentaire
-          </BaseButton>
-          <!-- <button @click="editComment()" v-if="isCreator" class="options__button">
-            <font-awesome-icon icon="pencil-alt" />
-            Modifier votre commentaire
-          </button> -->
-        </div>
-      </div>
-
-      <form
-        v-if="editing"
-        class="comment__edit">
-        
-        <input
-          type="text"
-          required
-          v-model="updatedComment.content"
-          @keydown.enter="updateComment"
-          placeholder="Modifier votre commentaire..."
-          class="comment__edit"
-        />
 
         <BaseButton
           v-if="isCreator"
+          @click="editComment(), displayOptions()"
           tag="button"
-          @click.prevent="editComment()"
-          isLink
+          isOptionBtn
         >
-          Annuler
+          <font-awesome-icon icon="pencil-alt" />
+          Modifier votre commentaire
         </BaseButton>
+      </div>
+    </div>
 
-        <!-- <button @click="editComment()">Annuler</button> -->
-      </form>
+    <!-- Formulaire de modification d'un commentaire -->
+    <form v-if="editing" class="comment__edit">
+      <input
+        type="text"
+        required
+        placeholder="Modifier votre commentaire..."
+        v-model="updatedComment.content"
+        @keydown.enter="updateComment"
+        class="comment__edit"
+      />
+
+      <BaseButton
+        v-if="isCreator"
+        @click.prevent="editComment()"
+        tag="button"
+        isLink
+      >
+        Annuler
+      </BaseButton>
+    </form>
   </div>
 </template>
+
 
 <style scope lang="scss">
 .comment {
@@ -238,6 +208,7 @@ export default {
     @include flexbox(space-between, row, center);
     margin-right: 0.5rem;
     padding: $base-padding;
+    
     background-color: $base-color;
     border-radius: $medium-radius;
 
@@ -250,7 +221,6 @@ export default {
   }
 
   &__meta {
-    // position: relative;
     margin: 0;
     color: $police-color;
 

@@ -69,6 +69,20 @@ const router = new VueRouter({
   mode: "history",
 });
 
+// Avant chaque route, verification de connexon de l'utilisateur en recherchant un token en localStrage :
+
+// Si aucun token n'est trouvé dans le localStorage (utilisateur déconnecté) :
+//    * si redirection vers une page publique, accès à la page recherchée
+//    * si redirection vers une page privée, accès refusé, retour à la page Landing
+
+// Si un token est trouvé dans le localStorage :
+//    1. Vérifier l'ancienneté du token :
+//          * si le token a plus de 24h : suppression du token et retour à la page Landing (utilisateur déconnecté)
+//          * si le token a moins de 24h : Poursuite de la tentative d'accès à la page
+//    2. Utilisation du token pour faire une requête d'authentification "me"
+//          * si la réponse est régative (token obsolète), accès refusé, retour à la page Landing
+//          * si la réponse est positive, accès à la page recherchée
+
 router.beforeEach((to, from, next) => {
   document.title = to.meta.title;
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);

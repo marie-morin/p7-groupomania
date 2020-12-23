@@ -8,37 +8,36 @@ const MIME_TYPES = {
 };
 
 const storage = multer.diskStorage({
-  // Creating configuration object for multer
+  // Determiner la destination du fichier
   destination: (req, file, callback) => {
-    console.log("pass destination");
     callback(null, "images");
   },
+
+  // Determiner le nouveau nom du fichier
   filename: (req, file, callback) => {
-    console.log("pass disktorage filename");
-    console.log("file : ", file);
     const name = file.originalname.split(".")[0].split(" ").join("_");
     const extension = MIME_TYPES[file.mimetype];
-    callback(null, name + Date.now() + "." + extension); // Creating an name for the image
+    callback(null, name + Date.now() + "." + extension);
   },
 });
 
+// Vérifier la compatibilité de l'extention du fichier
 const fileFilter = (req, file, callback) => {
-  console.log("pass fileFilter");
-  const extension = MIME_TYPES[file.mimetype]; // Fiding the uploaded file's mine type
+  const extension = MIME_TYPES[file.mimetype];
   if (
     extension === "jpg" ||
     extension === "jpeg" ||
     extension === "png" ||
     extension === "gif"
   ) {
-    callback(null, true); // Making sure it is a png or a jpg
+    callback(null, true);
   } else {
     callback("Erreur : Mauvais type de fichier", false);
   }
 };
 
 module.exports = multer({
-  storage, // Adding our multer object
-  limits: { fileSize: 104857600 }, // Setting a max file size to be upload to 100 Mo
-  fileFilter, // Applying extention filter
-}).single("file"); // Making sure the file uploaded by user is a single file, note several
+  storage,
+  limits: { fileSize: 104857600 },
+  fileFilter,
+}).single("file");

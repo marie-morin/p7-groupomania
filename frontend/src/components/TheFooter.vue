@@ -1,7 +1,5 @@
 <script>
-export default {
-  name: "TheFooter",
-};
+export default { name: "TheFooter" };
 </script>
 
 
@@ -11,11 +9,12 @@ export default {
   </div> 
 </template>
 
+
 <style scoped lang="scss">
 .footer {
   width: 100%;
   @include flexbox(center, row, center);
-  background-color: lighten($color: $primary-color, $amount: 10);
+  background-color: $primary-color;
 
   &__logo {
     width: 15%;

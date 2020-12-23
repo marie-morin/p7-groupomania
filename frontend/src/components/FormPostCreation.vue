@@ -7,9 +7,9 @@ import FormImageUpload from "@/components/FormImageUpload";
 export default {
   name: "FormPostCreation",
 
-  mixins: [formValidation],
-
   components: { BaseButton, FormImageUpload },
+  
+  mixins: [formValidation],
 
   data() {
     return {
@@ -22,9 +22,7 @@ export default {
   methods: {
     ...mapActions(["add"]),
 
-    setFile(image) {
-      this.file = image;
-    },
+    setFile(image) { this.file = image },
 
     addPost() {
       let formData = new FormData();
@@ -62,22 +60,14 @@ export default {
 };
 </script>
 
-<template>
-  <form enctype="multipart/form-data" @submit.prevent="addPost" class="form postcreation">
 
-    <BaseButton
-      tag="button"
-      @click.prevent.stop="$emit('display-form')"
-      isCloseBtn
-    >
+<template>
+  <form @submit.prevent="addPost" enctype="multipart/form-data" class="form postcreation">
+
+    <!-- Croix pour fermer le formulaire -->
+    <BaseButton @click.prevent.stop="$emit('display-form')" tag="button" isCloseBtn >
       <font-awesome-icon icon="times" />
     </BaseButton>
-
-    <!-- <font-awesome-icon
-      icon="times"
-      @click.prevent.stop="$emit('display-form')"
-      class="close-cross"
-    /> -->
 
     <h2 class="form__title">Partager avec vos collègues :</h2>
 
@@ -94,37 +84,16 @@ export default {
       <label for="title" class="form__label">Titre</label>
     </div>
 
-    <FormImageUpload
-      v-on:send-imagefile="setFile"
-      :wasPosted="wasPosted"
-      inputfile="postCreation"
-    />
+    <FormImageUpload @send-imagefile="setFile" :wasPosted="wasPosted" inputfile="postCreation" />
 
-    <!-- <BaseButton>Publier</BaseButton> -->
-
-    <BaseButton
-      tag="button"
-      nativeType="submit"
-      isGenericBtn
-    >
+    <BaseButton tag="button" nativeType="submit" isGenericBtn>
       Publier
     </BaseButton>
-
-    <!-- <input
-      type="submit"
-      value="Annuler"
-      @click.prevent.stop="$emit('display-form')"
-      class="global-btn"
-    /> -->
-
-    <BaseButton
-      tag="button"
-      @click.prevent.stop="$emit('display-form')"
-      isCancelBtn
-    >
+    <BaseButton @click.prevent.stop="$emit('display-form')" tag="button" isCancelBtn>
       Annuler
     </BaseButton>
   </form>
 </template>
+
 
 <style scope lang="scss"></style>

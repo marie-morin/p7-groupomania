@@ -11,6 +11,7 @@ export default {
   computed: mapGetters(["allUsers"]),
 
   created() {
+    // Récupération de tous les users
     const options = {
       url: process.env.VUE_APP_LOCALHOST_URL + "users/",
       mutation: "setUsers",
@@ -22,11 +23,13 @@ export default {
 };
 </script>
 
+
 <template>
   <div class="users container">
     <BaseSearch :items="allUsers" />
     <BaseCardUser v-for="user in allUsers" :key="user.id" :user="user"/>
   </div>
 </template>
+
 
 <style scope lang="scss"></style>

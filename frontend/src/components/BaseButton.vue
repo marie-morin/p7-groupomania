@@ -6,12 +6,9 @@ export default {
     tag: {
       type: String,
       default: "button",
-      description: "Button tag (default -> button)"
     },
     to: {
-      // type: String,
       default: null,
-      description: "Destination du router si element est router"
     },
     type: {
       type: String,
@@ -33,35 +30,31 @@ export default {
       default: false,
       description: "Whether button contains only an icon"
     },
+
+    // Props définissants le style du bouton
     isGenericBtn: {
       type: Boolean,
       default: false,
-      
     },
     isBigGreenBtn: {
       type: Boolean,
       default: false,
-      
     },
     isCancelBtn: {
       type: Boolean,
       default: false,
-      
     },
     isOptionBtn: {
       type: Boolean,
       default: false,
-      
     },
     isCloseBtn: {
       type: Boolean,
       default: false,
-      
     },
     isLink: {
       type: Boolean,
       default: false,
-      
     },
     isDotsBtn: {
       type: Boolean,
@@ -111,29 +104,23 @@ export default {
   },
 
   methods: {
-    handleClick(event) {
-      this.$emit("click", event);
-    }
+    handleClick(event) { this.$emit("click", event) }
   }
 };
 </script>
 
 <template>
-
   <component
     :is="tag"
-    :to="to"
     :type="tag === 'button' ? nativeType : ''"
+    :to="to"
     @click="handleClick"
     @keydown.enter="handleClick"
     class="btn"
     :class="classes"
   >
-
     <slot v-if="!iconOnly"/>
-
   </component>
-
 </template>
 
 <style scoped lang="scss">
@@ -206,6 +193,7 @@ export default {
     top: 0;
     margin: 0 0.5rem 0 0;
     padding: 0;
+    
     background-color: transparent;
     color: inherit;
 
@@ -215,11 +203,11 @@ export default {
   }
 
   &--link {
-    color: $success-color;
+    color: inherit;
     background-color: transparent;
       
     &:hover {
-      color: darken($color: $success-color, $amount: 10);
+      color: darken($color: $success-color, $amount: 20);
       text-decoration: underline;
     }
   }

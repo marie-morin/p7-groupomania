@@ -1,42 +1,30 @@
 <script>
-// import { mapGetters } from "vuex";
 import { mapActions, mapGetters } from "vuex";
 import InfosUser from "@/components/InfosUser";
-// import FormPasswordUpdate from "@/components/FormPasswordUpdate";
 import BasePost from "@/components/BasePost";
-// import BaseButton from "@/components/BaseButton";
 
 export default {
   name: "Profil",
 
-  components: {
-    InfosUser,
-    // FormPasswordUpdate,
-    BasePost,
-    // BaseButton,
-  },
+  components: { InfosUser, BasePost },
 
   data() {
     return {
       isOwner: false,
       isAdmin: false,
-      // profilFormDisplayed: false,
-      // passwordFormDisplayed: false,
     };
   },
 
   computed: {
     ...mapGetters(["currentUser", "guest", "allPosts"]),
 
-    posts() {
-      return this.$store.state.postModule.posts.filter(
-        (post) => post.userId == this.$route.params.id
-      );
-    },
+    // Filtrage des posts publiés par l'utilisateur de la page profil actuelle
+    posts() { return this.$store.state.postModule.posts.filter((post) => post.userId == this.$route.params.id) },
   },
 
   watch: {
     $route(to) {
+      // Mise ajour des informations du profil lors d'une redirection de profil à profil
       const guestOptions = {
         url: process.env.VUE_APP_LOCALHOST_URL + `users/${to.params.id}`,
         mutation: "setGuest",
@@ -53,14 +41,14 @@ export default {
   },
 
   created() {
-    // Chargement de tous les posts
+    // Récupération des tous les posts
     const postsOptions = {
       url: process.env.VUE_APP_LOCALHOST_URL + "posts",
       mutation: "setPosts",
     };
     this.fetch(postsOptions);
 
-    // Chargement du profil guest
+    // Récupération du profil de l'utilisateur de la page actuelle
     const guestOptions = {
       url: process.env.VUE_APP_LOCALHOST_URL + `users/${this.$route.params.id}`,
       mutation: "setGuest",
@@ -75,68 +63,22 @@ export default {
     }
   },
 
-  methods: {
-    ...mapActions(["fetch"]),
-
-    // deleteProfil() {
-    //   const contexte = {
-    //     origin: "deleteProfil",
-    //     intention: "confirmation",
-    //     message: "Voulez-vous vraiment supprimer votre compte ?",
-    //     options: {
-    //       url:
-    //         process.env.VUE_APP_LOCALHOST_URL +
-    //         `users/${this.$route.params.id}`,
-    //       mutation: "removeUser",
-    //       id: this.$route.params.id,
-    //     },
-    //   };
-    //   this.$store.commit("displayPopup", contexte);
-    // },
-
-    // displayProfilForm() {
-    //   return (this.profilFormDisplayed = !this.profilFormDisplayed);
-    // },
-
-    // displayPasswordFrom() {
-    //   return (this.passwordFormDisplayed = !this.passwordFormDisplayed);
-    // },
-  },
+  methods: mapActions(["fetch"]),
 };
 </script>
+
 
 <template>
   <div class="profil container">
     <InfosUser v-if="isOwner" :is-owner="isOwner" :user="currentUser" />
     <InfosUser v-else :is-owner="isOwner" :user="guest" />
 
-    <!-- <FormProfilUpdate
-      v-if="isOwner"
-      v-show="profilFormDisplayed"
-      @display-form="displayProfilForm()"
-    /> -->
-    <!-- <BaseButton v-if="isOwner" :onClick="displayProfilForm">
-      Modifier mon profil
-    </BaseButton> -->
-    
-    <!-- <BaseButton v-if="isOwner" :onClick="displayPasswordFrom">
-      Modifier mon mot de passe
-    </BaseButton> -->
-    <!-- <FormPasswordUpdate
-      v-if="isOwner"
-      v-show="passwordFormDisplayed"
-      @display-form="displayPasswordFrom()"
-    /> -->
-
-    <!-- <BaseButton v-if="isOwner || isAdmin" :onClick="deleteProfil">
-      Supprimer le profil
-    </BaseButton> -->
-
     <div v-for="post in posts" :key="post.id">
       <BasePost :post="post" />
     </div>
   </div>
 </template>
+
 
 <style scope lang="scss">
 .profil {

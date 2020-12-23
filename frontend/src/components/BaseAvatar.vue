@@ -1,5 +1,4 @@
 <script>
-
 export default {
   name: "BaseAvatar",
 
@@ -16,34 +15,32 @@ export default {
   },
 
   computed: {
-    isLarge() {
-      return this.origin == "profil";
-    }
+    isFullSizeImage() { return this.origin == "profil" }
   }
 };
 </script>
 
+
 <template>
   <div class="avatar">
+    <!-- Si l'utilisateur à ajouté une photos de profil -->
     <img
       v-if="user.imageUrl"
       :src="user.imageUrl"
       :alt="user.username"
-      :class="{ large : isLarge }"
+      :class="{ large : isFullSizeImage }"
       class="avatar__image"
     />
-    <div
-      v-else
-      :class="{ large : isLarge }"
-      class="avatar__image avatar__image--empty"
-    >
+
+    <!-- Si utilisateur n'a pas de photo de profil, affichage de ses initales à la place de l'image -->
+    <div v-else :class="{ large : isFullSizeImage }" class="avatar__image avatar__image--empty">
       {{ this.user.firstname.split('')[0] }}{{ this.user.lastname.split('')[0] }}
     </div>
   </div>
 </template>
 
-<style scope lang="scss">
 
+<style scope lang="scss">
 .avatar {
 
   &__image {

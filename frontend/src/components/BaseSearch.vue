@@ -14,9 +14,7 @@ export default {
   },
 
   data() {
-    return {
-      matcheditems: [],
-    };
+    return { matcheditems: [] };
   },
 
   methods: {
@@ -36,22 +34,22 @@ export default {
       }
     },
 
-    blur() {
-      this.matcheditems = [];
-    }
+    closeByBlur() { this.matcheditems = [] }
   },
 };
 </script>
 
+
 <template>
   <div class="search">
-    <input type="text" id="pays" placeholder="Rechercher un utilisateur..." @input="search"  class="search__input" />
+    <input type="text" id="search" placeholder="Rechercher un utilisateur..." @input="search" class="search__input" />
 
     <div class="search__results" :class="{ display : matcheditems.length > 0 }">
       <BaseCardUser v-for="item in matcheditems" :key="item.id" :user="item" tabindex="0"/>
     </div>
   </div>
 </template>
+
 
 <style scope lang="scss">
 .search {

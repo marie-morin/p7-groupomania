@@ -30,11 +30,10 @@ export default {
     };
   },
 
-  computed: {
-    ...mapGetters(["currentUser"]),
-  },
+  computed: mapGetters(["currentUser"]),
 
   created() {
+    // Récuperation des likes de l'item
     const likesOptions = {
       url:
         process.env.VUE_APP_LOCALHOST_URL +
@@ -67,8 +66,11 @@ export default {
 };
 </script>
 
+
 <template>
   <div class="likes">
+
+    <!-- Bouton thumbup pour liker -->
     <font-awesome-icon
       icon="thumbs-up"
       @click="like()"
@@ -78,25 +80,23 @@ export default {
       tabindex="0"
     />
 
-    <p
-      @mouseover="showUsers = true"
-      @mouseout="showUsers = false"
-      class="likes__amout"
-    >
+    <!-- Nombre de likes -->
+    <p @mouseover="showUsers = true" @mouseout="showUsers = false" class="likes__amout">
       {{ item.likes.length }}
     </p>
 
-    <div class="likes__users" v-if="item.likes.length > 0 && showUsers">
+    <!-- Div popup affichant les utilisateur qui ont liké -->
+    <div v-if="item.likes.length > 0 && showUsers" class="likes__users">
       <p v-for="like in item.likes" :key="like.id">{{ like.User.username }}</p>
     </div>
   </div>
 </template>
 
+
 <style scope lang="scss">
 .likes {
   @include flexbox(flex-start, row, flex-start);
   position: relative;
-  // padding: 1rem 0 1rem 2rem;
 
   &__icon {
     margin: 0 0.5rem 0 0;

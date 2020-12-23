@@ -7,9 +7,9 @@ import BaseAvatar from "@/components/BaseAvatar";
 export default {
   name: "SectionComments",
 
-  mixins: [formValidation],
-
   components: { BaseComment, BaseAvatar },
+  
+  mixins: [formValidation],
 
   props: {
     post: {
@@ -25,12 +25,10 @@ export default {
     };
   },
 
-  computed: {
-    ...mapGetters(["currentUser", "popup"]),
-  },
+  computed: mapGetters(["currentUser", "popup"]),
 
   created() {
-    console.log("papasitoto");
+    // Récupération de tous les commentaires du post
     const commentOptions = {
       url: process.env.VUE_APP_LOCALHOST_URL + `comments/from/${this.post.id}`,
       mutation: "setComments",
@@ -41,9 +39,7 @@ export default {
   methods: {
     ...mapActions(["fetch", "add"]),
 
-    displayComment() {
-      this.displayComments = !this.displayComments;
-    },
+    displayComment() { this.displayComments = !this.displayComments },
 
     addComment() {
       if (this.newComment == "") {
@@ -76,9 +72,10 @@ export default {
 };
 </script>
 
+
 <template>
   <div class="comment-section">
-
+    <!-- Bouton toggle pour ouvrir la section commentaire -->
     <div
       @click="displayComment()"
       @keydown.enter="displayComment()"
@@ -86,14 +83,19 @@ export default {
       tabindex="0"
     >
       <font-awesome-icon icon="comment" class="comment-section__icon" />
-      <p class="comment-section__amout">{{ post.comments.length }} commentaires</p>
+      <p class="comment-section__amout">
+        {{ post.comments.length }} commentaires
+      </p>
     </div>
 
+    <!-- Section commentaires -->
     <div v-show="displayComments === true" >
+
+      <!-- Liste des commentaires -->
       <BaseComment v-for="comment in post.comments" :key="comment.id" :comment="comment" />
 
+      <!-- Input pour ajouter un nouveau commentaire -->
       <div class="comment-section__new">
-        <!-- <img :src="post.imageUrl" alt="currentUser.username" class="avatar"> -->
         <BaseAvatar :user="currentUser" origin="commentSection" />
         <input
           type="text"
@@ -104,10 +106,10 @@ export default {
           class="comment-section__entry"
         />
       </div>
-
     </div>
   </div>
 </template>
+
 
 <style scope lang="scss">
 .comment-section {

@@ -10,8 +10,6 @@ import BaseAvatar from "@/components/BaseAvatar";
 export default {
   name: "BasePost",
 
-  mixins: [formValidation],
-
   components: {
     BaseLike,
     FormImageUpload,
@@ -19,6 +17,8 @@ export default {
     BaseAvatar,
     BaseButton
   },
+
+  mixins: [formValidation],
 
   props: {
     post: {
@@ -44,15 +44,13 @@ export default {
   computed: {
     ...mapGetters(["currentUser", "popup"]),
 
+    isCreator() { return this.post.userId == this.currentUser.id },
+
     isAllowed() {
       return (
         this.currentUser.isAdmin == true ||
         this.post.userId == this.currentUser.id
       );
-    },
-
-    isCreator() {
-      return this.post.userId == this.currentUser.id;
     },
 
     wasPublished() {
@@ -72,6 +70,12 @@ export default {
   methods: {
     ...mapActions(["fetch", "add", "update"]),
 
+    setFile(image) { this.file = image },
+
+    editPost() { this.editing = !this.editing },
+
+    displayOptions() { this.optionsDisplayed = !this.optionsDisplayed },
+
     deletePost(id) {
       const contexte = {
         origin: "deletePost",
@@ -85,16 +89,6 @@ export default {
       };
       this.$store.commit("displayPopup", contexte);
     },
-
-    editPost() {
-      this.editing = !this.editing;
-    },
-
-    setFile(image) {
-      this.file = image;
-    },
-
-    displayOptions() { this.optionsDisplayed = !this.optionsDisplayed },
 
     updatePost() {
       let formData = new FormData();
@@ -139,79 +133,56 @@ export default {
 };
 </script>
 
+
 <template>
   <div class="post">
-
     <div class="post__header">
-      
+
       <div class="post__meta">
-        <!-- <img :src="post.imageUrl" alt="currentUser.username" class="avatar"> -->
         <BaseAvatar :user="post.User" origin="post" />
         <p>
-          <!-- <router-link :to="{ name: 'Profil', params: { id: post.UserId } }">{{
-            post.User.username
-          }}</router-link> -->
-          <BaseButton
-            tag="router-link"
-            :to="{ name: 'Profil', params: { id: post.UserId } }"
-            isLink
-          >
+          <BaseButton :to="{ name: 'Profil', params: { id: post.UserId } }" tag="router-link" isLink>
             {{ post.User.username }}
-          </BaseButton>
-          , {{ wasPublished }}.
+          </BaseButton>, {{ wasPublished }}.
         </p>
       </div>
 
       <div class="options">
+        <!-- Bouton ... pour afficher les options -->
         <BaseButton
-          tag="button"
           @click="displayOptions()"
           @keydown.enter="displayOptions()"
+          tag="button"
           isDotsBtn
         >
           <font-awesome-icon icon="ellipsis-h" />
         </BaseButton>
-        
-        <!-- 
-        <div class="options__dots" @click="displayOptions" @keydown.enter="displayOptions" tabindex="0">
-          <font-awesome-icon icon="ellipsis-h" />
-        </div> -->
 
+        <!-- Div options -->
         <div v-show="optionsDisplayed" class="options__dropdown">
           <BaseButton
             v-if="isAllowed"
-            tag="button"
             @click="deletePost(post.id), displayOptions()"
+            tag="button"
             isOptionBtn
           >
             <font-awesome-icon icon="trash-alt" />
             Supprimer le post
           </BaseButton>
-
-          <!-- <button v-if="isAllowed" @click="deletePost(post.id)" class="options__button">
-            <font-awesome-icon icon="trash-alt" />
-            Supprimer le post
-          </button> -->
 
           <BaseButton
             v-if="isCreator"
-            tag="button"
             @click="editPost(), displayOptions()"
+            tag="button"
             isOptionBtn
           >
             <font-awesome-icon icon="pencil-alt" />
             Modifier votre post
           </BaseButton>
-
-          <!-- <button v-if="isCreator" @click="editPost()" class="options__button">
-            <font-awesome-icon icon="pencil-alt" />
-            Modifier votre post
-          </button> -->
         </div>
       </div>
     </div>
 
-    <!-- Contenu du post -->
     <div class="post__content">
       <h2 class="post__title">{{ post.title }}</h2>
       <div class="post__image">
@@ -219,7 +190,6 @@ export default {
       </div>
     </div>
 
-    <!-- Affichage des likes -->
     <div class="post__likes">
       <BaseLike
         :item="post"
@@ -229,18 +199,14 @@ export default {
       />
     </div>
 
-    <!-- Section commentaires -->
     <SectionComments :post="post" />
 
-    <!-- Formulaire de modification du post -->
-    <div
-      v-show="editing"
-      class="popupform"
-    >
+    <!-- Formulaire popup pour modifier son post -->
+    <div v-show="editing" class="popupform">
       <form
         v-if="editing"
-        enctype="multipart/form-data"
         @submit.prevent="updatePost"
+        enctype="multipart/form-data"
         class="popup-form__form form"
       >
         <div class="form__group">
@@ -248,44 +214,29 @@ export default {
             type="text"
             name="title"
             required
+            placeholder="Modifier votre title"
             v-model="updatedPost.title"
             @keyup.enter="updatePost()"
-            placeholder="Modifier votre title"
             class="form__field"
           />
           <label for="title" class="form__label">Modifier votre title</label>
         </div>
 
-
         <label for="upload">Nouvelle image</label>
 
-        <FormImageUpload
-          v-on:send-imagefile="setFile"
-          :wasPosted="wasPosted"
-          inputfile="postUpdate"
-        />
+        <FormImageUpload @send-imagefile="setFile" :wasPosted="wasPosted" inputfile="postUpdate" />
 
-        <BaseButton
-          tag="button"
-          nativeType="submit"
-          isGenericBtn
-        >
+        <BaseButton tag="button" nativeType="submit" isGenericBtn>
           Valider la modification
         </BaseButton>
-
-        <BaseButton
-          tag="button"
-          @click="editPost()"
-          isCancelBtn
-        >
+        <BaseButton @click="editPost()" tag="button" isCancelBtn>
           Annuler
         </BaseButton>
       </form>   
     </div>
-
-       
   </div>
 </template>
+
 
 <style scope lang="scss">
 .post {

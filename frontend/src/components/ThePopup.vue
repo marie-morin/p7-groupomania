@@ -7,7 +7,7 @@ export default {
 
   components: { BaseButton },
 
-  computed: { ...mapGetters(["popup", "currentUser"]) },
+  computed: mapGetters(["popup", "currentUser"]),
 
   mounted() {
     if (this.popup.intention === "alert" || this.popup.intention === "success") {
@@ -18,13 +18,9 @@ export default {
   methods: {
     ...mapActions(["update", "delete"]),
 
-    hidePopup() {
-      this.$store.commit("hidePopup");
-    },
+    hidePopup() { this.$store.commit("hidePopup") },
 
     confirm() {
-      // console.log("passitototo");
-
       const origin = this.popup.origin;
 
       let notifyContexte = {
@@ -70,8 +66,6 @@ export default {
         default:
           console.log(`Error`);
       }
-
-
       this.$store.commit("displayPopup", notifyContexte);
       setTimeout(() => this.$store.commit("hidePopup"), 5000);
     },
@@ -79,54 +73,30 @@ export default {
 };
 </script>
 
+
 <template>
-  <!-- <div class="popup" :class="{ 'popup__displayed' : }"> -->
   <div class="popup">
+    <!-- Icons de notification de l'information : allter, success ou warning -->
     <font-awesome-icon v-if="popup.intention == 'success'" icon="check-circle" class="popup__icon popup__icon--success"/>
     <font-awesome-icon v-else-if="popup.intention == 'alert'" icon="exclamation-circle" class="popup__icon popup__icon--warning"/>
     <font-awesome-icon v-else icon="question-circle" class="popup__icon popup__icon--warning"/>
 
-    <BaseButton
-      tag="button"
-      @click="hidePopup"
-      isCloseBtn
-    >
+    <!-- Croix pour fermer le formulaire -->
+    <BaseButton @click="hidePopup" tag="button" isCloseBtn>
       <font-awesome-icon icon="times" />
     </BaseButton>
 
-    <!-- <font-awesome-icon icon="times" @click="hidePopup" class="popup__icon close-cross"/> -->
-
     <p>{{ popup.message }}</p>
 
-    <!-- <button v-if="popup.intention == 'confirmation'" @click="confirm()" class="popup__button popup__button--confirm">
-      Oui
-    </button> -->
-
-    <BaseButton
-      v-if="popup.intention == 'confirmation'"
-      tag="button"
-      @click="confirm()"
-      isGenericBtn
-    >
+    <BaseButton v-if="popup.intention == 'confirmation'" @click="confirm()" tag="button" isGenericBtn>
       Oui
     </BaseButton>
-    
-
-    <!-- <button v-if="popup.intention == 'confirmation'" @click="hidePopup()" class="popup__button popup__button--deny">
-      Annuler
-    </button> -->
-
-    <BaseButton
-      v-if="popup.intention == 'confirmation'"
-      tag="button"
-      @click="hidePopup()"
-      isCancelBtn
-    >
+    <BaseButton v-if="popup.intention == 'confirmation'" @click="hidePopup()" tag="button" isCancelBtn>
       Annuler
     </BaseButton>
-
   </div>
 </template>
+
 
 <style scope lang="scss">
 .popup {
@@ -160,29 +130,5 @@ export default {
       color: $warning-color;
     }
   }
-
-  // &__button {
-  //   padding: $base-padding;
-  //   margin: 0.5rem;
-
-  //   color: $clear-color;
-  //   border: none;
-
-  //   font-family: inherit;
-  //   font-weight: inherit;
-  //   cursor: pointer;
-
-  //   &--confirm {
-  //     color: $success-color;
-  //   }
-
-  //   &--deny {
-  //     color: $warning-color;
-  //   }
-
-  //   &:hover {
-  //     background-color: darken($color: $police-color, $amount: 1);
-  //   }
-  // }
 }
 </style>

@@ -1,25 +1,11 @@
-//Import
 const models = require("../models");
 const jwt = require("../utils/jwtValidator");
 const fs = require("fs");
 const regex = /^[A-Za-z\d\s.,;:!?"()/%-_']*$/;
 
-//Création d'un message
 exports.addPost = (req, res) => {
-  console.log("-------------");
-  console.log("-------------");
-  console.log("-------------");
-  console.log("------------- addPost");
-
-  // console.log("req.body : ", req.body); // undefined
-  console.log("req.body.title : ", JSON.parse(req.body.title)); // undefined
-  // console.log("req.file : ", req.file); // undefined
-
   const data = JSON.parse(req.body.title);
-  // const data = JSON.parse(req.body.title);
-  // console.log("data : ", data);
   const image = req.file;
-  // console.log("image : ", image);
 
   if (!data || !image || !req.headers.authorization || !regex.test(data)) {
     res.status(400).json({ message: "Requête erronée." });
@@ -51,10 +37,7 @@ exports.addPost = (req, res) => {
   }
 };
 
-// Get all posts
 exports.getAllPosts = (req, res) => {
-  console.log("------------ getAllPosts");
-
   models.Post.findAll({
     include: [
       {
@@ -74,18 +57,7 @@ exports.getAllPosts = (req, res) => {
     .catch((error) => res.status(500).json(error));
 };
 
-// Update a post
 exports.modifyPost = (req, res) => {
-  console.log("-------------");
-  console.log("-------------");
-  console.log("-------------");
-  console.log("---------- modifyPost");
-
-  // console.log("req.body : ", req.body); // undefined
-  console.log("req.body.content : ", req.body.content); // undefined
-  console.log("JSON.parse(req.body.content) : ", JSON.parse(req.body.content));
-  console.log("req.file : ", req.file); // undefined
-
   const data = req.file
     ? {
         ...JSON.parse(req.body.content),
@@ -96,8 +68,6 @@ exports.modifyPost = (req, res) => {
     : {
         ...JSON.parse(req.body.content),
       };
-
-  console.log("data : ", data);
 
   if (
     !data ||
@@ -118,11 +88,10 @@ exports.modifyPost = (req, res) => {
       .then((post) => {
         if (post.userId == userId) {
           if (req.file) {
+            // Supprimer l'ancienne image du server
             const filename = post.imageUrl.split("/images/")[1];
-            console.log(filename);
             fs.unlink(`images/${filename}`, (err) => {
               if (err) throw err;
-              console.log(`images/${filename} was deleted`);
             });
           }
           models.Post.update(
@@ -160,10 +129,7 @@ exports.modifyPost = (req, res) => {
   }
 };
 
-// Delete a post
 exports.deletePost = (req, res) => {
-  console.log("--------- deletePost");
-
   if (!req.params.id || !req.headers.authorization) {
     res.status(400).json({ message: "Requête incomplète." });
   } else {
@@ -175,8 +141,8 @@ exports.deletePost = (req, res) => {
       .then((post) => {
         if (post.userId == userId || isAdmin) {
           if (post.imageUrl) {
+            // Supprimer l'image du server
             const filename = post.imageUrl.split("/images/")[1];
-            console.log(filename);
             fs.unlink(`images/${filename}`, () => {
               models.Post.destroy({
                 where: { id: req.params.id },
@@ -201,13 +167,7 @@ exports.deletePost = (req, res) => {
   }
 };
 
-// Like a post
 exports.like = (req, res, next) => {
-  console.log("----------- giveOpinion on post");
-
-  console.log("req.body : ", req.body);
-  console.log("req.body.data : ", req.body.data);
-
   const data = JSON.parse(req.body.data);
 
   if (!data || !req.headers.authorization || !regex.test(data)) {
@@ -219,7 +179,6 @@ exports.like = (req, res, next) => {
     models.PostLikes.findOne({ where: { UserId: userId, PostId: data } })
       .then((like) => {
         if (like) {
-          console.log("passssss");
           if (userId === like.userId) {
             models.PostLikes.destroy({ where: { id: like.id } })
               .then(() => {
@@ -230,7 +189,6 @@ exports.like = (req, res, next) => {
             res.status(403).json({ message: "Action non autorisée." });
           }
         } else {
-          console.log("pppppppppp");
           models.PostLikes.create({ UserId: userId, PostId: data })
             .then(() => {
               models.PostLikes.findOne({
@@ -257,10 +215,7 @@ exports.like = (req, res, next) => {
   }
 };
 
-// Get likes from one post
 exports.getLikesFromPost = (req, res, next) => {
-  console.log("--------- getLikesFromPost");
-
   if (!req.params.id) {
     res.status(400).json({ message: "Requête erronée." });
   } else {

@@ -65,7 +65,6 @@ const actions = {
       message: `Bienvenue ${state.user.username} !`,
     };
     commit("displayPopup", contexte);
-    // setTimeout(() => commit("hidePopup"), 5000);
   },
 };
 

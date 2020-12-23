@@ -29,10 +29,7 @@ export default {
 
   methods: {
     selectFile(event) {      
-      if (event.target.files.length < 1) {
-        console.log("passss");
-        return;
-      }
+      if (event.target.files.length < 1) { return }
       
       const allowedTypes = [
         "image/jpeg",
@@ -66,24 +63,22 @@ export default {
       this.emitFile(this.file);
     },
 
-    emitFile(file) {
-      this.$emit("send-imagefile", file);
-    },
+    emitFile(file) { this.$emit("send-imagefile", file) },
   },
 };
 </script>
 
+
 <template>
   <div class="imageSelection">
-
     <label :for="inputfile" class="imageSelection__label">
-      Choisez une image ou un gif
+      Choisez un fichier
     </label>
 
     <input
-      type="file"
       :id="inputfile"
       :ref="inputfile"
+      type="file"
       accept="image/png, image/jpg, image/jpeg, image/gif"
       @change="selectFile($event)"
       tabindex="0"
@@ -92,9 +87,9 @@ export default {
     <div v-show="imagePreview" class="imageSelection__preview">
       <img  :src="imagePreview" />
     </div>
-
   </div>
 </template>
+
 
 <style scope lang="scss">
 .imageSelection {
@@ -128,20 +123,12 @@ export default {
   }
 
   &__preview {
-    // height: 50rem;
-    // background-color: $secondary-color;
-
     max-height: 50rem;
     @include flexbox(center, row, center);
     background-color: $secondary-color;
     text-align: center;
 
     img {
-      // max-width: 100%;
-      // height: 100%;
-      // display: block;
-      // margin: $centered-margin;
-
       max-width: 100%;
       max-height: 50rem;
       object-fit: cover;

@@ -21,16 +21,6 @@
       padding: 5rem 2rem;
     }
 
-    // a {
-    //   color: $success-color;
-    //   text-decoration: none;
-      
-    //   &:hover {
-    //     color: darken($color: $success-color, $amount: 10);
-    //     text-decoration: underline;
-    //   }
-    // }
-
     &__title {
       text-align: center;
     }
@@ -46,7 +36,6 @@
       display: block;
       position: absolute;
       top: 0;
-      // padding-bottom: 1rem;
       background-color: $clear-color;
       text-align: left;
       transition: 0.2s;
@@ -64,8 +53,7 @@
       outline: 0;
 
       font-size: 1.8rem;
-    font-family: inherit;
-
+      font-family: inherit;
 
       transition: border-color 0.2s;
   
@@ -99,37 +87,7 @@
     }
   }
 
-// .global-btn {
-//   display: block;
-//   margin: $centered-margin;
-//   padding: 1.5rem 4rem;
-
-//   background-color: $success-color;
-//   color: $clear-color;
-
-//   border: none;
-//   border-radius: $medium-radius;
-
-//   font-size: 1.9rem;
-//   text-align: center;
-//   text-transform: uppercase;
-//   text-decoration: none;
-
-//   cursor: pointer;
-//   transition: all .2s;
-
-//   &:hover {
-//     transform: translateY(-0.3rem);
-//   }
-
-//   &:active {
-//     transform: translateY(-0.1rem);
-//     box-shadow: $shadow;
-//   }
-// }
-
 .options {
-  // position: relative;
 
   &__dots {
     width: 3.5rem;
@@ -152,11 +110,7 @@
 
   &__dropdown {
     @include flexbox(flex-start, column, flex-start);
-
-    // width: 35rem;
     position: absolute;
-    // left: -16.5rem;
-    // top: 4rem;
     top: 7rem;
     right: 0;
     padding: $base-padding;
@@ -178,45 +132,7 @@
     }
 
   }
-  
-  // &__button {
-  //   @include flexbox(flex-start, row, center);
-  //   margin: $marged-centered-margin;
-
-  //   background-color: transparent;
-  //   color: $police-color;
-
-  //   border: none;
-
-  //   font-size: 1.8rem;
-  //   font-family: inherit;
-  //   font-weight: inherit;
-
-  //   cursor: pointer;
-
-  //   &:hover{
-  //     color: darken($color: $police-color, $amount: 10);
-  //   }
-
-  //   svg {
-  //     margin-right: 1rem;
-  //   }
-  // }
 }
-
-// .close-cross {
-//   position: absolute;
-//   right: 0;
-//   top: 0;
-//   margin: 0;
-//   margin: 0.5rem;
-//   padding: 0;
-//   cursor: pointer;
-
-//   &:hover {
-//     color: darken($color: $police-color, $amount: 10)
-//   }
-// }
 
 .popupform {
   width: 100%;
@@ -227,7 +143,6 @@
   left: 0;
 
   background-color: rgb(10, 23, 52, 0.6);
-  // transform: translate(-50%, -50%);
   z-index: 2;
 
   &__form {
@@ -244,7 +159,6 @@
   padding-left: 4rem;
   
   @media screen and (max-width: $break-tablet) {
-    // max-width: 95%;
     padding-right: 2rem;
     padding-left: 2rem;
   }

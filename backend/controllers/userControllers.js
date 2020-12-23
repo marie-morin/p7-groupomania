@@ -1,20 +1,14 @@
-// Import
 const models = require("../models");
 const jwt = require("../utils/jwtValidator");
 const fs = require("fs");
 
-// Security imports
 const bcrypt = require("bcrypt");
 
-// Constantes
 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%?]{6,}$/;
 const regex = /^[A-Za-z\d\s.,;:!?"()/%-_']*$/;
 
-// Signup
 exports.signup = (req, res, next) => {
-  console.log("----------- signup");
-
   const data = JSON.parse(req.body.data);
 
   if (
@@ -42,7 +36,6 @@ exports.signup = (req, res, next) => {
         isAdmin: 0,
       })
         .then((user) => {
-          console.log("user : ", user);
           res.status(200).json({ token: jwt.generateToken(user.dataValues) });
         })
         .catch((error) => res.status(409).json(error));
@@ -50,10 +43,7 @@ exports.signup = (req, res, next) => {
   }
 };
 
-// Login
 exports.login = (req, res, next) => {
-  console.log("------------------ login");
-
   const data = JSON.parse(req.body.data);
 
   if (
@@ -85,10 +75,7 @@ exports.login = (req, res, next) => {
   }
 };
 
-// Me
 exports.me = (req, res, next) => {
-  console.log("------------------ me");
-
   const data = JSON.parse(req.body.data);
 
   if (!data || !regex.test(data)) {
@@ -107,10 +94,7 @@ exports.me = (req, res, next) => {
   }
 };
 
-// Get all users
 exports.getAllUsers = (req, res, next) => {
-  console.log("---------- getAllUsers");
-
   models.User.findAll({ order: [["username", "ASC"]] })
     .then((users) => {
       if (users.length > 0) {
@@ -122,10 +106,7 @@ exports.getAllUsers = (req, res, next) => {
     .catch((error) => res.status(500).json(error));
 };
 
-// Get one user
 exports.getOneUser = (req, res) => {
-  console.log("----------- getOneUser");
-
   if (!req.params.id) {
     res.status(400).json({ message: "Requête erronée." });
   } else {
@@ -137,10 +118,7 @@ exports.getOneUser = (req, res) => {
   }
 };
 
-// Update user acount
 exports.updateUser = (req, res, next) => {
-  console.log("------------ updateUser");
-
   const data = req.body;
 
   if (
@@ -187,23 +165,7 @@ exports.updateUser = (req, res, next) => {
   }
 };
 
-// Update user profil picture
 exports.updateProfilPicture = (req, res, next) => {
-  console.log("------------ ");
-  console.log("------------ ");
-  console.log("------------ ");
-  console.log("------------ ");
-  console.log("------------ updateProfilPicture");
-
-  console.log("req.file : ", req.file); // undefined
-  console.log("req.file.filename : ", req.file.filename); // localhost:3000
-  console.log("req.protocol : ", req.protocol); // http
-  console.log("req.get(host) : ", req.get("host")); // localhost:3000
-  console.log(
-    "nom : ",
-    `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
-  ); // localhost:3000
-
   const image = req.file;
 
   if (!image || !req.headers.authorization) {
@@ -211,20 +173,15 @@ exports.updateProfilPicture = (req, res, next) => {
   } else {
     const token = jwt.getUserId(req.headers.authorization);
     const userId = token.userId;
-    console.log("userId : ", userId);
 
     models.User.findOne({ where: { id: userId } })
       .then((user) => {
-        console.log("users : ", user);
         if (user.id === userId) {
-          console.log("user identifié");
-
           if (user.imageUrl != null) {
+            // Supprimer l'ancienne image du server
             const filename = user.imageUrl.split("/images/")[1];
-            console.log(filename);
             fs.unlink(`images/${filename}`, (err) => {
               if (err) throw err;
-              console.log(`images/${filename} was deleted`);
             });
           }
 
@@ -251,14 +208,7 @@ exports.updateProfilPicture = (req, res, next) => {
   }
 };
 
-// Delete user profil picture
 exports.deleteProfilPicture = (req, res, next) => {
-  console.log("------------ ");
-  console.log("------------ ");
-  console.log("------------ ");
-  console.log("------------ ");
-  console.log("------------ deleteProfilPicture");
-
   if (!req.params.id || !req.headers.authorization) {
     res.status(400).json({ message: "Requête erronée." });
   } else {
@@ -269,10 +219,8 @@ exports.deleteProfilPicture = (req, res, next) => {
       .then((user) => {
         if (user.id === userId) {
           const filename = user.imageUrl.split("/images/")[1];
-          console.log(filename);
           fs.unlink(`images/${filename}`, (err) => {
             if (err) throw err;
-            console.log(`images/${filename} was deleted`);
           });
           models.User.update(
             {
@@ -296,12 +244,7 @@ exports.deleteProfilPicture = (req, res, next) => {
 };
 
 exports.updatePassword = (req, res, next) => {
-  console.log("------------ updatePassword");
-
-  console.log("req.body : ", req.body);
-  console.log("req.body.data : ", req.body.data);
   const data = req.body;
-  console.log("data : ", data);
 
   if (
     !data ||
@@ -358,10 +301,7 @@ exports.updatePassword = (req, res, next) => {
   }
 };
 
-// // Delete an acount
 exports.deleteUser = (req, res, next) => {
-  console.log("---------- deleteUser");
-
   if (!req.params.id || !req.headers.authorization) {
     res.status(400).json({ message: "Requête erronée." });
   } else {
@@ -373,8 +313,8 @@ exports.deleteUser = (req, res, next) => {
       .then((user) => {
         if (user.id == userId || isAdmin) {
           if (user.imageUrl) {
+            // Supprimer la photo de profil du server
             const filename = user.imageUrl.split("/images/")[1];
-            console.log(filename);
             fs.unlink(`images/${filename}`, () => {
               models.User.destroy({ where: { id: user.id } })
                 .then(() =>

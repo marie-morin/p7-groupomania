@@ -6,7 +6,9 @@ import ThePopup from '@/components/ThePopup.vue';
 
 export default {
   name: "App",
+
   components: { TheHeader, TheFooter, ThePopup },
+  
   computed: { 
     ...mapGetters(['currentUser', 'popup']),
 
@@ -38,7 +40,6 @@ export default {
   color: $police-color;
 
   text-align: center;
-  
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 

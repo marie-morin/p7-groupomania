@@ -4,20 +4,22 @@ const router = express.Router();
 const commentCtrl = require("../controllers/commentControllers");
 const auth = require("../middleware/auth");
 
-// Routes
-
-// Create a comment
+// Ajout d'un nouveau commentaire
 router.post("/", auth, commentCtrl.addComment);
-// Get all comments from one post
+
+// Récupérer les commentaires d'un post
 router.get("/from/:id", auth, commentCtrl.getCommentsFromPost);
-// Update a comment
+
+// Modifier un commentaire
 router.put("/:id", auth, commentCtrl.modifyComment);
-// Delete a comment
+
+// Supprimer un commentaire
 router.delete("/:id", auth, commentCtrl.deleteComment);
-// Like or dislike a comment
+
+// Liker ou disliker un commentaire
 router.post("/like", auth, commentCtrl.like);
-// Get likes from one comment
+
+// Récupérer les likes d'un commentaire
 router.get("/:id/like", auth, commentCtrl.getLikesFromComment);
 
-// Exporting Router
 module.exports = router;

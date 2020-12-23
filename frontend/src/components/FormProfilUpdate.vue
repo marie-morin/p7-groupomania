@@ -67,25 +67,17 @@ export default {
 };
 </script>
 
+
 <template>
   <form @submit.prevent="updateUser" class="form">
-
-    <BaseButton
-      tag="button"
-      @click.prevent.stop="$emit('display-form')"
-      isCloseBtn
-    >
+    <!-- Croix pour fermer le formulaire -->
+    <BaseButton @click.prevent.stop="$emit('display-form')" tag="button" isCloseBtn>
       <font-awesome-icon icon="times" />
     </BaseButton>
 
-    <!-- <font-awesome-icon
-      icon="times"
-      @click.prevent.stop="$emit('display-form')"
-      class="close-cross"
-    /> -->
-
     <h2 class="form__title">Modifiez votre profil :</h2>
 
+    <!-- Adresse email -->
     <div class="form__group">
       <input
         type="email"
@@ -99,6 +91,7 @@ export default {
       <label for="email" class="form__label">Adresse email</label>
     </div>
 
+    <!-- Prénom -->
     <div class="form__group">
       <input
         type="text"
@@ -112,6 +105,7 @@ export default {
       <label for="firstname" class="form__label">Prénom</label>
     </div>
 
+    <!-- Nom -->
     <div class="form__group field">
       <input
         type="text"
@@ -125,6 +119,7 @@ export default {
       <label for="lastname" class="form__label">Nom</label>
     </div>
 
+    <!-- Biographie -->
     <div class="form__group">
       <textarea
         id="bio"
@@ -133,34 +128,17 @@ export default {
         v-model="user.bio"
         class="form__field"
       ></textarea>
-      <label for="bio" class="form__label">Biographie</label>
+      <label for="bio" class="form__label">Biographie (optionnel)</label>
     </div>
 
-    <!-- <BaseButton>Enregistrer</BaseButton> -->
-
-    <BaseButton
-      tag="button"
-      nativeType="submit"
-      isGenericBtn
-    >
+    <BaseButton tag="button" nativeType="submit" isGenericBtn>
       Enregistrer
     </BaseButton>
-
-    <!-- <input
-      type="submit"
-      value="Annuler"
-      @click.prevent.stop="$emit('display-form')"
-      class="global-btn"
-    /> -->
-
-    <BaseButton
-      tag="button"
-      @click.prevent.stop="$emit('display-form')"
-      isCancelBtn
-    >
+    <BaseButton @click.prevent.stop="$emit('display-form')" tag="button" isCancelBtn >
       Annuler
     </BaseButton>
   </form>
 </template>
+
 
 <style scoped lang="scss"></style>

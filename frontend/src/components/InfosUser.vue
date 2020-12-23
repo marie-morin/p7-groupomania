@@ -40,7 +40,7 @@ export default {
     };
   },
 
-  computed: { ...mapGetters(["currentUser"]) },
+  computed: mapGetters(["currentUser"]),
 
   created() {
     if (this.currentUser.isAdmin == true) {
@@ -51,26 +51,17 @@ export default {
   methods: {
     ...mapActions(["update"]),
 
-    displayImageUpload() {
-      return (this.imageUploadDisplayed = !this.imageUploadDisplayed);
-    },
-
     setFile(image) { this.file = image },
 
-    displayOptions() { 
-      return (this.optionsDisplayed = !this.optionsDisplayed);
-    },
+    displayOptions() { this.optionsDisplayed = !this.optionsDisplayed },
 
-    displayProfilForm() {
-      return (this.profilFormDisplayed = !this.profilFormDisplayed);
-    },
+    displayImageUpload() { this.imageUploadDisplayed = !this.imageUploadDisplayed },
 
-    displayPasswordFrom() {
-      return (this.passwordFormDisplayed = !this.passwordFormDisplayed);
-    },
+    displayProfilForm() { this.profilFormDisplayed = !this.profilFormDisplayed },
+
+    displayPasswordFrom() { this.passwordFormDisplayed = !this.passwordFormDisplayed },
 
     addPicture() {
-      console.log("pass");
       let formData = new FormData();
       formData.append("file", this.file);
 
@@ -128,8 +119,10 @@ export default {
 };
 </script>
 
+
 <template>
     <div class="userinfos">
+
       <div class="userinfos__content">
         <BaseAvatar :user="user" origin="profil" />
 
@@ -149,76 +142,34 @@ export default {
       </div>
 
       <div>
-        <!-- Ajout d'une image -->
-        <div
-          v-if="imageUploadDisplayed"
-          @submit.prevent="addPicture"
-          class="popupform"
-        >
+        <!-- Formulaire popup pur modifier sa photo de profil -->
+        <div v-if="imageUploadDisplayed" @submit.prevent="addPicture" class="popupform">
           <form class="form popupform__form">
-
-            <BaseButton
-              tag="button"
-              @click="displayImageUpload"
-              isCloseBtn
-            >
+            <BaseButton @click="displayImageUpload" tag="button" isCloseBtn>
               <font-awesome-icon icon="times" />
             </BaseButton>
 
-            <!-- <font-awesome-icon
-              icon="times"
-              @click="displayImageUpload"
-              class="close-cross"
-            /> -->
-
             <h2 class="form__title">Modifiez votre photo de profil :</h2>
-            <FormImageUpload
-              v-on:send-imagefile="setFile"
-              :wasPosted="wasPosted"
-              inputfile="profilPictureUpdate"
-            />
 
-            <!-- <BaseButton>Enregistrer</BaseButton> -->
+            <FormImageUpload @send-imagefile="setFile" :wasPosted="wasPosted" inputfile="profilPictureUpdate" />
 
-            <BaseButton
-              tag="button"
-              nativeType="submit"
-              isGenericBtn
-            >
+            <BaseButton tag="button" nativeType="submit" isGenericBtn>
               Enregistrer
             </BaseButton>
 
-            <!-- <BaseButton @click="displayImageUpload">Annuler</BaseButton> -->
-
-            <BaseButton
-              tag="button"
-              @click="displayImageUpload"
-              isCancelBtn
-            >
+            <BaseButton @click="displayImageUpload" tag="button" isCancelBtn>
               Annuler
             </BaseButton>
           </form>
         </div>
 
-        <!-- Modification du profil -->
-        <div
-          v-show="profilFormDisplayed"
-          class="popupform"
-          v-if="isOwner"
-        >
-          <FormProfilUpdate
-            v-if="isOwner"
-            @display-form="displayProfilForm()"
-            class="popup-form__form"
-          />
+        <!-- Formulaire popup pour modifier son profil -->
+        <div v-if="isOwner" v-show="profilFormDisplayed" class="popupform">
+          <FormProfilUpdate v-if="isOwner" @display-form="displayProfilForm()" class="popup-form__form" />
         </div>
 
-        <!-- Modification du mot de passe -->
-        <div
-          v-show="passwordFormDisplayed"
-          v-if="isOwner"
-          class="popupform"
-        >
+        <!-- Formulaire popup pour modifier son mot de passe -->
+        <div v-if="isOwner" v-show="passwordFormDisplayed" class="popupform">
           <FormPasswordUpdate
             v-if="isOwner"
             @display-form="displayPasswordFrom()"
@@ -228,121 +179,94 @@ export default {
       </div>
 
       <div class="options">
+        <!-- Bouton ... pour afficher les options -->
         <BaseButton
-          tag="button"
           @click="displayOptions()"
           @keydown.enter="displayOptions()"
+          tag="button"
           isDotsBtn
         >
           <font-awesome-icon icon="ellipsis-h" />
         </BaseButton>
 
-        <!-- <div
-          class="options__dots"
-          @keydown.enter="displayOptions"
-          @click="displayOptions"
-          tabindex="0"
-        >
-          <font-awesome-icon icon="ellipsis-h" />
-        </div> -->
-
+        <!-- Div options -->
         <div v-show="optionsDisplayed" class="options__dropdown">
+
+          <!-- Modifier sa photo de profil -->
           <BaseButton
             v-if="user.imageUrl"
-            tag="button"
             @click="displayImageUpload(), displayOptions()"
+            tag="button"
             isOptionBtn
           >
             <font-awesome-icon icon="camera" />
             Modifier la photo de profil
           </BaseButton>
-          <!-- <button v-if="user.imageUrl" @click="displayImageUpload" class="options__button">
-            <font-awesome-icon icon="camera" />
-            Modifier la photo de profil
-          </button> -->
 
+          <!-- Ajouter une photo de profil -->
           <BaseButton
             v-else
-            tag="button"
             @click="displayImageUpload(), displayOptions()"
+            tag="button"
             isOptionBtn
           >
             <font-awesome-icon icon="camera" />
             Ajouter une photo de profil
           </BaseButton>
-          <!-- <button v-else @click="displayImageUpload" class="options__button">
-            <font-awesome-icon icon="camera" />
-            Ajouter une photo de profil
-          </button> -->
 
+          <!-- Supprimer sa photo de profil -->
           <BaseButton
             v-if="user.imageUrl"
-            tag="button"
             @click="deleteProfilPicture(), displayOptions()"
+            tag="button"
             isOptionBtn
           >
             <font-awesome-icon icon="trash-alt" />
             Supprimer ma photo de profil
           </BaseButton>
-          <!-- <button v-if="user.imageUrl" class="options__button">
-            <font-awesome-icon icon="trash-alt" />
-            Supprimer ma photo de profil
-          </button> -->
 
+          <!-- Modifier son profil -->
           <BaseButton
             v-if="isOwner"
-            tag="button"
             @click="displayProfilForm(), displayOptions()"
+            tag="button"
             isOptionBtn
           >
             <font-awesome-icon icon="pencil-alt" />
             Modifier mon profil
           </BaseButton>
-          <!-- <button v-if="isOwner" @click="displayProfilForm" class="options__button">
-            <font-awesome-icon icon="pencil-alt" />
-            Modifier mon profil
-          </button> -->
 
+          <!-- Modifier son mot de passe -->
           <BaseButton
             v-if="isOwner"
-            tag="button"
             @click="displayPasswordFrom(), displayOptions()"
+            tag="button"
             isOptionBtn
           >
             <font-awesome-icon icon="lock" />
             Modifier mon mot de passe
           </BaseButton>
-          <!-- <button v-if="isOwner" @click="displayPasswordFrom" class="options__button">
-            <font-awesome-icon icon="lock" />
-            Modifier mon mot de passe
-          </button> -->
 
+          <!-- Supprimer son porfil -->
           <BaseButton
             v-if="isOwner || isAdmin"
-            tag="button"
             @click="deleteProfil(), displayOptions()"
+            tag="button"
             isOptionBtn
           >
             <font-awesome-icon icon="trash-alt" />
             Supprimer le profil
           </BaseButton>
-          <!-- <button v-if="isOwner || isAdmin" @click="deleteProfil" class="options__button">
-            <font-awesome-icon icon="trash-alt" />
-            Supprimer mon profil
-          </button> -->
-
         </div>
       </div>
-
-      
     </div>
 </template>
 
+
 <style scope lang="scss">
 .userinfos {
-  position: relative;
-  // width: 70%;
   @include flexbox(space-between, row, flex-start);
+  position: relative;
   margin: $marged-centered-margin;
   padding: 3rem;
 
