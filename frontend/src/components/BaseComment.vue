@@ -163,7 +163,7 @@ export default {
           <font-awesome-icon icon="ellipsis-h" />
         </div> -->
 
-        <div v-show="optionsDisplayed" class="options__dropdown">
+        <div v-show="optionsDisplayed" class="options__dropdown options__comment">
 
           <BaseButton
             v-if="isAllowed"
@@ -229,6 +229,10 @@ export default {
   margin: $marged-centered-margin;
   text-align: left;
 
+  @media screen and (max-width: $break-small) {
+    @include flexbox(center, column, flex-start);
+  }
+
   &__main {
     max-width: 90%;
     @include flexbox(space-between, row, center);
@@ -236,6 +240,13 @@ export default {
     padding: $base-padding;
     background-color: $base-color;
     border-radius: $medium-radius;
+
+    @media screen and (max-width: $break-small) {
+      max-width: 100%;
+      @include flexbox(flex-start, column, flex-start);
+      margin-right: 0;
+      margin-bottom: 0.5rem;
+    }
   }
 
   &__meta {
@@ -257,6 +268,14 @@ export default {
   &__content {
     max-width: 90%;
     word-wrap: break-word ;
+  }
+
+  &__likes {
+    padding: 1rem 0 1rem 2rem;
+
+    @media screen and (max-width: $break-small) {
+      padding: 0;
+    }
   }
 
   &__edit {

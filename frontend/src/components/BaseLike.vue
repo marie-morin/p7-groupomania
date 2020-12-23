@@ -96,7 +96,7 @@ export default {
 .likes {
   @include flexbox(flex-start, row, flex-start);
   position: relative;
-  padding: 1rem 0 1rem 2rem;
+  // padding: 1rem 0 1rem 2rem;
 
   &__icon {
     margin: 0 0.5rem 0 0;

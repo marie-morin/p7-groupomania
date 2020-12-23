@@ -220,12 +220,14 @@ export default {
     </div>
 
     <!-- Affichage des likes -->
-    <BaseLike
-      :item="post"
-      url-endpoint="posts"
-      rateMutation="ratePost"
-      setMutation="setPostLikes"
-    />
+    <div class="post__likes">
+      <BaseLike
+        :item="post"
+        url-endpoint="posts"
+        rateMutation="ratePost"
+        setMutation="setPostLikes"
+      />
+    </div>
 
     <!-- Section commentaires -->
     <SectionComments :post="post" />
@@ -299,9 +301,14 @@ export default {
   &__header {
     @include flexbox(space-between, row, center);
     padding: $base-padding;
+
+    @media screen and (max-width: $break-small) {
+      @include flexbox(flex-start, column-reverse, flex-start);
+    }
   }
 
   &__meta {
+    text-align: left;
     @include flexbox(flex-start, row, center);
 
     a {
@@ -316,7 +323,8 @@ export default {
   }
 
   &__title {
-    padding: 0 2rem; 
+    margin: 0 0 2rem 0;
+    padding-left: 2rem; 
   }
 
   &__content {
@@ -334,6 +342,10 @@ export default {
       max-height: 50rem;
       object-fit: cover;
     }
+  }
+
+  &__likes {
+    padding: 1rem 0 0 1.5rem;
   }
 }
 </style>

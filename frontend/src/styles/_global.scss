@@ -169,6 +169,15 @@
 
     z-index: 1;
   }
+
+  &__comment { 
+    @media screen and (max-width: $break-small) {
+      top: 4rem;
+      left: 0;
+      right: auto;
+    }
+
+  }
   
   // &__button {
   //   @include flexbox(flex-start, row, center);

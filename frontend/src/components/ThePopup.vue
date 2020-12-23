@@ -23,7 +23,7 @@ export default {
     },
 
     confirm() {
-      console.log("passitototo");
+      // console.log("passitototo");
 
       const origin = this.popup.origin;
 
@@ -80,6 +80,7 @@ export default {
 </script>
 
 <template>
+  <!-- <div class="popup" :class="{ 'popup__displayed' : }"> -->
   <div class="popup">
     <font-awesome-icon v-if="popup.intention == 'success'" icon="check-circle" class="popup__icon popup__icon--success"/>
     <font-awesome-icon v-else-if="popup.intention == 'alert'" icon="exclamation-circle" class="popup__icon popup__icon--warning"/>
