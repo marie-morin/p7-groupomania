@@ -53,13 +53,13 @@ export default {
 
     setFile(image) { this.file = image },
 
-    displayOptions() { this.optionsDisplayed = !this.optionsDisplayed },
+    displayOptions() { return this.optionsDisplayed = !this.optionsDisplayed },
 
-    displayImageUpload() { this.imageUploadDisplayed = !this.imageUploadDisplayed },
+    displayImageUpload() { return this.imageUploadDisplayed = !this.imageUploadDisplayed },
 
-    displayProfilForm() { this.profilFormDisplayed = !this.profilFormDisplayed },
+    displayProfilForm() { return this.profilFormDisplayed = !this.profilFormDisplayed },
 
-    displayPasswordFrom() { this.passwordFormDisplayed = !this.passwordFormDisplayed },
+    displayPasswordFrom() { return this.passwordFormDisplayed = !this.passwordFormDisplayed },
 
     addPicture() {
       let formData = new FormData();
@@ -115,6 +115,24 @@ export default {
       };
       this.$store.commit("displayPopup", contexte);
     },
+
+    // offClick(event) {
+    //   if (event.target.closest("#formProfilPictureUpdate") == null) {
+    //     this.displayImageUpload();
+    //   }
+    // },
+
+    offClick(event) {
+      if (event.target.closest("#formProfilUpdate") == null) {
+        this.displayProfilForm();
+      }
+    },
+
+    // offClick(event) {
+    //   if (event.target.closest("#formPasswordUpdate") == null) {
+    //     this.displayPasswordFrom();
+    //   }
+    // },
   },
 };
 </script>
@@ -142,9 +160,9 @@ export default {
       </div>
 
       <div>
-        <!-- Formulaire popup pur modifier sa photo de profil -->
-        <div v-if="imageUploadDisplayed" @submit.prevent="addPicture" class="popupform">
-          <form class="form popupform__form">
+        <!-- Formulaire popup pour modifier sa photo de profil -->
+        <div v-if="imageUploadDisplayed" class="popupform" @click="offClick">
+          <form class="form popupform__form" @submit.prevent="addPicture" id="formProfilPictureUpdate">
             <BaseButton @click="displayImageUpload" tag="button" isCloseBtn>
               <font-awesome-icon icon="times" />
             </BaseButton>
@@ -164,21 +182,22 @@ export default {
         </div>
 
         <!-- Formulaire popup pour modifier son profil -->
-        <div v-if="isOwner" v-show="profilFormDisplayed" class="popupform">
-          <FormProfilUpdate v-if="isOwner" @display-form="displayProfilForm()" class="popup-form__form" />
+        <div v-if="isOwner" v-show="profilFormDisplayed" class="popupform" @click="offClick('plouf')" id="plouf">
+          <FormProfilUpdate v-if="isOwner" @display-form="displayProfilForm()" class="popup-form__form" id="formProfilUpdate"/>
         </div>
 
         <!-- Formulaire popup pour modifier son mot de passe -->
-        <div v-if="isOwner" v-show="passwordFormDisplayed" class="popupform">
+        <div v-if="isOwner" v-show="passwordFormDisplayed" class="popupform" @click="offClick">
           <FormPasswordUpdate
             v-if="isOwner"
             @display-form="displayPasswordFrom()"
             class="popup-form__form"
+            id="formPasswordUpdate"
           />
         </div>
       </div>
 
-      <div class="options">
+      <div class="options" v-if="isOwner">
         <!-- Bouton ... pour afficher les options -->
         <BaseButton
           @click="displayOptions()"
@@ -194,7 +213,7 @@ export default {
 
           <!-- Modifier sa photo de profil -->
           <BaseButton
-            v-if="user.imageUrl"
+            v-if="isOwner && user.imageUrl"
             @click="displayImageUpload(), displayOptions()"
             tag="button"
             isOptionBtn
@@ -216,7 +235,7 @@ export default {
 
           <!-- Supprimer sa photo de profil -->
           <BaseButton
-            v-if="user.imageUrl"
+            v-if="isOwner && user.imageUrl"
             @click="deleteProfilPicture(), displayOptions()"
             tag="button"
             isOptionBtn

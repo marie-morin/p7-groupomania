@@ -76,6 +76,12 @@ export default {
 
     displayOptions() { this.optionsDisplayed = !this.optionsDisplayed },
 
+    offClick(event) {
+      if (event.target.closest("#formPostUpdate") == null) {
+        this.editPost();
+      }
+    },
+
     deletePost(id) {
       const contexte = {
         origin: "deletePost",
@@ -202,13 +208,20 @@ export default {
     <SectionComments :post="post" />
 
     <!-- Formulaire popup pour modifier son post -->
-    <div v-show="editing" class="popupform">
+    <div v-show="editing" class="popupform" @click="offClick">
       <form
         v-if="editing"
         @submit.prevent="updatePost"
         enctype="multipart/form-data"
         class="popup-form__form form"
+        id="formPostUpdate"
       >
+
+        <!-- Croix pour fermer le formulaire -->
+        <BaseButton @click="editPost()" tag="button" isCloseBtn>
+          <font-awesome-icon icon="times" />
+        </BaseButton>
+
         <div class="form__group">
           <input
             type="text"

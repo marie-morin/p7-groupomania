@@ -30,7 +30,7 @@ export default {
 
 
 <template>
-  <div class="container">
+  <div>
     <FormRegister :settings="settings" :user="user"/>
   </div>
 </template>

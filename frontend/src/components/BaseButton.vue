@@ -132,6 +132,7 @@ export default {
   cursor: pointer;
 
   &--block {
+    margin: 0.5rem;
     padding: 1rem 2rem;
     color: $clear-color;
     border-radius: $small-radius;
@@ -139,11 +140,11 @@ export default {
   }
 
   &--generic {
-    background-color: lighten($color: $secondary-color, $amount: 10);
+    background-color: lighten($color: $secondary-color, $amount: 20);
   }
 
   &--bigGreen {
-    background-color: lighten($color: $success-color, $amount: 10);
+    background-color: $success-color;
     display: block;
   }
 
@@ -179,6 +180,7 @@ export default {
     padding: 1rem 2rem;
     background-color: transparent;
     color: $police-color;
+    border-radius: $small-radius;
     text-transform: uppercase;
 
     svg {
@@ -198,12 +200,12 @@ export default {
     color: inherit;
 
     &:hover {
-      color: darken($color: $police-color, $amount: 10)
+      color: darken($color: $police-color, $amount: 10);
     }
   }
 
   &--link {
-    color: inherit;
+    color: $success-color;
     background-color: transparent;
       
     &:hover {

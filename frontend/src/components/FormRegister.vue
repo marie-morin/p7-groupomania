@@ -179,7 +179,7 @@ export default {
       <label for="bio" class="form__label">Biographie (optionnel)</label>
     </div>    
 
-    <BaseButton tag="button" nativeType="sumbit" isBigGreenBtn>
+    <BaseButton tag="button" nativeType="sumbit" isBigGreenBtn class="center">
       {{ settings.title }}
     </BaseButton>
 
@@ -194,4 +194,8 @@ export default {
 </template>
 
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.center {
+  margin: 0 auto;
+}
+</style>

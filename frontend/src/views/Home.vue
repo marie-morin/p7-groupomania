@@ -27,7 +27,13 @@ export default {
   methods:  {
     ...mapActions(["fetch"]),
 
-    displayPostCreationForm() { this.postCreationFormDisplayed = !this.postCreationFormDisplayed }
+    displayPostCreationForm() { this.postCreationFormDisplayed = !this.postCreationFormDisplayed },
+
+    offClick(event) {
+      if (event.target.closest("#formPostCreation") == null) {
+        this.displayPostCreationForm();
+      }
+    }
   }
 };
 </script>
@@ -35,14 +41,15 @@ export default {
 
 <template>
   <div class="home container">
-    <BaseButton @click="displayPostCreationForm" tag="button" isGenericBtn>
+    <BaseButton @click="displayPostCreationForm()" tag="button" isGenericBtn class="postCreationBtn">
       Créer une publication
     </BaseButton>
 
-    <div v-show="postCreationFormDisplayed" class="popupform">
+    <div v-show="postCreationFormDisplayed" class="popupform" @click="offClick">
       <FormPostCreation
         @display-form="displayPostCreationForm()"
         class="popup-form__form"
+        id="formPostCreation"
       />
     </div>
 
@@ -51,4 +58,8 @@ export default {
 </template>
 
 
-<style scope lang="scss"></style>
+<style scope lang="scss">
+.postCreationBtn {
+  margin-top: 2.5rem !important;
+}
+</style>

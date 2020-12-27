@@ -1,8 +1,28 @@
+.container {
+  max-width: 110rem;
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 4rem;
+  padding-left: 4rem;
+  
+  @media screen and (max-width: $break-tablet) {
+    padding-right: 2rem;
+    padding-left: 2rem;
+  }
+
+  @media screen and (max-width: $break-small) {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+}
+
 .form {
-    width: 70%;
+    max-width: 75rem;
+    width: 60%;
     position: relative;
     margin: $centered-margin;
-    padding: 5rem;
+    padding: 3rem 5rem;
 
     background-color: $clear-color;
     color: $police-color;
@@ -12,7 +32,7 @@
 
     text-align: center;
 
-    @media screen and (max-width: $break-small) {
+    @media screen and (max-width: $break-tablet + 100) {
       width: 85%
     }
 
@@ -22,12 +42,13 @@
     }
 
     &__title {
+      margin: 0;
       text-align: center;
     }
   
     &__group {
       position: relative;
-      margin: 1rem 0 3rem 0;
+      margin: 1rem 0 2rem 0;
       padding: 1.5rem 0 0;
     }
   
@@ -147,24 +168,5 @@
 
   &__form {
     background-color: $clear-color;
-  }
-}
-
-.container {
-  max-width: 110rem;
-  width: 100%;
-  margin-right: auto;
-  margin-left: auto;
-  padding-right: 4rem;
-  padding-left: 4rem;
-  
-  @media screen and (max-width: $break-tablet) {
-    padding-right: 2rem;
-    padding-left: 2rem;
-  }
-
-  @media screen and (max-width: $break-small) {
-    padding-right: 1rem;
-    padding-left: 1rem;
   }
 }

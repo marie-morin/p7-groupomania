@@ -42,17 +42,18 @@ export default {
 
 <style scope lang="scss">
 .avatar {
+  margin-right: 0.5rem;
 
   &__image {
     width: 3.5rem;
     height: 3.5rem;
-    margin-right: 1rem;
     border-radius: $round-radius;
     object-fit: cover;
 
     &--empty {
+      margin: 0 auto;
       @include flexbox(center, row, center);
-      background-color: $base-color;
+      background-color: darken($color: $base-color, $amount: 50);
       color: $clear-color;
       text-transform: uppercase;
     }

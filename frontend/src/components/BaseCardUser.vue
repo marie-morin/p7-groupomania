@@ -21,7 +21,7 @@ export default {
 
 <template>
   <router-link :to="{ name: 'Profil', params: { id: user.id } }" class="user">
-    <BaseAvatar :user="user" origin="comment" />
+    <BaseAvatar :user="user" origin="comment" class="center"/>
     {{ user.firstname }} {{ user.lastname }}
   </router-link>
 </template>
@@ -50,6 +50,10 @@ export default {
 
   &:active {
     box-shadow: $shadow;
+  }
+
+  .center {
+    margin: 0;
   }
 }
 </style>

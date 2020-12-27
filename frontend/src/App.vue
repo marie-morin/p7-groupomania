@@ -19,14 +19,14 @@ export default {
 
 
 <template>
-  <div id="app" class="app">
+  <main id="app" class="app">
     <div :class="{ fullheight: !isLoged }" class="app__topcontent">
       <TheHeader v-if="isLoged" />
       <router-view class="app__router"/>
       <ThePopup v-if="popup.isDisplayed" />
     </div>
     <TheFooter v-if="isLoged"/>
-  </div>
+  </main>
 </template>
 
 

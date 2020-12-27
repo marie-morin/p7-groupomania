@@ -95,7 +95,7 @@ export default {
 .imageSelection {
 
   &__label {
-    width: 50%;
+    width: 24rem;
     display: block;
     margin: $centered-margin;
     padding: $base-padding;
@@ -104,7 +104,7 @@ export default {
     color: $clear-color;
     
     border: none;
-    border-radius: $medium-radius;
+    border-radius: $small-radius;
     
     text-align: center;
     text-transform: uppercase;
@@ -127,6 +127,7 @@ export default {
     @include flexbox(center, row, center);
     background-color: $secondary-color;
     text-align: center;
+    margin: 1rem auto;
 
     img {
       max-width: 100%;

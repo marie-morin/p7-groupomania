@@ -5,7 +5,7 @@ export default { name: "TheFooter" };
 
 <template>
   <div class="footer">
-    <img src="../../public/images/icon-white.png" alt="Logo" class="footer__logo" />
+    <img src="../../public/images/icon-white.png" alt="Logo Groupomania" class="footer__logo" />
   </div> 
 </template>
 
