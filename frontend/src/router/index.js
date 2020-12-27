@@ -62,11 +62,20 @@ const routes = [
       requiresAuth: true,
     },
   },
+  {
+    path: "/*",
+    name: "404",
+    component: () => import("../views/NotFound.vue"),
+    meta: {
+      title: "Page introuvable - Groupamania",
+      requiresAuth: false,
+    },
+  },
 ];
 
 const router = new VueRouter({
-  routes,
   mode: "history",
+  routes,
 });
 
 // Avant chaque route, verification de connexon de l'utilisateur en recherchant un token en localStrage :
@@ -84,6 +93,16 @@ const router = new VueRouter({
 //          * si la réponse est positive, accès à la page recherchée
 
 router.beforeEach((to, from, next) => {
+  console.log("to : ", to);
+  console.log("to.name : ", to.name);
+  console.log("to 404 ? : ", to.name == "404");
+
+  if (to.name == 404) {
+    next();
+    return;
+  }
+  console.log("pass");
+
   document.title = to.meta.title;
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
 

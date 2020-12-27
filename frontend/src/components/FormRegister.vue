@@ -30,9 +30,7 @@ export default {
     ...mapActions(["registerUser"]),
 
     submitUser() {
-      console.log(this.settings.destination);
       if (this.settings.destination == "signup") {
-        // this.passwordConfirmed = true;
         if (this.user.email == "" || this.user.password == "") {
           const contexte = {
             intention: "alert",
@@ -43,7 +41,6 @@ export default {
           return;
         }
       } else {
-        console.log("pas");
         if (
           this.user.email == "" ||
           this.user.password == "" ||
@@ -52,7 +49,6 @@ export default {
           this.user.password == "" ||
           this.user.passwordConf == ""
         ) {
-          console.log("pas bon 0");
           const contexte = {
             intention: "alert",
             message:
@@ -67,40 +63,28 @@ export default {
           !this.contentValidation(this.user.firstname) ||
           !this.contentValidation(this.user.lastname)
         ) {
-          console.log("pas bon 1");
           return;
         }
 
         if ( !this.passwordConfirmation(this.user.password, this.user.passwordConf)) {
-          console.log("pas bon 2");
           this.passwordConfirmed == false;
           return;
         }
-        console.log("passito");
 
         if (this.user.bio != "") {
           if (!this.contentValidation(this.user.bio)) {
             return;
           }
         }
-
-        // this.passwordConfirmed = true;
       }
-
-      console.log("testouille");
 
       if (
         !this.emailValidation(this.user.email) ||
         !this.passwordValidation(this.user.password)
       ) {
-        console.log("pas bon 4");
         return;
       }
 
-      console.log("testiflouf");
-
-      console.log(this.passwordConfirmed);
-      
       if (this.passwordConfirmed) {
         const data = { user: this.user, url: this.settings.urlPost };
         this.registerUser(data);
