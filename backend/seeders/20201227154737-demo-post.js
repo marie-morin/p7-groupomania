@@ -2,15 +2,78 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkInsert("People", [{}], {});
+    const date = new Date();
+
+    await queryInterface.bulkInsert(
+      "Posts",
+      [
+        {
+          id: 1,
+          userId: 4,
+          imageUrl: "test",
+          title:
+            "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...",
+          createdAt: date,
+          updatedAt: date,
+        },
+        {
+          id: 2,
+          userId: 3,
+          imageUrl: "test",
+          title: "Vestibulum porttitor hendrerit mauris sed sodales !",
+          createdAt: date,
+          updatedAt: date,
+        },
+        {
+          id: 3,
+          userId: 2,
+          imageUrl: "test",
+          title:
+            "Vestibulum scelerisque quam ac dolor egestas vehicula. Cras placerat neque sollicitudin accumsan laoreet. Ut eu.",
+          createdAt: date,
+          updatedAt: date,
+        },
+        {
+          id: 4,
+          userId: 1,
+          imageUrl: "test",
+          title:
+            "Nulla eu consequat mauris, ac mattis arcu. Nulla at velit et justo pharetra elementum eu a lectus. Vivamus lacus dui, finibus interdum vestibulum vitae, tempus sed leo. Pellentesque molestie purus.",
+          createdAt: date,
+          updatedAt: date,
+        },
+        {
+          id: 5,
+          userId: 4,
+          imageUrl: "test",
+          title: "Fusce at interdum !",
+          createdAt: date,
+          updatedAt: date,
+        },
+        {
+          id: 6,
+          userId: 3,
+          imageUrl: "test",
+          title:
+            "Aenean felis arcu, egestas sed auctor sed, condimentum quis quam. Vivamus vel dui commodo quam tincidunt malesuada a nec nisl. Maecenas eget !",
+          createdAt: date,
+          updatedAt: date,
+        },
+        {
+          id: 7,
+          userId: 5,
+          imageUrl: "test",
+          title:
+            "Sed sed erat diam. Donec eget neque diam. Nam sed volutpat nulla. Curabitur turpis neque, volutpat nec placerat.",
+          createdAt: date,
+          updatedAt: date,
+        },
+      ],
+      {}
+    );
   },
 
   down: async (queryInterface, Sequelize) => {
-    /**
-     * Add commands to revert seed here.
-     *
-     * Example:
-     * await queryInterface.bulkDelete('People', null, {});
-     */
+    await queryInterface.bulkDelete("Posts", null, {});
   },
 };
