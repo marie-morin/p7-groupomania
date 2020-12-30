@@ -140,6 +140,7 @@ export default {
         @keydown.enter="displayOptions()"
         tag="button"
         isDotsBtn
+        aria-label="Options"
       >
         <font-awesome-icon icon="ellipsis-h" />
       </BaseButton>

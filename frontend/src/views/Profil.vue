@@ -73,6 +73,9 @@ export default {
     <InfosUser v-if="isOwner" :is-owner="isOwner" :user="currentUser" />
     <InfosUser v-else :is-owner="isOwner" :user="guest" />
 
+    <h2 v-if="isOwner" class="profil__subtitle">Les publications de {{ currentUser.firstname }}</h2>
+    <h2 v-else class="profil__subtitle">Les publications de {{ guest.firstname }}</h2>
+
     <div v-for="post in posts" :key="post.id">
       <BasePost :post="post" />
     </div>
@@ -83,5 +86,9 @@ export default {
 <style scope lang="scss">
 .profil {
   position: relative;
+
+  &__subtitle {
+    font-weight: 400;
+  }
 }
 </style>

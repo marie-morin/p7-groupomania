@@ -41,12 +41,13 @@ export default {
 
 <template>
   <div class="home container">
+    <h1 class="title">Vos actualités</h1>
+
     <BaseButton
       @click="displayPostCreationForm()"
       
       tag="button"
       isGenericBtn
-      class="postCreationBtn"
       tabindex="0"
     >
       Créer une publication
@@ -69,7 +70,7 @@ export default {
 
 
 <style scope lang="scss">
-.postCreationBtn {
-  margin-top: 2.5rem !important;
+.title {
+  font-weight: 400;
 }
 </style>

@@ -47,6 +47,7 @@ export default {
           tag="router-link"
           isNavBtn
           :class="{ active : selectedPage == 'home' }"
+          aria-label="Accueil"
         >
           <font-awesome-icon icon="home" />
         </BaseButton>
@@ -57,6 +58,7 @@ export default {
           tag="router-link"
           isNavBtn
           :class="{ active : selectedPage == 'users' }"
+          aria-label="Utilisateurs"
         >
           <font-awesome-icon icon="users" />
         </BaseButton>
@@ -67,6 +69,7 @@ export default {
           tag="router-link"
           isNavBtn
           :class="{ active : selectedPage == 'profil' }"
+          aria-label="Profil"
         >
           <font-awesome-icon icon="user-circle" />
         </BaseButton>
@@ -75,8 +78,9 @@ export default {
           @click.prevent="logout"
           tag="button"
           isNavBtn
+          aria-label="Deconnexion"
         >
-          <font-awesome-icon icon="power-off" />
+          <font-awesome-icon icon="power-off"/>
         </BaseButton>
       </nav>
     </div>

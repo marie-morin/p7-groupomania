@@ -26,10 +26,15 @@ export default {
 
 <template>
   <div class="users container">
+    <h1 class="title">L'équipe Groupomania</h1>
     <BaseSearch :items="allUsers" />
     <BaseCardUser v-for="user in allUsers" :key="user.id" :user="user"/>
   </div>
 </template>
 
 
-<style scope lang="scss"></style>
+<style scope lang="scss">
+.title {
+  font-weight: 400;
+}
+</style>

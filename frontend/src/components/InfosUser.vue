@@ -147,14 +147,14 @@ export default {
         <BaseAvatar :user="user" origin="profil" />
 
         <div class="userinfos__meta">
-          <p>
+          <h1>
             <span class="userinfos__name">
               {{ user.firstname }} {{ user.lastname }}
             </span> 
             <span v-if="isOwner">
               ({{ user.email }})
             </span>
-          </p>
+          </h1>
           <p v-if="user.isAdmin">Vous êtes administrateur.</p>
           <p v-if="user.bio">" {{ user.bio }} "</p>
           <p v-else>Aucun biographie n'a été renseignée !</p>
@@ -216,6 +216,7 @@ export default {
           @keydown.enter="displayOptions()"
           tag="button"
           isDotsBtn
+          aria-label="Options"
         >
           <font-awesome-icon icon="ellipsis-h" />
         </BaseButton>
@@ -319,6 +320,10 @@ export default {
 
   &__meta {
     text-align: left;
+
+    span {
+      font-weight: 400;
+    }
     
     @media screen and (max-width: $break-tablet) {
       text-align: center;

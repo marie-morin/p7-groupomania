@@ -42,6 +42,7 @@ export default {
 
 <template>
   <div class="search">
+    <label for="search" class="search__label">Rechercher un utilisateur</label>
     <input type="text" id="search" placeholder="Rechercher un utilisateur..." @input="search" class="search__input" />
 
     <div class="search__results" :class="{ display : matcheditems.length > 0 }">
@@ -55,6 +56,10 @@ export default {
 .search {
   width: 100%;
   position: relative;
+
+  &__label {
+    display: none;
+  }
 
   &__input {
     width: 30rem;
