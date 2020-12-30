@@ -43,7 +43,6 @@ export default {
       } else {
         if (
           this.user.email == "" ||
-          this.user.password == "" ||
           this.user.firstname == "" ||
           this.user.lastname == "" ||
           this.user.password == "" ||
@@ -59,7 +58,7 @@ export default {
         }
 
         if (
-          !this.passwordValidation(this.user.passwordConf) ||
+          !this.passwordValidation(this.user.password) ||
           !this.contentValidation(this.user.firstname) ||
           !this.contentValidation(this.user.lastname)
         ) {

@@ -41,7 +41,14 @@ export default {
 
 <template>
   <div class="home container">
-    <BaseButton @click="displayPostCreationForm()" tag="button" isGenericBtn class="postCreationBtn">
+    <BaseButton
+      @click="displayPostCreationForm()"
+      
+      tag="button"
+      isGenericBtn
+      class="postCreationBtn"
+      tabindex="0"
+    >
       Créer une publication
     </BaseButton>
 
@@ -53,7 +60,10 @@ export default {
       />
     </div>
 
-    <BasePost v-for="post in allPosts" :key="post.id" :post="post" />
+    <div v-if="allPosts.length">
+      <BasePost v-for="post in allPosts" :key="post.id" :post="post" />
+    </div>
+    <p v-else> Aucune publication a afficher !</p>
   </div>
 </template>
 

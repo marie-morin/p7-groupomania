@@ -33,7 +33,9 @@ const actions = {
           "Bearer " + localStorage.getItem("jwt").replace(/['"']+/g, ""),
       },
     });
-    commit(item.mutation, response.data);
+    if (!response.data.message) {
+      commit(item.mutation, response.data);
+    }
   },
 
   async add({ commit }, item) {
@@ -67,6 +69,7 @@ const actions = {
         },
       }
     );
+
     const rate = {
       response: response,
       itemId: item.id,
@@ -75,14 +78,42 @@ const actions = {
     commit(item.mutation, rate);
   },
 
-  async update({ commit }, item) {
-    const response = await axios.put(item.url, item.data, {
-      headers: {
-        Authorization:
-          "Bearer " + localStorage.getItem("jwt").replace(/['"']+/g, ""),
-      },
-    });
-    commit(item.mutation, response.data);
+  // async update({ commit }, item) {
+  //   const response = await axios.put(item.url, item.data, {
+  //     headers: {
+  //       Authorization:
+  //         "Bearer " + localStorage.getItem("jwt").replace(/['"']+/g, ""),
+  //     },
+  //   });
+  //   commit(item.mutation, response.data);
+  // },
+
+  update({ commit }, item) {
+    axios
+      .put(item.url, item.data, {
+        headers: {
+          Authorization:
+            "Bearer " + localStorage.getItem("jwt").replace(/['"']+/g, ""),
+        },
+      })
+      .then((response) => {
+        commit(item.mutation, response.data);
+      })
+      .catch((error) => {
+        if (error.response) {
+          const contexte = {
+            intention: "alert",
+            message: "",
+          };
+          if (error.response.status === 403) {
+            contexte.message =
+              "Le mot de passe est invalide ou vous n'êtes pas autorisé à effectuer cette action !";
+          } else {
+            contexte.message = "Une erreur est survenu";
+          }
+          commit("displayPopup", contexte);
+        }
+      });
   },
 };
 

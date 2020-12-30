@@ -134,6 +134,7 @@ export default {
       this.update(options);
       this.wasPosted = true;
       this.editing = false;
+      this.file = null;
     },
   },
 };
@@ -148,12 +149,11 @@ export default {
         <BaseAvatar :user="post.User" origin="post" />
         <p>
           <BaseButton :to="{ name: 'Profil', params: { id: post.UserId } }" tag="router-link" isLink>
-            {{ post.User.username }}
-          </BaseButton>, {{ wasPublished }}.
+            {{post.User.username}}</BaseButton>, {{ wasPublished }}.
         </p>
       </div>
 
-      <div class="options">
+      <div v-if="isCreator || isAllowed" class="options">
         <!-- Bouton ... pour afficher les options -->
         <BaseButton
           @click="displayOptions()"
@@ -232,7 +232,7 @@ export default {
             @keyup.enter="updatePost()"
             class="form__field"
           />
-          <label for="title" class="form__label">Modifier votre title</label>
+          <label for="title" class="form__label">Modifier votre titre</label>
         </div>
 
         <label for="upload">Nouvelle image</label>

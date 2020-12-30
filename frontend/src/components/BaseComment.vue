@@ -62,7 +62,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(["fetch", "update"]),
+    ...mapActions(["update"]),
 
     editComment() { this.editing = !this.editing },
 
@@ -93,7 +93,7 @@ export default {
         return;
       }
 
-      if (this.contentValidation(this.updatedComment.content)) {
+      if (!this.contentValidation(this.updatedComment.content)) {
         return;
       }
       
@@ -119,8 +119,7 @@ export default {
       <div class="comment__content">
         <p class="comment__meta">
           <BaseButton :to="{ name: 'Profil', params: { id: comment.UserId } }" tag="router-link" isLink>
-          {{ comment.User.username }}
-          </BaseButton>, {{ wasPublished }}.
+          {{comment.User.username}}</BaseButton>, {{ wasPublished }}.
         </p>
         {{ comment.content }}
       </div>
@@ -134,7 +133,7 @@ export default {
       </div>
     </div>
 
-    <div class="options relative" :class="{ hide : editing }">
+    <div v-if="isCreator || isAllowed" class="options relative" :class="{ hide : editing }">
       <!-- Bouton ... pour afficher les options -->
       <BaseButton
         @click="displayOptions()"

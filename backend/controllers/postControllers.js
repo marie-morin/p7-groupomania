@@ -1,7 +1,7 @@
 const models = require("../models");
 const jwt = require("../utils/jwtValidator");
 const fs = require("fs");
-const regex = /^[A-Za-z\d\s.,;:!?"()/%-_']*$/;
+const regex = /^[A-Za-z\d\s.,;:!?"()/%-_'éèêëà#@ô^öù*ç€$£≠÷°]*$/;
 
 exports.addPost = (req, res) => {
   const data = JSON.parse(req.body.title);

@@ -54,6 +54,7 @@ export default {
       this.add(options);
       this.newPostTitle = "";
       this.wasPosted = true;
+      this.file = null;
       this.$emit("display-form");
     },
   },

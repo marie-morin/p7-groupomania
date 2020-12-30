@@ -81,7 +81,14 @@ export default {
     />
 
     <!-- Nombre de likes -->
-    <p @mouseover="showUsers = true" @mouseout="showUsers = false" class="likes__amout">
+    <p
+      @mouseover="showUsers = true"
+      @mouseout="showUsers = false"
+      @focus="showUsers = true"
+      @blur="showUsers = false"
+      class="likes__amout"
+      tabindex="0"
+    >
       {{ item.likes.length }}
     </p>
 

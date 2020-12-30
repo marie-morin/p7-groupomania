@@ -39,6 +39,8 @@ const actions = {
           } else if (error.response.status === 409) {
             contexte.message =
               "Cette adresse mail est déjà attribuée à un compte !";
+          } else {
+            contexte.message = "Une erreur est survenu";
           }
           commit("displayPopup", contexte);
         }
@@ -62,7 +64,7 @@ const actions = {
     router.push("Home");
     const contexte = {
       intention: "success",
-      message: `Bienvenue ${state.user.username} !`,
+      message: `Bienvenue ${state.user.firstname} !`,
     };
     commit("displayPopup", contexte);
   },

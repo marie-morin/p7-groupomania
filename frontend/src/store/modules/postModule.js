@@ -46,7 +46,7 @@ const mutations = {
     state.posts.forEach((post) => {
       if (post.id === rate.itemId) {
         if (rate.response.status == 200) {
-          post.likes.push(rate);
+          post.likes.push(rate.response.data);
         } else {
           post.likes = post.likes.filter((like) => like.userId !== rate.userId);
         }

@@ -84,7 +84,7 @@ export default {
         id="email"
         name="email"
         placeholder="Mon adresse email..."
-        required
+        
         v-model="user.email"
         class="form__field"
       />
@@ -98,7 +98,7 @@ export default {
         id="firstname"
         name="firstname"
         placeholder="Mon prenom..."
-        required
+        
         v-model="user.firstname"
         class="form__field"
       />
@@ -112,7 +112,7 @@ export default {
         id="lastname"
         name="lastname"
         placeholder="Mon nom..."
-        required
+        
         v-model="user.lastname"
         class="form__field"
       />

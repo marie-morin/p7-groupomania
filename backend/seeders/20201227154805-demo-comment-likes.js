@@ -66,7 +66,7 @@ module.exports = {
         {
           id: 9,
           commentId: 12,
-          userId: 7,
+          userId: 5,
           createdAt: date,
           updatedAt: date,
         },
@@ -136,7 +136,7 @@ module.exports = {
         {
           id: 19,
           commentId: 14,
-          userId: 7,
+          userId: 5,
           createdAt: date,
           updatedAt: date,
         },

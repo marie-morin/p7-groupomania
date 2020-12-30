@@ -17,6 +17,7 @@ export default {
     return {
       imagePreview: null,
       file: null,
+      isFocused: false, 
     };
   },
 
@@ -28,6 +29,7 @@ export default {
   },
 
   methods: {
+
     selectFile(event) {      
       if (event.target.files.length < 1) { return }
       
@@ -71,7 +73,7 @@ export default {
 
 <template>
   <div class="imageSelection">
-    <label :for="inputfile" class="imageSelection__label">
+    <label :for="inputfile" class="imageSelection__label" :class="{ focused : isFocused }">
       Choisez un fichier
     </label>
 
@@ -81,7 +83,8 @@ export default {
       type="file"
       accept="image/png, image/jpg, image/jpeg, image/gif"
       @change="selectFile($event)"
-      tabindex="0"
+      @focus="isFocused = true"
+      @blur="isFocused = false"
     />
 
     <div v-show="imagePreview" class="imageSelection__preview">
@@ -147,5 +150,9 @@ export default {
   overflow: hidden;
   white-space: nowrap;
   cursor: pointer;
+}
+
+.focused {
+  outline: solid blue;
 }
 </style>

@@ -1,6 +1,7 @@
+const emailRegex = /^(([^<>()[\].,;:\s@"'*]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%?]{6,}$/;
-const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const regex = /^[a-zA-Z0-9\s-_.,!?()"]+$/;
+const regex = /^[A-Za-z\d\s.,;:!?"()/%-_'éèêëà#@ô^öù*ç€$£≠÷°]*$/;
 
 export default {
   methods: {
@@ -34,7 +35,7 @@ export default {
       if (!regex.test(input)) {
         const contexte = {
           intention: "alert",
-          message: `Le mot de passe doit comporter au moins 8 caractères, une majuscule, une minuscule, une lettre et un chiffre. Seuls les caractères spéciaux suivants sont autorisée : @ $ ! % ?`,
+          message: `Seuls les caractères spéciaux suivants sont autorisée : . , ; : ! ? () @ " ' é è ê ë à ô ö ù ç € $ £ # ≠ ÷ % - _ * / ^ °`,
         };
         this.$store.commit("displayPopup", contexte);
         return false;

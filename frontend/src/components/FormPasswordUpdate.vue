@@ -1,11 +1,14 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
+import formValidation from "../mixins/formValidation";
 import BaseButton from "@/components/BaseButton";
 
 export default {
   name: "FormProfilUpdate",
 
   components: { BaseButton },
+
+  mixins: [formValidation],
 
   data() {
     return {
@@ -31,7 +34,6 @@ export default {
 
     updatePassword() {
       if (
-        this.updatedPassword == "" ||
         this.updatedPassword.initialMdp == "" ||
         this.updatedPassword.newMdp == "" ||
         this.updatedPassword.newMdpConf == ""
@@ -46,9 +48,9 @@ export default {
       }
 
       if (
-        this.passwordValidation(this.updatedPassword.initialMdp) ||
-        this.passwordValidation(this.updatedPassword.newMdp) ||
-        this.passwordConfirmation(this.updatedPassword.newMdp, this.updatedPassword.newMdpConf)
+        !this.passwordValidation(this.updatedPassword.initialMdp) ||
+        !this.passwordValidation(this.updatedPassword.newMdp) ||
+        !this.passwordConfirmation(this.updatedPassword.newMdp, this.updatedPassword.newMdpConf)
       ) {
         return;
       }

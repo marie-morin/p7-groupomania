@@ -4,9 +4,10 @@ const fs = require("fs");
 
 const bcrypt = require("bcrypt");
 
-const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const emailRegex = /^(([^<>()\[\]\\.,;:\s@"']+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%?]{6,}$/;
-const regex = /^[A-Za-z\d\s.,;:!?"()/%-_']*$/;
+
+const regex = /^[A-Za-z\d\s.,;:!?"()/%-_'éèêëà#@ô^öù*ç€$£≠÷°]*$/;
 
 exports.signup = (req, res, next) => {
   const data = JSON.parse(req.body.data);
@@ -38,7 +39,7 @@ exports.signup = (req, res, next) => {
         .then((user) => {
           res.status(200).json({ token: jwt.generateToken(user.dataValues) });
         })
-        .catch((error) => res.status(409).json(error));
+        .catch((error) => res.status(404).json(error));
     });
   }
 };
@@ -177,7 +178,7 @@ exports.updateProfilPicture = (req, res, next) => {
     models.User.findOne({ where: { id: userId } })
       .then((user) => {
         if (user.id === userId) {
-          if (user.imageUrl != null) {
+          if (user.imageUrl) {
             // Supprimer l'ancienne image du server
             const filename = user.imageUrl.split("/images/")[1];
             fs.unlink(`images/${filename}`, (err) => {

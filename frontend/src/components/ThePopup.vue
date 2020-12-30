@@ -64,7 +64,7 @@ export default {
           }
           break;
         default:
-          console.log(`Error`);
+          notifyContexte.message = "Un errer est survenu !";
       }
       this.$store.commit("displayPopup", notifyContexte);
       setTimeout(() => this.$store.commit("hidePopup"), 5000);
@@ -82,7 +82,7 @@ export default {
     <font-awesome-icon v-else icon="question-circle" class="popup__icon popup__icon--warning"/>
 
     <!-- Croix pour fermer le formulaire -->
-    <BaseButton @click="hidePopup" tag="button" isCloseBtn>
+    <BaseButton @click="hidePopup" tag="button" isCloseBtn tabindex="1">
       <font-awesome-icon icon="times" />
     </BaseButton>
 

@@ -115,7 +115,6 @@ export default {
     :type="tag === 'button' ? nativeType : ''"
     :to="to"
     @click="handleClick"
-    @keydown.enter="handleClick"
     class="btn"
     :class="classes"
   >
