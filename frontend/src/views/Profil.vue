@@ -73,8 +73,10 @@ export default {
     <InfosUser v-if="isOwner" :is-owner="isOwner" :user="currentUser" />
     <InfosUser v-else :is-owner="isOwner" :user="guest" />
 
-    <h2 v-if="isOwner" class="profil__subtitle">Les publications de {{ currentUser.firstname }}</h2>
-    <h2 v-else class="profil__subtitle">Les publications de {{ guest.firstname }}</h2>
+    <div v-if="posts.length">
+      <h2 v-if="isOwner" class="profil__subtitle">Les publications de {{ currentUser.firstname }}</h2>
+      <h2 v-else class="profil__subtitle">Les publications de {{ guest.firstname }}</h2>
+    </div>
 
     <div v-for="post in posts" :key="post.id">
       <BasePost :post="post" />

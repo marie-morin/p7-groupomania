@@ -35,6 +35,7 @@ export default {
 <template>
   <div class="header">
     <div class="container header__content">
+      
       <div class="header__welcome">
         <BaseAvatar :user="currentUser" origin="header" />
         <p>{{ currentUser.firstname }} {{ currentUser.lastname }}</p>

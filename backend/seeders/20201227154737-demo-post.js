@@ -10,7 +10,7 @@ module.exports = {
         {
           id: 1,
           userId: 4,
-          imageUrl: "http://localhost:3000/images-test/usa.jpg",
+          imageUrl: "http://localhost:3000/images/test_usa.jpg",
           title:
             "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...",
           createdAt: date,
@@ -19,7 +19,7 @@ module.exports = {
         {
           id: 2,
           userId: 3,
-          imageUrl: "http://localhost:3000/images-test/dog.jpg",
+          imageUrl: "http://localhost:3000/images/test_dog.jpg",
           title: "Vestibulum porttitor hendrerit mauris sed sodales !",
           createdAt: date,
           updatedAt: date,
@@ -27,7 +27,7 @@ module.exports = {
         {
           id: 3,
           userId: 2,
-          imageUrl: "http://localhost:3000/images-test/beach.jpg",
+          imageUrl: "http://localhost:3000/images/test_beach.jpg",
           title:
             "Vestibulum scelerisque quam ac dolor egestas vehicula. Cras placerat neque sollicitudin accumsan laoreet. Ut eu.",
           createdAt: date,
@@ -36,7 +36,7 @@ module.exports = {
         {
           id: 4,
           userId: 1,
-          imageUrl: "http://localhost:3000/images-test/friends.gif",
+          imageUrl: "http://localhost:3000/images/test_friends.gif",
           title:
             "Nulla eu consequat mauris, ac mattis arcu. Nulla at velit et justo pharetra elementum eu a lectus. Vivamus lacus dui, finibus interdum vestibulum vitae, tempus sed leo. Pellentesque molestie purus.",
           createdAt: date,
@@ -45,7 +45,7 @@ module.exports = {
         {
           id: 5,
           userId: 4,
-          imageUrl: "http://localhost:3000/images-test/happ_new_year.gif",
+          imageUrl: "http://localhost:3000/images/test_happ_new_year.gif",
           title: "Fusce at interdum !",
           createdAt: date,
           updatedAt: date,
@@ -53,7 +53,7 @@ module.exports = {
         {
           id: 6,
           userId: 3,
-          imageUrl: "http://localhost:3000/images-test/snow.gif",
+          imageUrl: "http://localhost:3000/images/test_snow.gif",
           title:
             "Aenean felis arcu, egestas sed auctor sed, condimentum quis quam. Vivamus vel dui commodo quam tincidunt malesuada a nec nisl. Maecenas eget !",
           createdAt: date,
@@ -62,7 +62,7 @@ module.exports = {
         {
           id: 7,
           userId: 5,
-          imageUrl: "http://localhost:3000/images-test/the_office.gif",
+          imageUrl: "http://localhost:3000/images/test_the_office.gif",
           title:
             "Sed sed erat diam. Donec eget neque diam. Nam sed volutpat nulla. Curabitur turpis neque, volutpat nec placerat.",
           createdAt: date,
