@@ -24,7 +24,7 @@ export default {
   watch: {
     wasPosted() {
       this.imagePreview = null;
-      this.$refs.this.inputfile.value = "";
+      document.getElementById(this.inputfile).value = "";
     },
   },
 
@@ -88,7 +88,7 @@ export default {
     />
 
     <div v-show="imagePreview" class="imageSelection__preview">
-      <img  :src="imagePreview" />
+      <img :src="imagePreview" />
     </div>
   </div>
 </template>
