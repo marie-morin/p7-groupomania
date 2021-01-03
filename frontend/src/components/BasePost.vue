@@ -134,6 +134,7 @@ export default {
 
     onClose(){
       this.optionsDisplayed = false;
+      this.editing = false;
     },
   },
 };
@@ -186,6 +187,7 @@ export default {
             @click="editPost(), displayOptions()"
             tag="button"
             isOptionBtn
+            class="openPostUpdate"
           >
             <font-awesome-icon icon="pencil-alt" />
             Modifier votre post
@@ -219,9 +221,8 @@ export default {
         @submit.prevent="updatePost"
         enctype="multipart/form-data"
         class="popup-form__form form"
-        id="formPostUpdate"
+        v-outside-click="{ exclude: ['openPostUpdate'], handler: onClose }"
       >
-
         <!-- Croix pour fermer le formulaire -->
         <BaseButton @click="editPost()" tag="button" isCloseBtn>
           <font-awesome-icon icon="times" />

@@ -118,17 +118,11 @@ export default {
       this.$store.commit("displayPopup", contexte);
     },
 
-    offClick(event) {
-      if (event.target.closest(".elementToClose") == null) {
-        this.optionsDisplayed = false;
-        this.imageUploadDisplayed = false;
-        this.profilFormDisplayed = false;
-        this.passwordFormDisplayed = false;
-      }
-    },
-
     onClose(){
       this.optionsDisplayed = false;
+      this.imageUploadDisplayed = false;
+      this.profilFormDisplayed = false;
+      this.passwordFormDisplayed = false;
     },
   },
 };
@@ -158,14 +152,12 @@ export default {
 
       <div>
         <!-- Formulaire popup pour modifier sa photo de profil -->
-
-        <div
-          v-if="imageUploadDisplayed"
-          class="popupform"
-          @click="offClick"
-        >
-
-          <form @submit.prevent="addPicture" class="form popupform__form elementToClose">
+        <div v-if="imageUploadDisplayed" class="popupform">
+          <form
+            @submit.prevent="addPicture"
+            class="form popupform__form"
+            v-outside-click="{ exclude: [classname], handler: onClose }"
+          >
             <BaseButton @click="displayImageUpload" tag="button" isCloseBtn>
               <font-awesome-icon icon="times" />
             </BaseButton>
@@ -185,16 +177,22 @@ export default {
         </div>
 
         <!-- Formulaire popup pour modifier son profil -->
-        <div v-if="isOwner" v-show="profilFormDisplayed" class="popupform" @click="offClick">
-          <FormProfilUpdate v-if="isOwner" @display-form="displayProfilForm()" class="popup-form__form elementToClose"/>
+        <div v-if="isOwner" v-show="profilFormDisplayed" class="popupform">
+          <FormProfilUpdate
+            v-if="isOwner"
+            @display-form="displayProfilForm()"
+            class="popup-form__form"
+            v-outside-click="{ exclude: [classname], handler: onClose }"
+          />
         </div>
 
         <!-- Formulaire popup pour modifier son mot de passe -->
-        <div v-if="isOwner" v-show="passwordFormDisplayed" class="popupform" @click="offClick">
+        <div v-if="isOwner" v-show="passwordFormDisplayed" class="popupform">
           <FormPasswordUpdate
             v-if="isOwner"
             @display-form="displayPasswordFrom()"
             class="popup-form__form elementToClose"
+            v-outside-click="{ exclude: [classname], handler: onClose }"
           />
         </div>
       </div>
@@ -225,6 +223,7 @@ export default {
             @click="displayImageUpload(), displayOptions()"
             tag="button"
             isOptionBtn
+            :class="classname"
           >
             <font-awesome-icon icon="camera" />
             Modifier la photo de profil
@@ -236,6 +235,7 @@ export default {
             @click="displayImageUpload(), displayOptions()"
             tag="button"
             isOptionBtn
+            :class="classname"
           >
             <font-awesome-icon icon="camera" />
             Ajouter une photo de profil
@@ -258,6 +258,7 @@ export default {
             @click="displayProfilForm(), displayOptions()"
             tag="button"
             isOptionBtn
+            :class="classname"
           >
             <font-awesome-icon icon="pencil-alt" />
             Modifier mon profil
@@ -269,6 +270,7 @@ export default {
             @click="displayPasswordFrom(), displayOptions()"
             tag="button"
             isOptionBtn
+            :class="classname"
           >
             <font-awesome-icon icon="lock" />
             Modifier mon mot de passe

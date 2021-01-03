@@ -142,6 +142,8 @@ exports.deletePost = (req, res) => {
     models.Post.findOne({ where: { id: req.params.id } })
       .then((post) => {
         if (post.userId == userId || isAdmin) {
+          console.log("--------- delete post");
+          console.log("post.imageUrl : ", post.imageUrl);
           if (post.imageUrl) {
             // Supprimer l'image du server
             const filename = post.imageUrl.split("/images/")[1];

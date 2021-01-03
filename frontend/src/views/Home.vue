@@ -29,11 +29,15 @@ export default {
 
     displayPostCreationForm() { this.postCreationFormDisplayed = !this.postCreationFormDisplayed },
 
-    offClick(event) {
-      if (event.target.closest(".elementToClose") == null) {
-        this.postCreationFormDisplayed = false;
-      }
+    onClose(){
+      this.postCreationFormDisplayed = false;
     },
+
+    // offClick(event) {
+    //   if (event.target.closest(".elementToClose") == null) {
+    //     this.postCreationFormDisplayed = false;
+    //   }
+    // },
   }
 };
 </script>
@@ -48,12 +52,22 @@ export default {
       tag="button"
       isGenericBtn
       tabindex="0"
+      class="openPostCreationFrom"
     >
       Créer une publication
     </BaseButton>
 
-    <div v-show="postCreationFormDisplayed" class="popupform" @click="offClick">
-      <FormPostCreation @display-form="displayPostCreationForm()" class="popup-form__form elementToClose" />
+    <!-- <div v-show="postCreationFormDisplayed" class="popupform" @click="offClick"> -->
+
+    <div
+      v-show="postCreationFormDisplayed"
+      class="popupform"
+    >
+      <FormPostCreation
+        @display-form="displayPostCreationForm()"
+        class="popup-form__form"
+        v-outside-click="{ exclude: ['openPostCreationFrom'], handler: onClose }"
+      />
     </div>
 
     <div v-if="allPosts.length">

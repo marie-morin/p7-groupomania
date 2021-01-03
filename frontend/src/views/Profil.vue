@@ -77,6 +77,10 @@ export default {
       <h2 v-if="isOwner" class="profil__subtitle">Les publications de {{ currentUser.firstname }}</h2>
       <h2 v-else class="profil__subtitle">Les publications de {{ guest.firstname }}</h2>
     </div>
+    <div v-else>
+      <p v-if="isOwner" class="profil__subtitle">{{ currentUser.firstname }} n'a encore rien publié !</p>
+      <p v-else class="profil__subtitle">{{ guest.firstname }} n'a encore rien publié !</p>
+    </div>
 
     <div v-for="post in posts" :key="post.id">
       <BasePost :post="post" />
