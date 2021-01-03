@@ -13,17 +13,6 @@ git clone https://github.com/marie-morin/p7-groupomania.git
 
 ## Base de données
 
-### Sequelize
-
-Vérifiez la présence de Sequelize en entrant dans le terminal:
-```
-sequelize --help
-```
-* Si l'aide aux commandes Sequelize s'affiche, Sequelize est déjà installé,
-
-* Sinon, installez [Sequelize](https://sequelize.org/ "Sequelize").
-
-
 ### Serveur
 
 Installez / lancez le serveur SQL adapté à votre système d'exploitation :
