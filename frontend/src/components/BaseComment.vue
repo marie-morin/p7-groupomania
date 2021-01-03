@@ -152,7 +152,6 @@ export default {
       </BaseButton>
 
       <!-- Div options -->
-      <!-- <div v-show="optionsDisplayed" class="options__dropdown options__comment"> -->
       <div
         v-show="optionsDisplayed"
         class="options__dropdown options__comment"

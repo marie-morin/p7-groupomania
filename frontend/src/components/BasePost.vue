@@ -154,7 +154,6 @@ export default {
 
       <div v-if="isCreator || isAllowed" class="options">
         <!-- Bouton ... pour afficher les options -->
-    
         <BaseButton
           @click="displayOptions()"
           @keydown.enter="displayOptions()"
@@ -167,7 +166,6 @@ export default {
         </BaseButton>
 
         <!-- Div options -->
-        <!-- <div v-show="optionsDisplayed" class="options__dropdown"> -->
         <div
           v-show="optionsDisplayed"
           class="options__dropdown popup-box"

@@ -67,7 +67,6 @@ export default {
       formData.append("file", this.file);
 
       if (this.file == null) {
-        console.log("pass");
         const contexte = {
           intention: "alert",
           message: "Vous devez selectionner une image !",
@@ -160,12 +159,11 @@ export default {
       <div>
         <!-- Formulaire popup pour modifier sa photo de profil -->
 
-        <!-- <div v-if="imageUploadDisplayed" class="popupform"> -->
-          <div
-            v-if="imageUploadDisplayed"
-            class="popupform"
-            @click="offClick"
-          >
+        <div
+          v-if="imageUploadDisplayed"
+          class="popupform"
+          @click="offClick"
+        >
 
           <form @submit.prevent="addPicture" class="form popupform__form elementToClose">
             <BaseButton @click="displayImageUpload" tag="button" isCloseBtn>
@@ -187,13 +185,11 @@ export default {
         </div>
 
         <!-- Formulaire popup pour modifier son profil -->
-        <!-- <div v-if="isOwner" v-show="profilFormDisplayed" class="popupform"> -->
         <div v-if="isOwner" v-show="profilFormDisplayed" class="popupform" @click="offClick">
           <FormProfilUpdate v-if="isOwner" @display-form="displayProfilForm()" class="popup-form__form elementToClose"/>
         </div>
 
         <!-- Formulaire popup pour modifier son mot de passe -->
-        <!-- <div v-if="isOwner" v-show="passwordFormDisplayed" class="popupform"> -->
         <div v-if="isOwner" v-show="passwordFormDisplayed" class="popupform" @click="offClick">
           <FormPasswordUpdate
             v-if="isOwner"

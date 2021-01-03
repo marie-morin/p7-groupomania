@@ -26,8 +26,6 @@ export default {
   },
 
   methods: {
-    // setActive(page) { this.selectedPage = page },
-
     logout() {
       localStorage.clear();
       this.$router.push("/");
@@ -36,7 +34,6 @@ export default {
       store.commit("removeGuest");
       store.commit("removePosts");
     },
-
   },
 };
 </script>

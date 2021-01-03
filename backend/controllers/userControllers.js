@@ -1,7 +1,6 @@
 const models = require("../models");
 const jwt = require("../utils/jwtValidator");
 const fs = require("fs");
-
 const bcrypt = require("bcrypt");
 
 // Format adresse email classique
