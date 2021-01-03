@@ -30,10 +30,10 @@ export default {
     displayPostCreationForm() { this.postCreationFormDisplayed = !this.postCreationFormDisplayed },
 
     offClick(event) {
-      if (event.target.closest("#formPostCreation") == null) {
-        this.displayPostCreationForm();
+      if (event.target.closest(".elementToClose") == null) {
+        this.postCreationFormDisplayed = false;
       }
-    }
+    },
   }
 };
 </script>
@@ -45,7 +45,6 @@ export default {
 
     <BaseButton
       @click="displayPostCreationForm()"
-      
       tag="button"
       isGenericBtn
       tabindex="0"
@@ -54,11 +53,7 @@ export default {
     </BaseButton>
 
     <div v-show="postCreationFormDisplayed" class="popupform" @click="offClick">
-      <FormPostCreation
-        @display-form="displayPostCreationForm()"
-        class="popup-form__form"
-        id="formPostCreation"
-      />
+      <FormPostCreation @display-form="displayPostCreationForm()" class="popup-form__form elementToClose" />
     </div>
 
     <div v-if="allPosts.length">

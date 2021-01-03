@@ -10,13 +10,23 @@ export default {
   components: { BaseAvatar, BaseButton },
 
   data() {
-    return { selectedPage: 'home' }
+    return { selectedPage: null, }
   },
 
   computed: mapGetters(["currentUser"]),
 
+  watch: {
+    $route(to) {
+      this.selectedPage = to.name;
+    },
+  },
+
+  created() {
+    this.selectedPage = this.$route.name
+  },
+
   methods: {
-    setActive(page) { this.selectedPage = page },
+    // setActive(page) { this.selectedPage = page },
 
     logout() {
       localStorage.clear();
@@ -42,12 +52,12 @@ export default {
       </div>
 
       <nav class="header__nav">
+
         <BaseButton
           to="/home"
-          @click="setActive('home')"
           tag="router-link"
           isNavBtn
-          :class="{ active : selectedPage == 'home' }"
+          :class="{ active : selectedPage == 'Home' }"
           aria-label="Accueil"
         >
           <font-awesome-icon icon="home" />
@@ -55,10 +65,9 @@ export default {
 
         <BaseButton
           to="/users"
-          @click="setActive('users')"
           tag="router-link"
           isNavBtn
-          :class="{ active : selectedPage == 'users' }"
+          :class="{ active : selectedPage == 'Users' }"
           aria-label="Utilisateurs"
         >
           <font-awesome-icon icon="users" />
@@ -66,10 +75,9 @@ export default {
         
         <BaseButton
           :to="{ name: 'Profil', params: { id: currentUser.id } }"
-          @click="setActive('profil')"
           tag="router-link"
           isNavBtn
-          :class="{ active : selectedPage == 'profil' }"
+          :class="{ active : selectedPage == 'Profil' }"
           aria-label="Profil"
         >
           <font-awesome-icon icon="user-circle" />

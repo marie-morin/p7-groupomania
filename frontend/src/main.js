@@ -11,10 +11,15 @@ import { dom } from "@fortawesome/fontawesome-svg-core";
 library.add(fas);
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 
+import OutsideClick from "./directives/OutsideClick";
+
 dom.watch();
 Vue.config.productionTip = false;
 
+Vue.directive("outside-click", OutsideClick);
+
 new Vue({
+  el: "#app",
   router,
   store,
   render: (h) => h(App),

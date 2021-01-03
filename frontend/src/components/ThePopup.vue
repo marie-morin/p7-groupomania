@@ -75,7 +75,7 @@ export default {
 
 
 <template>
-  <div class="popup">
+  <div class="popup elementToClose">
     <!-- Icons de notification de l'information : allter, success ou warning -->
     <font-awesome-icon v-if="popup.intention == 'success'" icon="check-circle" class="popup__icon popup__icon--success"/>
     <font-awesome-icon v-else-if="popup.intention == 'alert'" icon="exclamation-circle" class="popup__icon popup__icon--warning"/>

@@ -21,6 +21,7 @@ export default {
 
   data() {
     return {
+      classname: "outside-click-exclude-" + this.comment.id,
       editing: false,
       optionsDisplayed: false,
       updatedComment: {
@@ -105,7 +106,11 @@ export default {
       this.update(options);
       this.editComment();
       this.updatedComment.content = "";
-    }
+    },
+
+    onClose(){
+      this.optionsDisplayed = false;
+    },
   },
 };
 </script>
@@ -141,12 +146,18 @@ export default {
         tag="button"
         isDotsBtn
         aria-label="Options"
+        :class="classname"
       >
         <font-awesome-icon icon="ellipsis-h" />
       </BaseButton>
 
       <!-- Div options -->
-      <div v-show="optionsDisplayed" class="options__dropdown options__comment">
+      <!-- <div v-show="optionsDisplayed" class="options__dropdown options__comment"> -->
+      <div
+        v-show="optionsDisplayed"
+        class="options__dropdown options__comment"
+        v-outside-click="{ exclude: [classname], handler: onClose }"
+      >
         <BaseButton
           v-if="isAllowed"
           @click="deleteComment(comment.id), displayOptions()"

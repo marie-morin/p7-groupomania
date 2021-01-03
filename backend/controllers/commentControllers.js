@@ -1,6 +1,8 @@
 //Import
 const models = require("../models");
 const jwt = require("../utils/jwtValidator");
+
+// Seuls les caractères spéciaux présents dans la régex suivante sont autorisés :
 const regex = /^[A-Za-z\d\s.,;:!?"()/%-_'éèêëà#@ô^öù*ç€$£≠÷°]*$/;
 
 exports.addComment = (req, res) => {

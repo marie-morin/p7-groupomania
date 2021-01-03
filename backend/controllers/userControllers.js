@@ -4,9 +4,18 @@ const fs = require("fs");
 
 const bcrypt = require("bcrypt");
 
+// Format adresse email classique
 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"']+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+// Format mot de passe :
+// * Au moins 6 caractères
+// * Au moins 1 lettre majuscule
+// * Au moins 1 lettre minuscule
+// * Au moins 1 chiffre
+// * Seuls les caractères suivants sont autorisés : @ $ ! % ?
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%?]{6,}$/;
 
+// Seuls les caractères spéciaux présents dans la régex suivante sont autorisés :
 const regex = /^[A-Za-z\d\s.,;:!?"()/%-_'éèêëà#@ô^öù*ç€$£≠÷°]*$/;
 
 exports.signup = (req, res, next) => {

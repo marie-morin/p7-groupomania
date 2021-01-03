@@ -29,6 +29,7 @@ export default {
 
   data() {
     return {
+      classname: "outside-click-exclude-" + this.post.id,
       editing: false,
       file: null,
       optionsDisplayed: false,
@@ -75,12 +76,6 @@ export default {
     editPost() { this.editing = !this.editing },
 
     displayOptions() { this.optionsDisplayed = !this.optionsDisplayed },
-
-    offClick(event) {
-      if (event.target.closest("#formPostUpdate") == null) {
-        this.editPost();
-      }
-    },
 
     deletePost(id) {
       const contexte = {
@@ -136,6 +131,10 @@ export default {
       this.editing = false;
       this.file = null;
     },
+
+    onClose(){
+      this.optionsDisplayed = false;
+    },
   },
 };
 </script>
@@ -155,18 +154,25 @@ export default {
 
       <div v-if="isCreator || isAllowed" class="options">
         <!-- Bouton ... pour afficher les options -->
+    
         <BaseButton
           @click="displayOptions()"
           @keydown.enter="displayOptions()"
           tag="button"
           isDotsBtn
           aria-label="Options"
+          :class="classname"
         >
           <font-awesome-icon icon="ellipsis-h" />
         </BaseButton>
 
         <!-- Div options -->
-        <div v-show="optionsDisplayed" class="options__dropdown">
+        <!-- <div v-show="optionsDisplayed" class="options__dropdown"> -->
+        <div
+          v-show="optionsDisplayed"
+          class="options__dropdown popup-box"
+          v-outside-click="{ exclude: [classname], handler: onClose }"
+        >
           <BaseButton
             v-if="isAllowed"
             @click="deletePost(post.id), displayOptions()"
@@ -209,7 +215,7 @@ export default {
     <SectionComments :post="post" />
 
     <!-- Formulaire popup pour modifier son post -->
-    <div v-show="editing" class="popupform" @click="offClick">
+    <div v-show="editing" class="popupform">
       <form
         v-if="editing"
         @submit.prevent="updatePost"

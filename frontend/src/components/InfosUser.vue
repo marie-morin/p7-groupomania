@@ -30,6 +30,7 @@ export default {
 
   data() {
     return {
+      classname: "outside-click-exclude-" + this.user.id,
       isAdmin: false,
       file: null,
       optionsDisplayed: false,
@@ -118,23 +119,18 @@ export default {
       this.$store.commit("displayPopup", contexte);
     },
 
-    // offClick(event) {
-    //   if (event.target.closest("#formProfilPictureUpdate") == null) {
-    //     this.displayImageUpload();
-    //   }
-    // },
+    offClick(event) {
+      if (event.target.closest(".elementToClose") == null) {
+        this.optionsDisplayed = false;
+        this.imageUploadDisplayed = false;
+        this.profilFormDisplayed = false;
+        this.passwordFormDisplayed = false;
+      }
+    },
 
-    // offClick(event) {
-    //   if (event.target.closest("#formProfilUpdate") == null) {
-    //     this.displayProfilForm();
-    //   }
-    // },
-
-    // offClick(event) {
-    //   if (event.target.closest("#formPasswordUpdate") == null) {
-    //     this.displayPasswordFrom();
-    //   }
-    // },
+    onClose(){
+      this.optionsDisplayed = false;
+    },
   },
 };
 </script>
@@ -155,7 +151,7 @@ export default {
               ({{ user.email }})
             </span>
           </h1>
-          <p v-if="user.isAdmin">Vous êtes administrateur.</p>
+          <p v-if="user.isAdmin && isOwner">Vous êtes administrateur.</p>
           <p v-if="user.bio">" {{ user.bio }} "</p>
           <p v-else>Aucun biographie n'a été renseignée !</p>
         </div>
@@ -163,10 +159,15 @@ export default {
 
       <div>
         <!-- Formulaire popup pour modifier sa photo de profil -->
-        <div v-if="imageUploadDisplayed" class="popupform">
-        <!-- <div v-if="imageUploadDisplayed" class="popupform" @click="offClick"> -->
-          <form class="form popupform__form" @submit.prevent="addPicture">
-          <!-- <form class="form popupform__form" @submit.prevent="addPicture" id="formProfilPictureUpdate"> -->
+
+        <!-- <div v-if="imageUploadDisplayed" class="popupform"> -->
+          <div
+            v-if="imageUploadDisplayed"
+            class="popupform"
+            @click="offClick"
+          >
+
+          <form @submit.prevent="addPicture" class="form popupform__form elementToClose">
             <BaseButton @click="displayImageUpload" tag="button" isCloseBtn>
               <font-awesome-icon icon="times" />
             </BaseButton>
@@ -186,26 +187,19 @@ export default {
         </div>
 
         <!-- Formulaire popup pour modifier son profil -->
-        <div v-if="isOwner" v-show="profilFormDisplayed" class="popupform">
-        <!-- <div v-if="isOwner" v-show="profilFormDisplayed" class="popupform" @click="offClick('plouf')" id="plouf"> -->
-          <FormProfilUpdate v-if="isOwner" @display-form="displayProfilForm()" class="popup-form__form"/>
-          <!-- <FormProfilUpdate v-if="isOwner" @display-form="displayProfilForm()" class="popup-form__form" id="formProfilUpdate"/> -->
+        <!-- <div v-if="isOwner" v-show="profilFormDisplayed" class="popupform"> -->
+        <div v-if="isOwner" v-show="profilFormDisplayed" class="popupform" @click="offClick">
+          <FormProfilUpdate v-if="isOwner" @display-form="displayProfilForm()" class="popup-form__form elementToClose"/>
         </div>
 
         <!-- Formulaire popup pour modifier son mot de passe -->
-        <div v-if="isOwner" v-show="passwordFormDisplayed" class="popupform">
-        <!-- <div v-if="isOwner" v-show="passwordFormDisplayed" class="popupform" @click="offClick"> -->
+        <!-- <div v-if="isOwner" v-show="passwordFormDisplayed" class="popupform"> -->
+        <div v-if="isOwner" v-show="passwordFormDisplayed" class="popupform" @click="offClick">
           <FormPasswordUpdate
             v-if="isOwner"
             @display-form="displayPasswordFrom()"
-            class="popup-form__form"
+            class="popup-form__form elementToClose"
           />
-          <!-- <FormPasswordUpdate
-            v-if="isOwner"
-            @display-form="displayPasswordFrom()"
-            class="popup-form__form"
-            id="formPasswordUpdate"
-          /> -->
         </div>
       </div>
 
@@ -217,12 +211,17 @@ export default {
           tag="button"
           isDotsBtn
           aria-label="Options"
+          :class="classname"
         >
           <font-awesome-icon icon="ellipsis-h" />
         </BaseButton>
 
         <!-- Div options -->
-        <div v-show="optionsDisplayed" class="options__dropdown">
+        <div
+          v-show="optionsDisplayed"
+          class="options__dropdown"
+          v-outside-click="{ exclude: [classname], handler: onClose }"
+        >
 
           <!-- Modifier sa photo de profil -->
           <BaseButton

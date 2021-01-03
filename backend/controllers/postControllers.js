@@ -1,6 +1,8 @@
 const models = require("../models");
 const jwt = require("../utils/jwtValidator");
 const fs = require("fs");
+
+// Seuls les caractères spéciaux présents dans la régex suivante sont autorisés :
 const regex = /^[A-Za-z\d\s.,;:!?"()/%-_'éèêëà#@ô^öù*ç€$£≠÷°]*$/;
 
 exports.addPost = (req, res) => {
