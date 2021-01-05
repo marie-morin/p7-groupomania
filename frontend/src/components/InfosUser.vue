@@ -88,6 +88,14 @@ export default {
     },
 
     deleteProfil() {
+      let mutationToCall;
+      if (this.$route.params.id == this.currentUser.id) {
+        mutationToCall = "removeUser";
+      } else {
+        mutationToCall = "removeGuest";
+      }
+
+      console.log("mutationToCall : ", mutationToCall);
       const contexte = {
         origin: "deleteProfil",
         intention: "confirmation",
@@ -96,10 +104,11 @@ export default {
           url:
             process.env.VUE_APP_LOCALHOST_URL +
             `users/${this.$route.params.id}`,
-          mutation: "removeUser",
+          mutation: mutationToCall,
           id: this.$route.params.id,
         },
       };
+      console.log("contexte : ", contexte);
       this.$store.commit("displayPopup", contexte);
     },
 
@@ -120,9 +129,15 @@ export default {
 
     onClose(){
       this.optionsDisplayed = false;
-      this.imageUploadDisplayed = false;
-      this.profilFormDisplayed = false;
-      this.passwordFormDisplayed = false;
+      
+    },
+
+    offClick(event) {
+      if (event.target.closest(".elementToClose") == null) {
+        this.imageUploadDisplayed = false;
+        this.profilFormDisplayed = false;
+        this.passwordFormDisplayed = false;
+      }
     },
   },
 };
@@ -152,11 +167,10 @@ export default {
 
       <div>
         <!-- Formulaire popup pour modifier sa photo de profil -->
-        <div v-if="imageUploadDisplayed" class="popupform">
+        <div v-if="imageUploadDisplayed" class="popupform" @click="offClick">
           <form
             @submit.prevent="addPicture"
-            class="form popupform__form"
-            v-outside-click="{ exclude: [classname], handler: onClose }"
+            class="form popupform__form elementToClose"
           >
             <BaseButton @click="displayImageUpload" tag="button" isCloseBtn>
               <font-awesome-icon icon="times" />
@@ -177,22 +191,20 @@ export default {
         </div>
 
         <!-- Formulaire popup pour modifier son profil -->
-        <div v-if="isOwner" v-show="profilFormDisplayed" class="popupform">
+        <div v-if="isOwner" v-show="profilFormDisplayed" class="popupform" @click="offClick">
           <FormProfilUpdate
             v-if="isOwner"
             @display-form="displayProfilForm()"
-            class="popup-form__form"
-            v-outside-click="{ exclude: [classname], handler: onClose }"
+            class="popup-form__form elementToClose"
           />
         </div>
 
         <!-- Formulaire popup pour modifier son mot de passe -->
-        <div v-if="isOwner" v-show="passwordFormDisplayed" class="popupform">
+        <div v-if="isOwner" v-show="passwordFormDisplayed" class="popupform" @click="offClick">
           <FormPasswordUpdate
             v-if="isOwner"
             @display-form="displayPasswordFrom()"
             class="popup-form__form elementToClose"
-            v-outside-click="{ exclude: [classname], handler: onClose }"
           />
         </div>
       </div>
@@ -223,7 +235,6 @@ export default {
             @click="displayImageUpload(), displayOptions()"
             tag="button"
             isOptionBtn
-            :class="classname"
           >
             <font-awesome-icon icon="camera" />
             Modifier la photo de profil
@@ -235,7 +246,6 @@ export default {
             @click="displayImageUpload(), displayOptions()"
             tag="button"
             isOptionBtn
-            :class="classname"
           >
             <font-awesome-icon icon="camera" />
             Ajouter une photo de profil
@@ -258,7 +268,6 @@ export default {
             @click="displayProfilForm(), displayOptions()"
             tag="button"
             isOptionBtn
-            :class="classname"
           >
             <font-awesome-icon icon="pencil-alt" />
             Modifier mon profil
@@ -270,7 +279,6 @@ export default {
             @click="displayPasswordFrom(), displayOptions()"
             tag="button"
             isOptionBtn
-            :class="classname"
           >
             <font-awesome-icon icon="lock" />
             Modifier mon mot de passe

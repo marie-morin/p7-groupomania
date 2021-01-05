@@ -21,7 +21,7 @@ export default {
 
   data() {
     return {
-      classname: "outside-click-exclude-" + this.comment.id,
+      classname: "outside-click-exclude-" + this.comment.content.split(" ")[0],
       editing: false,
       optionsDisplayed: false,
       updatedComment: {

@@ -29,7 +29,7 @@ export default {
 
   data() {
     return {
-      classname: "outside-click-exclude-" + this.post.id,
+      classname: "outside-click-exclude-" + this.post.title.split(" ")[0],
       editing: false,
       file: null,
       optionsDisplayed: false,
@@ -134,7 +134,12 @@ export default {
 
     onClose(){
       this.optionsDisplayed = false;
-      this.editing = false;
+    },
+
+    offClick(event) {
+      if (event.target.closest(".elementToClose") == null) {
+        this.editing = false;
+      }
     },
   },
 };
@@ -187,7 +192,6 @@ export default {
             @click="editPost(), displayOptions()"
             tag="button"
             isOptionBtn
-            class="openPostUpdate"
           >
             <font-awesome-icon icon="pencil-alt" />
             Modifier votre post
@@ -215,13 +219,12 @@ export default {
     <SectionComments :post="post" />
 
     <!-- Formulaire popup pour modifier son post -->
-    <div v-show="editing" class="popupform">
+    <div v-show="editing" class="popupform" @click="offClick">
       <form
         v-if="editing"
         @submit.prevent="updatePost"
         enctype="multipart/form-data"
-        class="popup-form__form form"
-        v-outside-click="{ exclude: ['openPostUpdate'], handler: onClose }"
+        class="popup-form__form form elementToClose"
       >
         <!-- Croix pour fermer le formulaire -->
         <BaseButton @click="editPost()" tag="button" isCloseBtn>

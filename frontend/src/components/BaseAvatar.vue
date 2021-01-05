@@ -20,7 +20,7 @@ export default {
     ...mapGetters(["currentUser"]),
 
     isFullSizeImage() { return this.origin == "profil" }
-  }
+  },
 };
 </script>
 
@@ -37,7 +37,11 @@ export default {
     />
 
     <!-- Si utilisateur n'a pas de photo de profil, affichage de ses initales à la place de l'image -->
-    <div v-else-if="currentUser" :class="{ large : isFullSizeImage }" class="avatar__image avatar__image--empty">
+    <div
+      v-else
+      :class="{ large : isFullSizeImage }"
+      class="avatar__image avatar__image--empty"
+    >
       {{ this.user.firstname.split('')[0] }}{{ this.user.lastname.split('')[0] }}
     </div>
   </div>

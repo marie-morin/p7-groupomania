@@ -5,6 +5,7 @@ const OutsideClick = {
     handleOutsideClick = (e) => {
       e.stopPropagation();
       const { handler, exclude } = binding.value;
+
       let clickedOnExcludedEl = false;
 
       if (e.target._prevClass !== undefined) {

@@ -32,12 +32,6 @@ export default {
     onClose(){
       this.postCreationFormDisplayed = false;
     },
-
-    // offClick(event) {
-    //   if (event.target.closest(".elementToClose") == null) {
-    //     this.postCreationFormDisplayed = false;
-    //   }
-    // },
   }
 };
 </script>
